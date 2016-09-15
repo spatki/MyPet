@@ -1,0 +1,157 @@
+﻿@using ProcessAccelerator.WebUI
+@model auditRecordingInput
+@{
+    Layout = null;
+    ActionItemStatus ActionStatus = new ActionItemStatus();
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h2 class="panel-title">QA Observations For @Model.ProjectName (@Model.Audit_Reference)</h2>
+    </div>
+    <div class="panel-body">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Audit Dates: </label>
+                        <label class="control-label"><strong>@Model.Start.GetValueOrDefault().ToString(Globals.DateFormatString)</strong> - <strong>@Model.Finish.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Review Period: </label>
+                        <label class="control-label"><strong>@Model.Review_Start.GetValueOrDefault().ToString(Globals.DateFormatString)</strong> - <strong>@Model.Review_Finish.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                        <span><a href="Javascript:;" class="openDialog" data-source="@Url.Action("GetTasks","Project", new { startDate = Model.Review_Start.GetValueOrDefault(), endDate = Model.Review_Finish.GetValueOrDefault() })" title="Click to view project tasks"><i class="icon-list"></i></a></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Observation Date : <strong>@Model.RecordingDate.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Time Spent (Hrs) : @Model.TimeSpentHrs</label>
+                        </div>
+                    </div>
+                </div>                        
+            </div>
+            <hr />
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a data-toggle="tab" href="#ObservationForm"><i class="icon-file-alt"></i>&nbsp;&nbsp;Observations</a></li>
+            <li><a data-toggle="tab" href="#AuditParticipants"><i class="icon-user"></i>&nbsp;&nbsp;Participants</a></li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div id="ObservationForm" class="tab-pane fade in active">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"  id="AuditPlanTable" >
+                    <thead>
+                        <tr>
+                            <th class="docTableSequence-bg"></th>
+                            <th>Observation</th>
+                            <th>Possible Impact</th>
+                            <th class="tblMediumWidth">Responsibility</th>
+                            <th class="tblMediumWidth">Status</th>
+                            <th class="tblMediumWidth">Date Completed</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listing">
+                        @if (Model.tbl_audit_observation != null && Model.tbl_audit_observation.Any())
+                        {
+                            var counter = 0;
+                            foreach (var obs in Model.tbl_audit_observation)
+                            {
+                                counter += 1;
+                                <tr id="obs@(obs.ID)">
+                                    <td>@counter</td>
+                                    <td id="NC_Observation@(obs.ID)">@Html.Raw(obs.NC_Observation)</td>
+                                    <td id="PossibleImpact_Attr@(obs.ID)">@Html.Raw(obs.PossibleImpact_Attr)</td>
+                                    <td>@{
+                                            var person = Model.tbl_audit_participant.Where(o => o.tbl_Org_EmployeeID == obs.Responsibility).SingleOrDefault();
+                                            if (person != null)
+                                            {
+                                                @person.Name
+                                            }
+                                        }
+                                    </td>
+                                    <td>@ActionStatus.getTypeName((short)obs.Status)</td>
+                                    <td>@(obs.StatusUpdateDate != null ? obs.StatusUpdateDate.GetValueOrDefault().ToString(Globals.DateFormatString) : "")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="AuditParticipants" class="tab-pane">
+                <br />
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Auditor (s)
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                @if (Model.tbl_audit_participant != null && Model.tbl_audit_participant.Where(o => o.Type == 1).Any())
+                                {
+                                    <ol>
+                                        @foreach (var pt in Model.tbl_audit_participant.Where(o => o.Type == 1))
+                                        {
+                                            <li>
+                                                @pt.Name
+                                                <input type="hidden" name="tbl_audit_participant.Index" id="tbl_audit_participant.Index" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ID" id="tbl_audit_participant[@(pt.ID)].ID" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" id="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" value="@pt.tbl_Audit_ScheduleID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" value="@pt.tbl_Org_EmployeeID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" value="@pt.tbl_Org_RoleID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Type" id="tbl_audit_participant[@(pt.ID)].Type" value="@pt.Type" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ClientID" id="tbl_audit_participant[@(pt.ID)].ClientID" value="@pt.ClientID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Name" id="tbl_audit_participant[@(pt.ID)].Name" value="@pt.Name" />
+                                            </li>
+                                        }
+                                    </ol>
+                                }
+                                else
+                                {
+                                    <label class="control-label">Not Selected</label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Auditee (s)
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                @if (Model.tbl_audit_participant != null && Model.tbl_audit_participant.Where(o => o.Type == 2).Any())
+                                {
+                                    <ol>
+                                        @foreach (var pt in Model.tbl_audit_participant.Where(o => o.Type == 2))
+                                        {
+                                            <li>
+                                                @pt.Name
+                                                <input type="hidden" name="tbl_audit_participant.Index" id="tbl_audit_participant.Index" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ID" id="tbl_audit_participant[@(pt.ID)].ID" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" id="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" value="@pt.tbl_Audit_ScheduleID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" value="@pt.tbl_Org_EmployeeID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" value="@pt.tbl_Org_RoleID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Type" id="tbl_audit_participant[@(pt.ID)].Type" value="@pt.Type" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ClientID" id="tbl_audit_participant[@(pt.ID)].ClientID" value="@pt.ClientID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Name" id="tbl_audit_participant[@(pt.ID)].Name" value="@pt.Name" />
+                                            </li>
+                                        }
+                                    </ol>
+                                }
+                                else
+                                {
+                                    <label class="control-label">Not Selected</label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+

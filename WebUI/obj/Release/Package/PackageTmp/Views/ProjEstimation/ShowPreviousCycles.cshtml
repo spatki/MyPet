@@ -1,0 +1,61 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_proj_estimation>
+@{
+    Layout = null;
+}
+
+<div class="modal-dialog" style="width:80%; height: 50%">
+	<div class="modal-content">
+	    <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h4>Previous Estimation Cycles</h4>
+	    </div>
+        <div class="modal-body dialogScroll"> 
+		    <div class="row col-md-12">
+                <table  class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th >Cycle</th> 
+                            <th >Created On</th>
+                            <th >Project Phase</th>
+                            <th >Size</th>
+                            <th >Efforts</th>
+                            <th >Cost</th>
+                            <th >Schedule (Months)</th>
+                            <th >Defects</th>
+                            <th >View</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var cycle in Model)
+                            {
+                                <tr>
+                                    <td >@cycle.Version</td> 
+                                    <td >@cycle.CreatedOn.ToString(Globals.DateFormatString)</td>
+                                    <td >@cycle.mstr_org_phase_in_proj.mstr_org_proj_phase.LongName</td>
+                                    <td >@cycle.Size</td>
+                                    <td >@cycle.TotalEfforts</td>
+                                    <td >@cycle.Cost</td>
+                                    <td >@cycle.ScheduleMonths</td>
+                                    <td >@cycle.TotalDefects</td>
+                                    <td><a href="Javascript:;" class="btn btn-med green-bg loadDetails" data-element="listing" data-source="@Url.Action("ViewPreviousEstimation","ProjEstimation", new { id = cycle.ID})" data-sourceid="" data-mode="showAndCloseDialog"><i class="icon-">&#xf044;</i></a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+			</div>
+	    </div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+
+

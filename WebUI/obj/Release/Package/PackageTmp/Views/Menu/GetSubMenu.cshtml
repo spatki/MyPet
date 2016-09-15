@@ -1,0 +1,244 @@
+﻿@model IOrderedEnumerable<mstr_access_menu>
+@{
+    Layout = null;
+}
+<aside id="left_panel">
+	<nav id="aside_nav">
+        @if (Model.Any())
+        {
+			<ul>
+            @foreach (var o in Model)
+            {
+                
+            }
+            </ul>
+        }
+				    <li><a href="javascript:;" >Process <span>5</span></a>
+                        <ul>
+				            <li><a href="javascript:" class="subMenu" data-source="@Url.Action("Index","ProcessLevel")">Levels</a></li>
+                            <li><a href="javascript:" class="subMenu" data-source="/ProcessRole/Index">Roles</a></li>
+				            <li><a href="javascript:" class="subMenu" data-source="/ProcessStructure/Index">Structure</a></li>
+				            <li><a href="javascript:;">Masters <span>6</span></a>
+                                <ul>
+						            <li><a href="javascript:" class="subMenu" data-source="/ProcessType/Index">Process Type</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/PProcedure/Index">Process Artifact</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/PTemplate/Index">Templates</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/DocMgr/Index">Document</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/PChecklist/Index">Checklists</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/ProcessLCStatus/Index">Status Management</a></li>
+						            <!--li><a href="PMasterLevelStatus.html">Level Status</a></!--li>
+						            <li><a href="PMasterProcessStatus.html">Process Status</a></li>
+						            <li><a href="PMasterDocumentTypes.html">Document Types</a></li>
+						            <li><a href="PMasterDocumentStatus.html">Document Status</a></li>
+						            <li><a href="PMasterChkLstOptions.html">Checklist Options</a></li>
+						            <li><a href="PMasterTSStatus.html">Timesheet Status</a></li-->
+					            </ul>
+				            </li>
+				            <li><a href="javascript:" class="subMenu" data-source="/PConfiguration/Index">Configuration</a></li>
+                        </ul>
+				    </li>
+				    <li ><a href="javascript:;" >Organisation <span>7</span></a>
+                        <ul>
+				            <li><a href="javascript:" class="subMenu" data-source="/OrgLevel/Index">Levels</a></li>
+				            <li><a href="javascript:" class="subMenu" data-source="/OrgRole/Index">Roles</a></li>
+				            <li><a href="javascript:" class="subMenu" data-source="/OrgStructure/Index">Structure</a></li>
+				            <li><a href="javascript:">Project <span>2</span></a>
+                                <ul>
+						            <li><a href="javascript:" class="subMenu" data-source="/OrgProjType/Index">Types</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/OrgProjPhase/Index">Phases</a></li>
+                                </ul>
+                            </li>
+				            <li><a href="javascript:">Function <span>2</span></a>
+                                <ul>
+						            <li><a href="javascript:" class="subMenu" data-source="/OrgFunction/Index">Functional Groups</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/OrgSubFunction/Index">Sub-Functions</a></li>
+                                </ul>
+				            </li>
+				            <li><a href="javascript:;">Masters <span>4</span></a>
+                                <ul>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Employee</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/OrgDesignation/Index">Designation</a></li>
+						            <li><a href="javascript:" class="subMenu" data-source="/OrgLevelMaster/Index">Level Master Data</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">HRM</a></li>
+					            </ul>
+				            </li>
+				            <li><a href="javascript:" class="subMenu" data-source="/OConfiguration/Index">Configuration</a></li>
+                        </ul>
+				    </li>
+				    <li ><a href="javascript:;" >Mapping <span>2</span></a>
+                        <ul>
+				            <li><a href="javascript:" class="subMenu" data-source="/MapRole/Index">Roles</a></li>
+				            <li><a href="javascript:" class="subMenu" data-source="/MapRepository/Index">Structure</a></li>
+                        </ul>
+				    </li>
+			    </ul>
+                break;
+            case "Plan":
+			    <ul>
+				    <li><a href="javascript:">Projects <span>11</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Initiate Project</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Upload Project Documents</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Groups</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Project Estimation</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Project Plan</a></li>
+				            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Resource Plan<span>4</span></a>
+                                <ul>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Human</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Hardware</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Software</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Others</a></li>
+                                </ul>
+                            </li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Resource Allocation</a></li>
+                            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Locations</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Process Tailoring</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Close Project</a></li>
+        				    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Approvals <span>2</span></a>
+                                <ul>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Project Approvals</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Resource Approvals</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:">Functions <span>3</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Resource Allocation</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Process Tailoring</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Function Approvals</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:">Configure Proxy Role <span>2</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Proxy Timessheet entry</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Proxy Timesheet Approval</a></li>
+                        </ul>
+                    </li>
+			    </ul>
+                break;
+            case "Record":
+			    <ul>
+				    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Timessheet <span>3</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Enter Timesheets</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Approve Timesheets</a></li><li><a href="PickupReview.html">Pickup Reviews</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Proxy Timesheet<span>2</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Enter Timesheets</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Approve Timesheets</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:">Process Recordings <span>2</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Task Recordings</a></li>
+                            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Review Recordings</a></li>
+                        </ul>
+                    </li>
+			    </ul>    
+                break;
+            case "Audit":
+            	<ul>
+				    <li><a href="javascript:">Project <span>3</span></a>
+                        <ul>
+						    <li><a href="javascript:;">Plan Audit <span>2</span></a>
+                                <ul>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">QA Observation</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Audit</a></li>
+                                </ul>
+                            </li>
+						    <li><a href="javascript:;">Conduct Audit <span>2</span></a>
+                                <ul>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction"">QA Observation</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Audit</a></li>
+                                </ul>
+						    </li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Closure Activities</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:">Function <span>3</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Plan Audit <span>2</span></a>
+                                <ul>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">QA Observation</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Audit</a></li>
+                                </ul>
+                            </li>
+						    <li><a href="javascript:;">Conduct Audit <span>2</span></a>
+                                <ul>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">QA Observation</a></li>
+						            <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Audit</a></li>
+                                </ul>
+						    </li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Closure Activities</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:">Org Level <span>3</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Plan Audit</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Conduct Audit</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Closure Activities</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:;">Reports <span>4</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Project Information</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Function Information</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Organisation Level Information</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">NC Report</a></li>
+                        </ul>
+				    </li>
+				    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">External Audit Findings</a></li>
+			    </ul>
+                break;
+            case "System":
+			    <ul>
+				    <li><a href="javascript:">User Management <span>3</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">New User</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Purge User Information</a></li>
+	    				    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Manage User</a></li>
+                            </ul>
+                    </li>
+				    <li><a href="javascript:">Access Control<span>4</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Role Access</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Special Previledges</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Menu Access</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Data Access</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:">System Configuration <span>3</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Application Parameters</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Organisation Parameters</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">User Parameters</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Mail Server Settings</a></li>
+				    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Monitoring <span>4</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Current Users</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">User Activity</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Broadcast Mail</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Server Activity</a></li>
+                        </ul>
+                    </li>
+				    <li><a href="javascript:">Others <span>2</span></a>
+                        <ul>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">Post News</a></li>
+						    <li><a href="javascript:;" class="openDialog" data-source="/Main/UnderConstruction">General Annoucements</a></li>
+                        </ul>
+                    </li>
+			    </ul>
+                break;
+        }
+	</nav>
+</aside>
+<!--ASIDE LEFT PANNEL ENDS-->        
+
+<!-- Revision Comments to be shown just before the data is submitted for save -->
+<div class="modal fade" id="revCommentsDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div><!-- /.modal -->

@@ -1,0 +1,24 @@
+﻿@{
+}
+
+<!-- aside menu Start -->
+<aside id="left_panel">
+	<nav id="aside_nav">
+		<ul>
+			<li><a href="javascript:;" class="openDialog" data-source="@Url.Action("ChangePassword","Account")" >Change Password</a></li>
+            <li><a href="javascript:;" class="openDialog" data-source="@Url.Action("uploadProfilePicture","DocMgr")">Upload Profile Picture</a></li>
+        </ul>
+	</nav>
+</aside>
+<!--ASIDE LEFT PANNEL ENDS-->        
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+<div class="col-md-12" id="Details">
+    @if (ViewBag.Mode == "Org")
+    {
+        @Html.Action("EmployeeDetails","Employee")
+    }
+    else
+    {
+        @Html.Action("EditDetails", "SysUser")
+    }
+</div>

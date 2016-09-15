@@ -1,0 +1,28 @@
+﻿@using ProcessAccelerator.WebUI
+@model List<tbl_workflow_state_history>
+@{
+    Layout = null;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Status</th>
+            <th>User</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var hist in Model)
+        {
+            <tr >
+                <td>@hist.StatusDate.ToString(Globals.DateFormatString)</td>
+                <td>@hist.mstr_process_lc_status.Status</td>
+                <td>@hist.UserProfile.DisplayName</td>
+                <td>@hist.ReviewComments</td>
+            </tr>                                    
+        }
+    }
+</table>
+

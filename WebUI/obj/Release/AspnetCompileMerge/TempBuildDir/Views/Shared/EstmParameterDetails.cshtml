@@ -1,0 +1,35 @@
+﻿@model proj_estm_size_parameter
+@{
+    Layout = null;
+}
+<tr id="@Model.EstmSizeID" class="checksize">
+    <td><a href="Javascript:;" class="">
+        <i class="icon-remove"></i></a>
+        <input type="hidden" id="tbl_org_proj_estm_size.Index" name="tbl_org_proj_estm_size.Index" value="@Model.EstmSizeID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.EstmSizeID)].EstmSizeID" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].EstmSizeID" value="@Model.EstmSizeID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.EstmSizeID)].ClientID" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].ClientID" value="@ViewBag.ClientID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.EstmSizeID)].tbl_Org_ProjectID" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].tbl_Org_ProjectID" value="@Model.GroupID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.EstmSizeID)].tbl_Proj_EstimationID" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].tbl_Proj_EstimationID" value="@Model.Proj_EstimationID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.EstmSizeID)].ParameterID" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].ParameterID" value="@Model.ParameterID" />
+        <input type="hidden" id="ProjGroupID@(Model.EstmSizeID)" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].ProjGroupID" value="@Model.GroupID" />
+        <input type="hidden" id="@(Model.EstmSizeID)SWInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].SimpleW" value="@Model.Simple" />
+        <input type="hidden" id="@(Model.EstmSizeID)MWInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].MediumW" value="@Model.Medium" />
+        <input type="hidden" id="@(Model.EstmSizeID)CWInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].ComplexW" value="@Model.Complex" />
+        <input type="hidden" id="@(Model.EstmSizeID)SInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].SimpleC" value="0" />
+        <input type="hidden" id="@(Model.EstmSizeID)MInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].MediumC" value="0" />
+        <input type="hidden" id="@(Model.EstmSizeID)CInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].ComplexC" value="0" />
+        <input type="hidden" id="@(Model.EstmSizeID)SWPInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].SimpleWP" value="0" />
+        <input type="hidden" id="@(Model.EstmSizeID)MWPInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].MediumWP" value="0" />
+        <input type="hidden" id="@(Model.EstmSizeID)CWPInput" name="tbl_org_proj_estm_size[@(Model.EstmSizeID)].ComplexWP" value="0" />
+    </td>
+    <td>@Model.Name</td>
+    <td id="@(Model.EstmSizeID)S" class="EditNumber" data-node="@(Model.EstmSizeID)S" data-type="size" data-navkey="EditNumber">0</td>
+    <td id="@(Model.EstmSizeID)M" class="EditNumber" data-node="@(Model.EstmSizeID)M" data-type="size" data-navkey="EditNumber">0</td>
+    <td id="@(Model.EstmSizeID)C" class="EditNumber" data-node="@(Model.EstmSizeID)C" data-type="size" data-navkey="EditNumber">0</td>
+    <td id="@(Model.EstmSizeID)SW" class="EditNumber" data-node="@(Model.EstmSizeID)SW" data-type="size" data-navkey="EditNumber">@Model.Simple</td>
+    <td id="@(Model.EstmSizeID)MW" class="EditNumber" data-node="@(Model.EstmSizeID)MW" data-type="size" data-navkey="EditNumber">@Model.Medium</td>
+    <td id="@(Model.EstmSizeID)CW" class="EditNumber" data-node="@(Model.EstmSizeID)CW" data-type="size" data-navkey="EditNumber">@Model.Complex</td>
+    <td id="@(Model.EstmSizeID)SWP" class="simpleW TableDisabledLabel">0</td>
+    <td id="@(Model.EstmSizeID)MWP" class="mediumW TableDisabledLabel">0</td>
+    <td id="@(Model.EstmSizeID)CWP" class="complexW TableDisabledLabel">0</td>
+</tr>

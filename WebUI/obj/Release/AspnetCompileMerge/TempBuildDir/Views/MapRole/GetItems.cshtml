@@ -1,0 +1,12 @@
+﻿@model tbl_mapping_role
+@{
+    Layout = null;
+}
+@if (Model.mstr_Process_RoleID == null)
+{
+    <a href="javascript:;" id="L@(Model.ID)" class="openDialog" data-source="@Url.Action("addRole","MapRole",new { id = Model.ID })" data-id="@Model.ID">Click to link</a>
+}
+else {
+    <a href="javascript:;" id="L@(Model.ID)" class="openDialog" data-source="@Url.Action("editRole","MapRole",new { id = Model.ID })" data-id="@Model.ID">@Model.mstr_process_role.LongName</a>
+}
+

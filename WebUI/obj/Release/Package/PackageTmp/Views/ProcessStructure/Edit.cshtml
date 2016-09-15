@@ -1,0 +1,70 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using System.Web.Script.Serialization
+@using ProcessAccelerator.WebUI.Controllers
+@model tbl_process_structureInput
+@{
+    Layout = null;
+    string updateId = "";
+    
+    if (Model.ParentRoleID == null) 
+    {
+        updateId = "PStructure";
+    }
+    else {
+        updateId = Model.ParentRoleID.ToString();
+    }
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Edit Structure (Role)</h4>
+	</div>
+    <form method="post" action="@Url.Action("Edit")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group">    
+                        <label class="form-label col-md-12">Role</label>
+                        <div class="form-control col-md-12">@ViewBag.roleName</div>
+                    </div>
+                </div>
+                <div>
+                    <input type="hidden" name="mstr_Process_RoleID" id="mstr_Process_RoleID" value="@Model.mstr_Process_RoleID" />
+                     <input type="hidden" name="ID" id="ID" value="@Model.ID" />
+                     <input type="hidden" name="ClientID" id="ClientID" value="@Model.ClientID" />
+                    <input type="hidden" name="Level" id="Level" value="@Model.Level" />
+                   <input type="hidden" name="ParentRoleID" id="ParentRoleID" value="@Model.ParentRoleID" />
+                    <input type="hidden" name="IsParent" id="IsParent" value="false" />
+                    <input type="hidden" name="Sequence" id="Sequence" value="@Model.Sequence" />
+                    <input type="hidden" name="StructPath" id="StructPath" value="" />
+                </div>
+			    <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Comments</label>
+                        @Html.TextAreaFor(o => o.Comments,new { @class = "form-control col-md-12" })
+                        @Html.ValidationMessageFor(o => o.Comments)
+                    </div>
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveStructure" data-mode="edit" data-id="L@(Model.ID)" data-form="submitLevel" data-dismiss="modal" data-dialog="openDialogBox">Save</button>
+		        <button type="button" class="btn blue-bg deleteDialog" data-id="L@(Model.ID)" data-dialogname="DeleteDialog" data-source="@Url.Action("Delete", new { id = @Model.ID })">Delete</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<!-- Modal -->
+<div class="modal fade" id="DeleteDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div><!-- /.modal -->
+
+
+<script>
+    // specialDropDown(".specialCombo");
+</script>

@@ -1,0 +1,9 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@{
+    Layout = null;
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+<div id="DataListing">
+        @Html.Action("GetAuditPlan")
+</div>

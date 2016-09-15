@@ -1,0 +1,35 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+@{
+    ViewBag.Title = "Process Accelerator - Login";
+}
+
+@using (Html.BeginForm("JsonLogin", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "loginForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+
+    <div class="form-group">
+    @Html.TextBoxFor(m => m.UserName, new { autofocus = "autofocus", id = "loginName", placeholder = "Email ID", @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.UserName)
+    </div>
+                
+    <div class="form-group">
+        @Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Password)
+    </div>
+                               
+    <div class="form-group clearfix">
+        <div class="col-md-8">
+        </div>
+        <div class="col-md-4">
+            <input type="submit" class="btn btn-med blue-bg pull-right" value="Login">
+        </div>
+    </div>
+                
+    <hr>
+                
+    <h4>Forgot your password ?</h4>
+                
+    <p>if you have forgoten your password <a href="#">click here</a></p>
+}

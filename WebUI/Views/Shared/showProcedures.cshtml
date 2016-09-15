@@ -1,0 +1,60 @@
+﻿@model tbl_process_rep_details
+@{
+    Layout = null;
+    var selProcs = "0";
+    foreach (var p in Model.selectedOptions)
+    {
+        selProcs = selProcs + "," + p.ToString();   // Will be used to get the procedures selected for this repository
+    }
+}
+
+<div class="modal-dialog"  style="width:80%;height:80%;overflow:auto;">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="modal-title">Configure Procedures</h4>
+	</div>
+	<div class="modal-body">
+        <form id="ProcForm" name="ProcForm" action="@ViewBag.postURL" method="post">
+            <div class="row">
+                <input type="hidden" name="ID" id="ID" value="@Model.ID" />
+                <input type="hidden" name="repoID" id="repoID" value="@Model.repoID" />
+                <input type="hidden" name="phaseID" id="phaseID" value="@Model.phaseID" />
+                <input type="hidden" name="key" id="key" value="@Model.key" />
+                <div class="col-md-12">
+                    <div class="col-md-5">  <!-- List of all procedures -->
+                        <div class="col-md-12 control-label">Available Procedures</div>
+                        <div class="col-md-12" class="scrollResizeBorder">
+                            @Html.Action("getListBoxItems", "PProcedure", new { selectedItems = new List<int>(), controlName = "originalOptions", excludeIds = selProcs, selectIds = "", reload = "" });
+                        </div>
+                    </div>
+                    <div class="col-md-2">  <!-- item selection options -->
+                        <br /><br />
+                        <div class="row padd"><a class="btn btn-sm blue-bg padd col-md-12 shiftRight" data-left="originalOptions" data-right="selectedOptions"><i class="icon-forward"></i></a></div>
+                        <div class="row padd"><a class="btn btn-sm blue-bg padd col-md-12 shiftLeft" data-left="originalOptions" data-right="selectedOptions"><i class="icon-backward"></i></a></div>
+                        <div class="row padd"><a class="btn btn-sm blue-bg padd col-md-12 shiftAllRight" data-left="originalOptions" data-right="selectedOptions"><i class="icon-fast-forward"></i></a></div>
+                        <div class="row padd"><a class="btn btn-sm blue-bg padd col-md-12 shiftAllLeft" data-left="originalOptions" data-right="selectedOptions"><i class="icon-fast-backward"></i></a></div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="col-md-12 control-label">Selected Procedures</div>
+                        <div class="col-md-12" class="scrollResizeBorder">
+                            @Html.Action("getListBoxItems", "PProcedure", new { selectedItems = new List<int>(), controlName = "selectedOptions", excludeIds = "", selectIds = selProcs, reload = "" });
+                        </div>
+                    </div>
+                </div>
+            </div>          
+
+        </form>
+	</div>
+	<div class="modal-footer">
+	  <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+	  <button type="button" class="btn blue-bg saveDefaultPage" data-mode="editProcedures" data-pageid="Proc@(Model.key)" data-form="ProcForm">Save changes</button>
+	</div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="extraDialogBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	</div><!-- /.modal -->
+
+

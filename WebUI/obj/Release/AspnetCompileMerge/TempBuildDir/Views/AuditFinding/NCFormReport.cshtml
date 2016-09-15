@@ -1,0 +1,223 @@
+﻿@using ProcessAccelerator.WebUI
+@model auditRecordingInput
+@{
+    Layout = null;
+    ActionItemStatus ActionStatus = new ActionItemStatus();
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h2 class="panel-title">Audit Findings For @Model.ProjectName (@Model.Audit_Reference)</h2>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Audit Dates: </label>
+                    <label class="control-label"><strong>@Model.Start.GetValueOrDefault().ToString(Globals.DateFormatString)</strong> - <strong>@Model.Finish.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Audit Date : <strong>@Model.RecordingDate.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Time Spent (Hrs) : <strong>@Model.TimeSpentHrs</strong></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a data-toggle="tab" href="#NCForm"><i class="icon-file-alt"></i>&nbsp;&nbsp;NC Form</a></li>
+            <li><a data-toggle="tab" href="#AuditChkLst"><i class="icon-check"></i>&nbsp;&nbsp;Audit Checklist</a></li>
+            <li><a data-toggle="tab" href="#AuditParticipants"><i class="icon-user"></i>&nbsp;&nbsp;Participants</a></li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div id="NCForm" class="tab-pane fade in active">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"  id="NCListTable" >
+                    <thead>
+                        <tr>
+                            <th class="docTableSequence-bg"></th>
+                            <th>Observation</th>
+                            <th>Possible Impact</th>
+                            <th class="tblMediumWidth">Responsibility</th>
+                            <th class="tblMediumWidth">Status</th>
+                            <th class="tblMediumWidth">Date Completed</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listing">
+                        @if (Model.tbl_audit_observation != null && Model.tbl_audit_observation.Any())
+                        {
+                            var counter = 0;
+                            foreach (var obs in Model.tbl_audit_observation)
+                            {
+                                counter += 1;
+                                <tr id="obs@(obs.ID)">
+                                    <td>@counter</td>
+                                    <td id="NC_Observation@(obs.ID)" >@Html.Raw(obs.NC_Observation)</td>
+                                    <td id="PossibleImpact_Attr@(obs.ID)">@Html.Raw(obs.PossibleImpact_Attr)</td>
+                                    <td>@{
+                                            var person = Model.tbl_audit_participant.Where(o => o.tbl_Org_EmployeeID == obs.Responsibility);
+                                            string names = "";
+                                            if (person != null && person.Any())
+                                            {
+                                                foreach (var p in person)
+                                                {
+                                                    names = names + (names == "" ? "" : ", ") + p.Name;
+                                                }
+                                            }
+                                        }
+                                        @names
+                                    </td>
+                                    <td>@ActionStatus.getTypeName((short)obs.Status)</td>
+                                    <td>@(obs.StatusUpdateDate != null ? obs.StatusUpdateDate.GetValueOrDefault().ToShortDateString() : "")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="AuditChkLst" class="tab-pane">
+                @if (Model.tbl_audit_checklist != null && Model.tbl_audit_checklist.Any())
+                {
+                    var processGroup = "";
+                    var groupSequence = 0;
+                    var chklistSequene = 0;
+                    <table class="table table-bordered" id="AuditChklstTable">
+                        <thead>
+                            <tr>
+                                <th class="docTableSequence-bg AuditCL_Header">Task Id</th>
+                                <th class="AuditCL_Header">Phases & Task Description</th>
+                                <th class="AuditCL_Header">Y/N</th>
+                                <th class="AuditCL_Header">Compliance</th>
+                                <th class="AuditCL_Header">Score</th>
+                                <th class="AuditCL_Header" id="Th1"></th>
+                                <th class="AuditCL_Header">Observations / NCs / Best Practices</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="AuditCL_SubHeader"></th>
+                                <th class="AuditCL_SubHeader">Project Tasks</th>
+                                <th class="AuditCL_SubHeader">Y/N</th>
+                                <th class="AuditCL_SubHeader">Project Level</th>
+                                <th class="AuditCL_SubHeader">PCI Score</th>
+                                <th class="AuditCL_SubHeader" id="projScore">@(Decimal.Round((Model.tbl_audit_checklist.Average(o => o.PCI_Score) * 100),2)) %</th>
+                                <th class="AuditCL_SubHeader"></th>
+                            </tr>
+                            @foreach (var cl in Model.tbl_audit_checklist.OrderBy(o => o.GroupSequenceNo).ThenBy(o => o.ChkLstSequenceNo))
+                            {
+                                chklistSequene += 1;
+                                if (processGroup != cl.GroupName)
+                                {
+                                    groupSequence += 1;
+                                    processGroup = cl.GroupName;
+                                    <tr>
+                                        <td class="tblActionIcon AuditCL_Group">@groupSequence</td>
+                                        <td class="AuditCL_Group"><a href="javascript:;" class="group tree-toggle" data-childid="Ph@(cl.PhaseID)">@cl.GroupName</a></td>
+                                        <td class="AuditCL_Group">Select</td>
+                                        <td class="AuditCL_Group" colspan="2">Phase PCI Score</td>
+                                        <td class="AuditCL_Group phaseScore" id="PhPCI@(cl.PhaseID)">@(Decimal.Round((Model.tbl_audit_checklist.Where(o => o.GroupName == cl.GroupName).Average(a => a.PCI_Score) * 100),2)) %</td>
+                                        <td class="AuditCL_Group"></td>
+                                    </tr>
+                                }
+                                <tr class="Ph@(cl.PhaseID) EditRow">
+                                    <td class="AuditCL_Item">
+                                        @(groupSequence).@(chklistSequene)
+                                    </td>
+                                    <td class="AuditCL_Item">@cl.Task</td>
+                                    <td >@(cl.Applicable ? "Yes" : "No")</td>
+                                    <td >@cl.Score</td>
+                                    <td class="AuditCL_Item @(cl.Score == "NI" ? "Audit_NC" : "")" id="Score@(cl.ID)_W">@(cl.Score == "NI" ? "NC" : cl.PCI_Score.ToString())</td>
+                                    <td class="AuditCL_Item PhPCI@(cl.PhaseID)" id="Score@(cl.ID)_PC"><span style="display:none;">@(cl.PCI_Score * 100)</span></td>
+                                    <td class="AuditCL_Item" id="Comments@(cl.ID)">@Html.Raw(cl.Comments)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>                    
+                }
+                else
+                {
+                    <br />
+                    <label class="control-label">Checklist not filled</label>
+                }
+            </div>
+            <div id="AuditParticipants" class="tab-pane">
+                <br />
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Auditor (s)
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                @if (Model.tbl_audit_participant != null && Model.tbl_audit_participant.Where(o => o.Type == 1).Any())
+                                {
+                                    <ol>
+                                        @foreach (var pt in Model.tbl_audit_participant.Where(o => o.Type == 1))
+                                        {
+                                            <li>
+                                                @pt.Name
+                                                <input type="hidden" name="tbl_audit_participant.Index" id="tbl_audit_participant.Index" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ID" id="tbl_audit_participant[@(pt.ID)].ID" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" id="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" value="@pt.tbl_Audit_ScheduleID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" value="@pt.tbl_Org_EmployeeID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" value="@pt.tbl_Org_RoleID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Type" id="tbl_audit_participant[@(pt.ID)].Type" value="@pt.Type" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ClientID" id="tbl_audit_participant[@(pt.ID)].ClientID" value="@pt.ClientID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Name" id="tbl_audit_participant[@(pt.ID)].Name" value="@pt.Name" />
+                                            </li>
+                                        }
+                                    </ol>
+                                }
+                                else
+                                {
+                                    <label class="control-label">Not Selected</label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Auditee (s)
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                @if (Model.tbl_audit_participant != null && Model.tbl_audit_participant.Where(o => o.Type == 2).Any())
+                                {
+                                    <ol>
+                                        @foreach (var pt in Model.tbl_audit_participant.Where(o => o.Type == 2))
+                                        {
+                                            <li>
+                                                @pt.Name
+                                                <input type="hidden" name="tbl_audit_participant.Index" id="tbl_audit_participant.Index" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ID" id="tbl_audit_participant[@(pt.ID)].ID" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" id="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" value="@pt.tbl_Audit_ScheduleID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" value="@pt.tbl_Org_EmployeeID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" value="@pt.tbl_Org_RoleID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Type" id="tbl_audit_participant[@(pt.ID)].Type" value="@pt.Type" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ClientID" id="tbl_audit_participant[@(pt.ID)].ClientID" value="@pt.ClientID" />
+                                                <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Name" id="tbl_audit_participant[@(pt.ID)].Name" value="@pt.Name" />
+
+                                            </li>
+                                        }
+                                    </ol>
+                                }
+                                else
+                                {
+                                    <label class="control-label">Not Selected</label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

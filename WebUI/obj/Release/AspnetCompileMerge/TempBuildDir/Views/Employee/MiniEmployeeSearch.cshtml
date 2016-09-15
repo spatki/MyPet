@@ -1,0 +1,70 @@
+﻿@model mstr_org_levelInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog" style="width:70%; height:50%;">
+	<div class="modal-content">
+	<div class="modal-header">
+		<h4 class="modal-title" id="dialogTitle">Search Employees</h4>
+	</div>
+    <form name="searchEmp" id="searchEmp" action="@Url.Action("MiniSearchItems","Employee")">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="form-group">        
+                    <div class="col-lg-5">                            
+                        <label class="control-label"><b>Search on</b> : </label> <input type="radio" name="searchCode" id="searchCode" value="1" checked="checked"/>  Employee Name | <input type="radio"  name="searchCode" value="2"/>  Employee Code
+                    </div>
+                    <!--div class="col-lg-4 pull-right">
+                        <a href="javascript:;" id="showAdvSearch">Advanced Search <i class="icon-">&#xf00e;</i></a>
+                    </!--div-->
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                        <input type="text" class="form-control" name="searchText" id="searchTextBox" onkeydown = "return (event.keyCode!=13);">
+						<div class="input-group-btn">
+                        <button type="button" class="btn btn-med blue-bg saveDefaultExtra" data-dialog="openExtraDialog" data-mode="search" data-form="searchEmp" data-id="searchlisting">GO</button>
+						</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel colored col-md-12">
+                    <div class="panel-heading green-bg">
+                        <h3 class="panel-title">Employees</h3>
+                        <ul class="pull-right toolbar">
+                            <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                            <li><a href="javascript:;" class="icon-button reload-box reLoad" data-container="dataList" data-url="@Url.Action("ReloadItems")"><i class="icon-">&#xf021;</i></a></li>
+                            <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                        </ul>
+                        <input type="hidden" name="selectedID" id="selectedID" value="" />
+                    </div>
+                    <div class="panel-body" id="dataList">
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered" id="processTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Emp Code</th>
+                                    <th>Name</th>
+                                    <th>Date Of Joining</th>
+                                    <th>Designation</th>
+                                    <th class="hidden-sm">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchlisting">
+                                <p>Search for employees</p>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg closeDialog">Close</button>
+		        <button type="button" class="btn blue-bg selectItem" data-id="selectedID" data-pageid="enterSelected" data-dialog="extraDialogBox">Select</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

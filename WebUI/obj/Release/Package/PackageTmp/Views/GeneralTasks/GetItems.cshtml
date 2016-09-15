@@ -1,0 +1,53 @@
+﻿@model IEnumerable<mstr_org_general_tasks>
+@{
+    Layout = null;
+    var roleNames = "";
+}
+@foreach (var o in Model)
+{
+    roleNames = "";
+    <tr id="@o.ID">
+        <td>@o.Sequence</td>
+        <td>@o.Task</td>
+        <td>@(o.OwnedByProject == null ? Html.Raw(o.Description) : Html.Raw("<span class='label label-info'>Tailored For Project</span>: " + o.tbl_org_project.Name))</td>
+        <td>
+            @if (o.Global == true)
+            {
+                <span class="label label-success">All</span>
+            }
+            else
+            {
+                if (o.tbl_org_general_task_roles != null && o.tbl_org_general_task_roles.Any())
+                {
+                    foreach (var rl in o.tbl_org_general_task_roles)
+                    {
+                        roleNames = roleNames + (roleNames == "" ? "" : ", ") + rl.mstr_org_role.ShortName;  
+                    }
+                    <text>
+                        @roleNames
+                    </text>
+                }
+                else
+                {
+                    <span class="label label-warning">Not Configured</span>
+                }
+            }
+        </td>
+        <td>
+            @if (o.OwnedByProject == null)
+            {
+                <button class="btn btn-med green-bg openDialog" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "GeneralTasks", new { id = o.ID })"><i class="icon-">&#xf044;</i></button>
+                <button class="btn btn-med red-bg openDeleteDialog" data-id="@o.ID" data-mode="delete" data-source="@Url.Action("Delete", "GeneralTasks", new { id = o.ID })"><i class="icon-">&#xf057;</i></button>
+            }
+            else
+            {
+                <button class="btn btn-med blue-bg confirmAction" data-messagetitle="Confirm to Publish"
+                    data-message="Once published, this task will not be owned by the project. Changes to the general task cannot be made by the project tailoring. Do you want to proceed ?"
+                    data-class="loadDetails"
+                    data-classparams ="data-element='@o.ID' data-mode='edit' data-source='@Url.Action("PublishToAll", "GeneralTasks", new { id = o.ID })'"
+                    data-source="@Url.Action("PublishToAll", "GeneralTasks", new { id = o.ID })"
+                    title="Tailored for a project. Publish will make this tasks available to all projects."><i class="icon-umbrella"></i> Publish</button>
+            }
+        </td>
+    </tr>
+}

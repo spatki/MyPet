@@ -1,0 +1,84 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_employeeInput
+@{
+    Layout = null;
+}
+
+
+<div class="row">
+    <div class="panel colored col-md-12">
+        <div class="panel-heading green-bg">
+            <h3 class="panel-title">User Details</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+			    <div class="col-md-3">
+                    <img id="displayProfilePic" src="@Url.Content("~/Content/images/" + User.Identity.Name + "_pic.jpg")"  title='Profile Picture' width='200' height='200' alt='Profile Picture'  class="thumbnail"/>
+                </div>
+                <div class="col-md-9">
+                    <div class="row col-md-12">
+                        <div class="col-md-6">
+                            <input type="hidden" name="ID" id="ID" value="@Model.ID" />
+                            <div class="form-group">
+                                <label class="control-label">Employee Code</label>
+                                <input class="form-control" value="@Model.EmpCode" readonly="true"/>
+                            </div>
+                        </div>                            
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Date Of Joining</label>
+                                <input class="form-control" value="@Model.DateOfJoining.ToString(Globals.DateFormatString)" readonly="true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input class="form-control" value="@Model.GivenName @Model.FamilyName" readonly="true"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Employment Status</label>
+                                <input class="form-control" value="@Html.Action("GetName","ProcessLCStatus",new { id = Model.mstr_Process_LC_StatusID })" readonly="true"/>
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="row col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Designation</label>
+                                <input class="form-control" value="@Html.Action("GetName","OrgDesignation",new { id = Model.CurrentDesignation })" readonly="true"/>
+                            </div>
+                        </div>
+                            
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            <label>Role</label>
+                            <input class="form-control" value="@Html.Action("GetNames","OrgRole",new { id = Model.Roles })" readonly="true"/>
+                            </div>
+                        </div>
+                    </div>  
+
+                    <div class="row col-md-12">                           
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <input class="form-control" value="@(Model.Gender == 1 ? "Male" : "Female")" readonly="true"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input class="form-control" value="@(Model.DateOfBirth == null || Model.DateOfBirth == new DateTime() ? "" : Model.DateOfBirth.GetValueOrDefault().ToString(Globals.DateFormatString))" readonly="true"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,282 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+             <div class="row">            
+                <div class="col-md-12">
+					<div class="panel colored">
+                    <div class="panel-body">
+                        <div class="panel">
+                        <br />
+                        <div class="row">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-2">Select Project</label>
+                                <div class="controls col-md-10"><select class="col-md-12 chzn-nopadd chzn-select-no-single"><option>Payroll System</option> <option>Code Migration</option></select></div>
+                            </div>
+                       </div>
+                        <hr />
+                        <div class="row">
+                            <div class="pull-right col-md-7">
+                                <label>Status Legend: </label>
+                                <div class="btn btn-sm gray-bg" data-toggle="modal">Not Sent for Approval</div>
+                                <div class="btn btn-sm blue-bg" data-toggle="modal">Sent for Approval</div>
+                                <div class="btn btn-sm green-bg" data-toggle="modal">Approved</div>
+                                <div class="btn btn-sm red-bg" data-toggle="modal">Rejected</div>
+                            </div>
+                        </div>
+
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1"></th>
+                                        <th>Proxy User</th>
+                                        <th>TS Entry for</th>
+                                        <th>TS Approvals</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                        <th>Approval Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="proxyEmps" data-count="1">
+                                    <tr>
+                                        <td></td>
+                                        <td>Arvind Swami</td>
+                                        <td>Sunanda Gupte</td>
+                                        <td>Yes</td>
+                                        <td>12/10/2013</td>
+                                        <td>30/10/2013</td>
+                                        <td>Active</td>
+                                        <td>On Leave</td>
+                                        <td ><div class="btn btn-sm red-bg revComments" data-toggle="modal" title="Click to view comments" data-desc="Not needed. Resource can enter timesheet on return from absence">View</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Tarun Gupta</td>
+                                        <td>Krish Parekh</td>
+                                        <td>No</td>
+                                        <td>01/03/2013</td>
+                                        <td>30/10/2013</td>
+                                        <td>Active</td>
+                                        <td>Deployed on-site. Limited internet access</td>
+                                        <td ><div class="btn btn-sm green-bg revComments" data-toggle="modal" title="Click to view comments" data-desc="Justified Reason.">View</div></td>
+                                    </tr>
+                                    <tr id="R1">
+                                        <td><a href="#" data-id="R1" class="addResource" data-toggle="modal" data-tableid="proxyEmps" data-key="R"><i class="icon-">&#xf055</i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                        <div class="panel-footer">
+		                    <button type="button" class="btn blue-bg pull" id="Button1" data-dismiss="modal">Submit For Approval</button>
+		                </div>
+
+                    </div>
+                    </div>
+            </div>
+                </div>                                
+
+    <div class="modal fade" id="reviewDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Review Comments</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <input type="hidden" id="statusID" /><input type="hidden" id="statusDesc" />
+                        <label class="control-label col-lg-3"><b>Reviewer:</b></label>
+                        <label class="control-label col-lg-3 pull-left">Sanjay Goel</label>
+                        <label class="control-label col-lg-3"><b>Review Date: </b></label>
+                        <label class="control-label col-lg-3 pull-left" id="createDate">01-Oct-13</label>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="col-lg-12"><b>Review Comments</b></label>
+                        <textarea name="reviewComments" class="col-lg-12" rows="5" id="reviewComments" disabled></textarea>                    
+                    </div>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<script type="text/javascript">
+	    var config = {
+	        '.chzn-select': {},
+	        '.chzn-select-deselect': { allow_single_deselect: false },
+	        '.chzn-select-no-single': { disable_search_threshold: 10 },
+	        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+	        '.chzn-select-width': { width: "95%" }
+	    }
+	    for (var selector in config) {
+	        $(selector).chosen(config[selector]);
+	    }
+
+
+	    $("body").delegate(".removeResource", "keydown", function (e) {
+	        keypressCode = e.which;
+	        keypressShift = e.shiftKey;
+	    });
+
+	    $("body").delegate(".removeResource", "click", function () {
+	        if (confirm("Do you want to remove this resource ?")) {
+	            $("#" + $(this).data("id")).remove();
+	        }
+	    });
+
+	    $("body").delegate(".removeResource", "blur", function (e) {
+	        if (keypressCode == 9 && !keypressShift) $(this).parent().parent().children().eq(1).click();
+	        else {
+	            if (keypressCode == 9 && keypressShift) $(this).parent().parent().prev().children().last().prev().click();
+	        }
+	    });
+
+	    $("body").delegate(".addResource", "keydown", function (e) {
+	        keypressCode = e.which;
+	        keypressShift = e.shiftKey;
+	    });
+
+	    $("body").delegate(".addResource", "blur", function (e) {
+	        if (keypressCode == 9 && keypressShift) $(this).parent().parent().prev().children().last().prev().click();
+	    });
+
+	    $("body").delegate(".addResource", "click", function () {
+	        // add additional columns for edit
+	        var count = parseInt($(this).parent().parent().parent().data("count"));
+	        var nodeKey = $(this).parent().parent().parent().prop("id");
+	        count = count + 1;
+	        var newColumns = '<td class="resEdit" id="' + nodeKey + 'PUser' + count + '" data-id="0" data-next="' + nodeKey + 'TSUser' + count + '" data-type="PUser">Select</td>' +
+                                '<td class="resEdit" id="' + nodeKey + 'TSUser' + count + '" data-id="0" data-next="' + nodeKey + 'TSApprover' + count + '" data-prev="' + nodeKey + 'PUser' + count + '" data-type="TSUser">Select</td>' +
+                                '<td class="resEdit" id="' + nodeKey + 'TSApprover' + count + '" data-id="0" data-next="' + nodeKey + 'From' + count + '" data-prev="' + nodeKey + 'TSUser' + count + '" data-type="TSApprover">Select</td>' +
+                                '<td class="resEdit" data-id="" id="' + nodeKey + 'From' + count + '" data-next="' + nodeKey + 'To' + count + '" data-prev="' + nodeKey + 'TSApprover' + count + '" data-type="From"></td>' +
+                                '<td class="resEdit" data-id="" id="' + nodeKey + 'To' + count + '" data-next="' + nodeKey + 'Status' + count + '" data-prev="' + nodeKey + 'From' + count + '" data-type="To"></td>' +
+                                '<td class="resEdit" data-id="0" id="' + nodeKey + 'Status' + count + '" data-next="' + nodeKey + 'Reason' + count + '" data-prev="' + nodeKey + 'To' + count + '" data-type="Status">Select</td>' +
+                                '<td class="resEdit" data-id="" id="' + nodeKey + 'Reason' + count + '" data-next="' + nodeKey + 'AprvStatus' + count + '" data-prev="' + nodeKey + 'Status' + count + '" data-type="Reason"></td>' +
+                                '<td data-id="0" id="' + nodeKey + 'AprvStatus' + count + '" data-prev="' + nodeKey + 'Reason' + count + '" data-type="AprvStatus"><div class="btn btn-sm gray-bg" data-toggle="modal">View</div></td>';
+	        $(this).parent().after(newColumns);
+	        $(this).parent().parent().parent().data("count", count);
+
+	        // Add the option to add more rows
+	        $(this).parent().parent().parent().append('<tr id="R' + count + '"><td><a href="#" class="addResource" data-id="R' + count + '" data-count="' + count + '"><i class="icon-">&#xf055</i></a></td></tr>');
+	        $(this).removeClass("addResource");
+	        $(this).addClass("removeResource");
+	        $(this).children().first().html("&#xf00d");
+	        $("#TSUser" + count).click();
+	        // Go to the new rule
+	        $('html, body').animate({
+	            scrollTop: $("#" + "R" + count).offset().top
+	        }, 2000);
+
+	    });
+
+	    $("body").delegate(".resEdit", "click", function () {
+	        var OriginalContent = $(this).text();
+	        var OriginalValue = $(this).data("id");
+	        var editItem = $(this).data("type");
+
+	        var inputHTML = "";
+
+	        // Prepare input based on type of column
+	        switch (editItem) {
+	            case "PUser":
+	                inputHTML = '<select><option value="0">Select</option><option value="1">Arvind Swami</option> <option value="2">Sunanda Gupte</option> <option value="3">Krish Parekh</option> <option value="4">Tarun Gupta</option> <option value="5">Sumedha Patkar</option> </select>';
+	                break;
+	            case "TSUser":
+	                inputHTML = '<select><option value="0">Select</option><option value="1">Arvind Swami</option> <option value="2">Sunanda Gupte</option> <option value="3">Krish Parekh</option> <option value="4">Tarun Gupta</option> <option value="5">Sumedha Patkar</option> </select>';
+	                break;
+	            case "TSApprover":
+	                inputHTML = '<select><option value="0">Select</option><option value="1">Yes</option> <option value="2">No</option> </select>';;
+	                break;
+	            case "From":
+	                inputHTML = '<input type="text" class="dateInput" size="10">';
+	                break;
+	            case "To":
+	                inputHTML = '<input type="text" class="dateInput" size="10">';
+	                break;
+	            case "Status":
+	                inputHTML = '<select><option value="0">Select</option><option value="1">Active</option> <option value="2">In-Active</option> </select>';
+	                break;
+	            case "Reason":
+	                inputHTML = '<input type="text" size="20">';
+	                break;
+	        };
+
+	        $(this).removeClass("resEdit");
+	        $(this).addClass("cellEditing");
+	        $(this).html(inputHTML);
+	        $(this).children().val(OriginalValue);
+	        $(this).children().first().focus();
+	        $(this).children().first().select();
+	        // Add mask for duration
+	        $(".mask_percent").inputmask("999", { placeholder: " ", clearMaskOnLostFocus: true }); //default
+	        $(".dateInput").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+
+	        keypressCode = -1;
+	        keypressShift = false;
+
+	        $(this).children().first().blur(function () {
+	            var nextTD = $(this).parent().data("next");
+	            var prevTD = $(this).parent().data("prev");
+
+	            $(this).parent().removeClass("cellEditing");
+	            $(this).parent().addClass("resEdit");
+	            $(this).parent().data("id", $(this).val());
+	            if ($(this).find("option:selected").length == 0) $(this).parent().text($(this).val());
+	            else $(this).parent().text($(this).find("option:selected").eq(0).text());
+
+	            if (keypressCode == 9 || keypressCode == 16) {
+	                if (keypressShift) $("#" + prevTD).click();
+	                else $("#" + nextTD).click();
+	            }
+	        });
+
+
+	        $(this).children().first().on("keydown", (function (e) {
+	            // check for tab key
+	            if (e.which == 13) {
+	                var nextTD = $(this).parent().data("next");
+	                var prevTD = $(this).parent().data("prev");
+
+	                $(this).parent().removeClass("cellEditing");
+	                $(this).parent().addClass("resEdit");
+	                $(this).parent().data("id", $(this).val());
+	                if ($(this).find("option:selected").length == 0) $(this).parent().text($(this).val());
+	                else $(this).parent().text($(this).find("option:selected").eq(0).text());
+	                // Focus on the next td
+	                $("#" + nextTD).click();
+	            }
+	            else {
+	                keypressCode = e.which;
+	                keypressShift = e.shiftKey;
+	            }
+	        }));
+
+	    });
+
+	    $("body").delegate(".revComments", "click", function () {
+	        $("#reviewDetails").modal("show");
+	        $("#reviewComments").text($(this).data("desc"));
+	    });
+   </script> 
+               
+}

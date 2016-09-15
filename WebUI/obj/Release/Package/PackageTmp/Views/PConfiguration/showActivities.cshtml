@@ -1,0 +1,165 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_process_rep_taskdetails
+@{
+    Layout = null;
+}
+<div class="panel colored col-md-12" id="activityDetails">
+    <div class="panel-heading blue-bg">
+        <h3 class="panel-title">Configure Activity</h3>
+    </div>
+    <form action="@Url.Action("manageActivities")" method="post" id="formActivity">
+    <div class="panel-body">
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label id="postionLabel">Position : </label>
+                @foreach (var n in Model.position)
+                {
+                    <span class="label label-info">@n
+                        <input type="hidden" name="position" value="@n" />
+                    </span>
+                    <i class="icon-chevron-right"></i>
+                }
+                <span class="label label-success">Repository</span><i class="icon-chevron-right"></i><span class="label label-warning">Activities</span>
+            </div>                        
+
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="cProcesses" data-repo="@Model.ID" data-id="@(Model.selectedOptions.LastOrDefault().Name == null ? 1 : Model.selectedOptions.LastOrDefault().ID + 1)" data-sequence="@ViewBag.sequence">
+                <input type="hidden" name="ID" value="@Model.ID">
+                @if (Model.selectedOptions.Any())
+                {
+                    var tasks = Model.selectedOptions.OrderBy(o => o.SequenceNo);
+                    foreach (var a in tasks)
+                    {
+                        <div class="panel-group" id="inputPanel@(Model.ID)A@(a.ID)">
+                            <div class="panel colored">
+                                <div class="panel-heading  yellow-bg">
+                                    <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#pAccord@(Model.ID)" href="#PShow@(Model.ID)A@(a.ID)">
+                                        <span id="pNm@(Model.ID)A@(a.ID)Title">@((a.Name != null && a.Name != "") ? a.SequenceNo + ". " + a.Name : "Provide Activity Name")</span>
+                                    </a>
+                                    </h4>
+                                    <ul class="pull-right toolbar">
+                                        <li><a href="javascript:;" class="icon-button confirmAction" data-messagetitle="Confirm Delete" data-message="Do you want to delete this activity ?" data-class="removeActivity" data-classparams='data-id="@a.ID" data-repoid="@Model.ID" data-updateid="inputPanel@(Model.ID)A@(a.ID)" data-mode="@((a.Name != null && a.Name != "") ? "server" : "client")" data-pageid="Activity@(Model.ID)"'><i class="icon-">&#xf057;</i></a></li>
+                                    </ul>
+                                </div>
+                                <div id="PShow@(Model.ID)A@(a.ID)" class="panel-collapse collapse @((Model.selectedOptions.Count() > 1) ? "" : "in")">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="col-md-12 form-group">
+                                                    <div class="col-md-2"><input type="text" name="selectedOptions[@(a.ID)].SequenceNo" value="@a.SequenceNo" class="form-control" id="pNm@(Model.ID)A@(a.ID)Seq">
+                                                        @Html.ValidationMessage("selectedOptions[" + a.ID + "].SequenceNo")
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="col-md-2">Name</label>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <input type="hidden" name="selectedOptions.Index" value="@a.ID">
+                                                        <input type="hidden" name="selectedOptions[@(a.ID)].ID" value="@a.ID">
+                                                        <input type="hidden" name="selectedOptions[@(a.ID)].tbl_Process_RepositoryID" value="@a.tbl_Process_RepositoryID">
+                                                        <input type="hidden" name="selectedOptions[@(a.ID)].AssignmentMandatory" value="@a.AssignmentMandatory">
+                                                        <input type="hidden" name="selectedOptions[@(a.ID)].AsynExec" value="@a.AsynExec">
+                                                        <input type="hidden" name="selectedOptions[@(a.ID)].CreatedBy" value="@a.CreatedBy">
+                                                        <input type="hidden" name="selectedOptions[@(a.ID)].CreateDate" value="@(a.CreateDate == null ? "" : a.CreateDate.GetValueOrDefault().ToString(Globals.DateFormatString))">
+                                                        <input type="hidden" name="selectedOptions[@(a.ID)].UpdatedBy" value="@a.UpdatedBy">
+                                                        <input type="hidden" name="selectedOptions[@(a.ID)].UpdateDate" value="@a.UpdateDate">
+                                                        <input type="text" name="selectedOptions[@(a.ID)].Name" class="form-control procName" value="@a.Name" id="pNm@(Model.ID)A@(a.ID)">
+                                                        @Html.ValidationMessage("selectedOptions[" + a.ID + "].Name")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <div class="col-md-12 form-group">
+                                                    <label class="col-md-5">Status</label>
+                                                    <div class="col-md-6">@Html.Action("getStatusFor","ProcessLCStatus",new { selectedItem = a.mstr_Process_LC_StatusID.GetValueOrDefault(), controlName = "selectedOptions[" + @a.ID + "].mstr_Process_LC_StatusID", excludeIds = "", includeIds = "", reload = "", Type = 1, DefaultSelection = false })</div>
+                                                    @Html.ValidationMessage("selectedOptions[" + a.ID + "].mstr_Process_LC_StatusID")
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group col-md-12">
+                                                    <label>Description</label>
+                                                    <textarea id="pDsc@(Model.ID)A@(a.ID)" name="selectedOptions[@(a.ID)].Description" class="form-control popovers" rows="6" data-original-title="Description" data-content="Provide a detailed description of this activity" data-trigger="hover" data-placement="right">@a.Description</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="col-md-12">
+                                                    <label class="col-md-5">Default Status</label>
+                                                    <div class="col-md-6">
+                                                        @Html.Action("getStatusFor","ProcessLCStatus",new { selectedItem = a.DefaultStatus.GetValueOrDefault(), controlName = "selectedOptions[" + a.ID + "].DefaultStatus", excludeIds = "", includeIds = "", reload = "", Type = 2, DefaultSelection = false })
+                                                        @Html.ValidationMessage("selectedOptions[" + a.ID + "].DefaultStatus")
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label class="col-md-5">Completion Status</label>
+                                                    <div class="col-md-6">
+                                                        @Html.Action("getStatusFor","ProcessLCStatus",new { selectedItem = a.CompletionStatus.GetValueOrDefault(), controlName = "selectedOptions[" + a.ID + "].CompletionStatus", excludeIds = "", includeIds = "", reload = "", Type = 2, DefaultSelection = false })
+                                                        @Html.ValidationMessage("selectedOptions[" + a.ID + "].CompletionStatus")
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label class="col-md-5">Default Hrs</label>
+                                                    <div class="col-md-6">
+                                                        @Html.TextBox("selectedOptions[" + a.ID + "].DefaultHRS",a.DefaultHRS)
+                                                        @Html.ValidationMessage("selectedOptions[" + a.ID + "].DefaultHRS")
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label class="col-md-5">Default Duration (Days)</label>
+                                                    <div class="col-md-6">
+                                                        @Html.TextBox("selectedOptions[" + a.ID + "].DefaultDurationDays",a.DefaultDurationDays)
+                                                        @Html.ValidationMessage("selectedOptions[" + a.ID + "].DefaultDurationDays")
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label class="col-md-5">Activity Type</label>
+                                                    <div class="col-md-6">
+                                                        @Html.DropDownList("selectedOptions[" + a.ID + "].Type", (new ActivityType()).getList((short)a.Type), "Select ...", new { @class = "col-md-12 form-control" })
+                                                        @Html.ValidationMessage("selectedOptions[" + a.ID + "].Type")
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                @if (a.Name != null && a.Name != "")
+                                                {
+                                                    <p class="col-md-12 pull-right" ><a href="javascript:;" data-toggle="modal" class="btn btn-xs label-configured openDialog" data-source="@Url.Action("manageActivityRefDocs", "PConfiguration", new { repoID = a.tbl_Process_RepositoryID, activityID = a.ID })"><i class="icon-file-alt"></i> Documents</a> | <a href="javascript:;" class="btn btn-xs label-configured openDialog" data-source="@Url.Action("UnderConstruction","Main")"><i class="icon-cogs"></i> Rules</a></p>
+                                                }
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group col-md-12">
+                                                    <div class="col-md-12">@Html.CheckBox("selectedOptions[" + a.ID + "].reSequence", a.reSequence.GetValueOrDefault(), new { @class = "reSequenceOption" })&nbsp; <label class="control-label">Re-order sequence starting from here</label></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div> 
+        </div> 
+        <div class="col-md-12 navbar-fixed-bottom pull-right">
+            <div class="row pull-right panel-footer">
+                <div class="col-md-12 col-md-offset-1">
+                <button type="button" class="btn blue-bg newActivity">Add New Process</button>
+                <button type="button" class="btn blue-bg saveDefaultExtra" data-form="formActivity" data-mode="saveActivity" data-id="Activity@(Model.ID)" data-dialog="openDialogBox" data-pageid="activityDetails" >Save</button>
+                <button type="button" class="btn blue-bg backToRepository" data-last="1">Back</button>
+                <input type="reset" class="btn gray-bg">
+                </div>
+            </div>
+        </div>
+
+    </div>
+	</form>
+</div>  
+
+    <!-- Modal -->
+    <div class="modal fade" id="extraDialogBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	</div><!-- /.modal -->
+
+

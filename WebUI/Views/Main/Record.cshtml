@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Record";
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+    @section Scripts
+    {
+            @Scripts.Render("~/bundles/editor")
+    }
+}

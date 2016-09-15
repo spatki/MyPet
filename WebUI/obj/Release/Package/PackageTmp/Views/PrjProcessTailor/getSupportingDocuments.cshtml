@@ -1,0 +1,31 @@
+﻿@model IEnumerable<tbl_org_plan_documentInput>
+@{
+    Layout = null;
+    var doc = new DocType();
+    var docRef = new DocReferenceType();
+    var counter = (int)ViewBag.Key;
+}
+@foreach (var o in Model)
+{
+    <tr id="SD@(o.ID)" class="mappedDocs">
+        <td >
+            <input type="hidden" name="tbl_org_plan_document.Index" value="@counter" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].ID" value="@counter" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].tbl_Org_PlanID" value="@o.tbl_Org_PlanID" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].DocType" value="@o.DocType" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].Name" value="@o.Name" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].tbl_DocMgr_DocumentID" value="@o.tbl_DocMgr_DocumentID" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].tbl_Process_ProcedureID" value="@o.tbl_Process_ProcedureID" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].tbl_Process_ChecklistID" value="@o.tbl_Process_ChecklistID" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].tbl_Process_TemplateID" value="@o.tbl_Process_TemplateID" />
+            <input type="hidden" name="tbl_org_plan_document[@counter].Source" value="@o.Source" />
+            @Html.CheckBox("tbl_org_plan_document[" + counter + "].Include", true)
+        </td>
+        <td>@doc.getTypeName(o.DocType)</td>
+        <td>@o.Name</td>
+        <td><input type="text" name="tbl_org_plan_document[@counter].Remarks" id="tbl_org_plan_document[@counter].Remarks" value="@o.Remarks" class="form-control"/></td>
+        <td>@Html.DropDownList("tbl_org_plan_document[" + counter + "].ReferenceType",docRef.getList((short)o.ReferenceType.GetValueOrDefault()),"Select ...",new { @class = "col-md-12 form-control" })</td>
+        <td class="hidden-sm"></td>
+    </tr>
+    counter++;
+}

@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Process Accelerator</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/cssPA")
+</head>
+<body>
+	<header>
+    	<div class="container-fluid clearfix">
+			<div class="row">
+				<div id="logo" class="col-md-5">
+					<a href="index.html" title="Process Admin" class="pull-left">
+						<img src="~/Content/images/brand_identitiy.gif" height="45" title="PA" alt="Process Accelerator">
+					</a>
+				</div>
+			</div>
+            @if (@User.Identity.IsAuthenticated)
+            {
+            <div  class="col-md-4 user pull-right" id="userSettings">
+                @Html.Partial("_UserSettings")
+            </div>
+            }
+        </div>
+    </header>
+    @if (@User.Identity.IsAuthenticated)
+    {
+        <nav id="main_topnav">
+    	    <div class="container-fluid">
+                <a href="javascript:;" class="pull-right toggle-topmenu visible-xs"><i class="icon-">&#xf0c9;</i></a>
+                <ul>
+                    <li><a href="index.html" title="Dashboard"><i class="icon-dashboard"></i> Dashboard</a></li>
+                    <li><a href="DefineDefineOptions.html" title="Define Process"><i class="icon-">&#xf02e;</i> Define</a></li>    
+                    <li><a href="DefinePlanOptions.html" title="Planing & Tracking Processes"><i class="icon-">&#xf02d;</i> Plan & Track</a></li>
+                    <li><a href="DefineRecordOptions.html" title="Record"><i class="icon-">&#xf085;</i> Record</a></li>
+                    <li><a href="DefineAuditOptions.html" title="Audit"><i class="icon-">&#xf0c9;</i> Audit</a></li>
+                    <li><a href="DefineSystemOptions.html" title="System"><i class="icon-">&#xf0ad;</i> System</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!--TOP NAV ENDS-->
+    }
+
+    <section id="main_content" class="adjustMain_content">
+        @RenderBody()
+    </section>
+
+    <!--footer>
+        <nav>
+            <ul id="menu">
+                <li>@Html.ActionLink("Todo List", "Index", "Home", new { area = "" }, null)</li>
+                <li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, null)</li>
+            </ul>
+        </nav> 
+        <p>Learn more about <a href="http://go.microsoft.com/fwlink/?LinkId=273732">Single Page Applications</a></p>
+        <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
+    </!--footer-->
+
+    @Scripts.Render("~/bundles/ajaxlogin")
+    @Scripts.Render("~/bundles/customPA")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

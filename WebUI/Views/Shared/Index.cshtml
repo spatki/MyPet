@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "Process Accelerator - Dashboard";
+    Layout = "~/Views/Shared/_Dashboard_Layout.cshtml";
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;
+        }
+    }
+    <input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+
+        <br />			
+	    <div class="page-header">
+		    <h1>Dashboard 
+                <div class="col-md-3 pull-right">
+                    <select class="chzn-nopadd chzn-select-no-single col-md-12 changeDashboard">
+                        <option value="1" selected="selected">Senior Management</option>
+                        <option value="2" >Middle Management</option>
+                        <option value="3" >Project Management</option>
+                        <option value="4" >Individual</option>
+                    </select>
+                </div>
+            </h1>
+	    </div>
+	    <ol class="breadcrumb">
+		    <li><a href="#">Home</a></li>
+		    <li><a href="#">Dashboard</a></li>
+		    <li class="active">Senior Management</li>
+	    </ol>
+        <div class="row" ng-controller="Graphs">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                 	<div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Projects</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+                                <div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <select class="form-control" ng-model="VarianceType" ng-change="ReloadVariance()" id="GraphType">
+                                                <option value="1" selected="selected">Effort Variance</option>
+                                                <option value="2" >Schedule Variance</option>
+                                            </select>
+                                        </div>
+                                        <small class="col-md-6 help-block"><i class="icon-info-sign"></i> Choose the information you want to view</small>
+                                    </div>
+						            <div id="linechart" style="width: 100%; height: 300px;" dx-chart="varianceGraphSettings"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel col-md-12">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Overall Effort Variance</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+            		    </div>
+                        <div class="panel-body">
+                            <div id="EffOrgLevel" style="width: 100%; height: 200px;" dx-circular-gauge="effGaugeSettings"></div>
+                        </div>
+                        </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel col-md-12">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Overall Schedule Variance</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+            		    </div>
+                        <div class="panel-body">
+                            <div id="SchOrgLevel" style="width: 100%; height: 200px;" dx-circular-gauge="schGaugeSettings"></div>
+                        </div>
+                        </div>
+                </div>                    
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <br />
+                 	<div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Employees</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <!--div class="col-md-12">
+                                <div class="col-md-6">
+                                    <select class="col-md-6 form-control" ng-model="Employees" ng-change="ReloadEmployee()" >
+                                        <option value="1" selected="selected">% Project Allocation</option>
+                                        <option value="2" >Billable to Client</option>
+                                        <option value="3" >Org Level</option>
+                                    </select>
+                                </div>
+                                <small class="col-md-6 help-block"><i class="icon-info-sign"></i> Choose the information you want to view</small>
+                            </!--div-->
+                            <div class="col-md-12">
+                                <div id="PieChart" style="width: 100%; height: 300px;" dx-pie-chart="pieChartSettings"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <br />
+                 	<div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Compliance</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div id="simplestbarchart" style="width: 100%; height: 300px;" dx-chart="barChartSettings"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+}

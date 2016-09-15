@@ -1,0 +1,28 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_employee>
+@{
+    Layout = null;
+}
+@if (Model.Any())
+{
+    var counter = 1;
+    foreach (var e in Model)
+    {
+        <tr id="@e.ID">
+            <td>@counter</td>
+            <td>@e.EmpCode</td>
+            <td>@e.GivenName @e.FamilyName</td>
+            <td>@e.DateOfJoining.ToString(Globals.DateFormatString)</td>
+            <td>@((e.mstr_org_designation != null) ? e.mstr_org_designation.LongName : "Not defined")</td>
+            <td>@((e.mstr_process_lc_status != null) ? e.mstr_process_lc_status.Status : "")</td>
+            <td><button class="btn btn-med green-bg subMenu" data-source="@Url.Action("Edit", "Employee", new { id = e.ID })"><i class="icon-">&#xf044;</i></button>
+                <button class="btn btn-med red-bg openDeleteDialog" data-id="@e.ID" data-mode="delete" data-source="@Url.Action("Delete", "Employee", new { id = e.ID })"><i class="icon-">&#xf057;</i></button>
+            </td>
+
+        </tr>
+    }
+}
+else
+{
+    <p>No Employees found</p>
+}

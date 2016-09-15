@@ -1,0 +1,36 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@model UserProfileInput
+@{
+    Layout = null;
+}
+            @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pull-right"><a href="javascript:;" data-toggle="modal" class="btn btn-med blue-bg openDialog" data-id="listing" data-source="@Url.Action("Create")">Add New</a></div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="panel colored col-md-12">
+                    <div class="panel-heading green-bg">
+                        <h3 class="panel-title" id="masterTitle">Users</h3>
+                        <ul class="pull-right toolbar">
+                            <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                            <li><a href="javascript:;" class="icon-button reload-box reLoad" data-container="dataList" data-url="/SysUser/ReloadItems"><i class="icon-">&#xf021;</i></a></li>
+                            <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body" id="dataList">
+                        @Html.Action("ReloadItems")
+                    </div>
+                </div>                
+            </div>
+
+
+<script>
+    jsTable('processTable');
+
+</script>
+
+

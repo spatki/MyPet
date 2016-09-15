@@ -1,0 +1,94 @@
+﻿@using ProcessAccelerator.WebUI
+@model timesheetEntry
+@{
+    DateTime weekStart = (DateTime) ViewBag.startDate;
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+    <form method="post" action="@Url.Action("ProcessTimesheet","Timesheet")" name="WFForm" id="WFForm">
+
+ 			<div class="row">
+            	<div class="panel col-md-12">
+                    <!--div class="row">
+                        <div class="col-md-12 notification blue-bg">
+                 	            <strong>Record Time: </strong> : Click on the desired date to record time for that date, click to close this. 
+                        </div>
+                    </!--div-->                        
+                    <div class="row col-md-12">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><span id="viewTitle">Weekly View</span> ( <span id="vTitlePrefix"> Starting </span><span id="weekStart" class="TableDisabledLabel"></span> )
+                                <a href="#" class="nav_options" id="prevWeekTS"><i class="icon-double-angle-left"></i> Prev</a>
+                                <a href="#" class="nav_options" id="showTodayTS"><i class="icon-double-angle-down"></i> current</a>
+                                <a href="#" class="nav_options" id="nextWeekTS">Next <i class="icon-double-angle-right"></i></a>
+                            </h3>
+                            <ul class="pagination pull-right" style="margin:-1px 0;">
+                                <li><a href="#" id="dailyView">Dialy</a></li>
+                                <li  class="active"><a href="#" id="weeklyView" >Weekly</a></li>
+                                <!--li><a href="#" id="monthlyView">Monthly</a></!--li-->
+                            </ul>
+                        </div>
+                        <div class="panel" id="DailyTS" style="display:none;">
+                             <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="TSHeader">Activity</th>
+                                        <th class="TSHeader TSHours">Action(s)</th>
+                                        <th class="TSHeader TSHours">Assigned Hrs</th>
+                                        <th class="TSHeader TSHours">Total Hrs</th>
+                                        <th class="TSHeader TSHours">Start Time</th>
+                                        <th class="TSHeader TSHours">End Time</th>
+                                        <th class="TSHeader TSHours">Hours</th>
+                                        <th class="TSHeader TSHours">Billable To Client</th>
+                                        <th class="TSHeader TSHours">Billable Hours</th>
+                                        <th class="TSHeader TSHours">Overtime Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="DailyTSDetails">
+                                </tbody>
+                            </table>
+                       </div>
+                        <div class="panel" id="WeeklyTS">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="TSHeader" rowspan="2">Activity</th>
+                                        <th class="TSHeader TSHours" rowspan="2">Action(s)</th>
+                                        <th class="TSHeader TSHours" rowspan="2">Assigned Hrs</th>
+                                        <th class="TSHeader TSHours" rowspan="2">Total Hrs</th>
+                                        <th class="TSHeader TSHours">MON</th>
+                                        <th class="TSHeader TSHours">TUE</th>
+                                        <th class="TSHeader TSHours">WED</th>
+                                        <th class="TSHeader TSHours">THUR</th>
+                                        <th class="TSHeader TSHours">FRI</th>
+                                        <th class="TSHeader TSHours">SAT</th>
+                                        <th class="TSHeader TSHours">SUN</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="TSSubHeader TSHours" id="weekDt1">@weekStart.ToString("dd-mmm")</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt2">@weekStart.AddDays(1).ToString("dd-mmm")</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt3">c</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt4">d</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt5">e</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt6">f</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt7">g</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="WeeklyTSDetails">
+                                    @Html.Action("WeeklyView","Timesheet", new { startDate = weekStart.ToString(Globals.DateFormatString) })
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--div id="MonthlyTS" class="panel" style="width:100%;height:90%;">
+                        </!--div-->
+                    </div>
+            </div>
+        </div>
+    </form>
+<script>
+    viewDate = new Date("@weekStart");
+    populateView(viewDate, "week");
+</script>
+}

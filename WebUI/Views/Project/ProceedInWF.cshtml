@@ -1,0 +1,67 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_proj_review_historyInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog" style="width:70%;">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Review Comments</h4>
+	</div>
+    <form method="post" action="@Url.Action("ProjectProceedInWF")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+            <input type="hidden" value="@Model.tbl_Org_ProjectID" name="tbl_Org_ProjectID" id="tbl_Org_ProjectID" />
+            <input type="hidden" value="@Model.ReviewDate.ToString(Globals.DateFormatString)" name="ReviewDate" id="ReviewDate" />
+            <input type="hidden" value="@Model.UserID" name="UserID" id="UserID" />
+            <input type="hidden" value="@Model.StatusID" name="StatusID" id="StatusID" />
+            <input type="hidden" value="@Model.workflow.ToString()" name="workflow" id="workflow" />
+            <input type="hidden" value="@Model.prevUser" name="prevUser" id="prevUser" />
+            <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-6">    
+                        <div class="col-md-4"><strong>Project</strong></div>
+                        <div class="col-md-8 pull-right">@Model.projectName</div>
+                    </div>
+                    <div class="form-group col-md-6">    
+                        <div class="col-md-5"><strong>Created By</strong></div>
+                        <div class="col-md-7 pull-right">@Model.CreatedBy</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-6">    
+                        <div class="col-md-4"><strong>Status</strong></div>
+                        <div class="col-md-8 pull-right">@Model.StatusName</div>
+                    </div>
+                    <div class="form-group col-md-6">    
+                        <div class="col-md-5"><strong>Comments By</strong></div>
+                        <div class="col-md-7 pull-right">@Model.userName</div>
+                    </div>
+                </div>
+            </div>		    
+            <div class="row">
+			    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="control-label"><strong>Comments</strong></div>
+                            @Html.TextAreaFor(o => o.Comments, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Comments)
+                        </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveWorkflowExtra" data-mode="edit" data-id="containerDetails" data-form="submitLevel" data-message="@ViewBag.message">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+   // specialDropDown (".specialCombo")
+</script>

@@ -1,0 +1,8 @@
+﻿@model IEnumerable<tbl_org_estm_parameters>
+@{
+    Layout=null;
+}
+@foreach (var p in Model)
+{
+    <option value="@p.ID" id="ParamOption@(p.ID)" selected="selected">@p.Name</option>
+}

@@ -1,0 +1,20 @@
+﻿@model IEnumerable<tbl_process_document>
+@{
+    Layout = null;
+}
+@foreach (var o in Model)
+{  <tr id="@o.ID">
+        <td><a href="javascript:" class="openDocument" data-source="@Url.Action("ViewDocument","DocMgr",new { id = o.tbl_docmgr_document.ID })">@o.tbl_docmgr_document.Name</a></td>
+        <td>@o.tbl_docmgr_document.Classification</td>
+        <td>@o.tbl_docmgr_document.Version
+            @if (o.tbl_docmgr_document.Version > 1) 
+            {
+                <button class="btn btn-xs orange-bg openDialog" title="View Versions" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("ViewVersions", new { id = o.tbl_docmgr_document.ID })"><i class="icon-copy"></i></button>
+            }
+        </td>
+        <td>
+            <button class="btn btn-med blue-bg openDialog" title="Upload Version" data-id="@o.tbl_docmgr_document.ID" data-mode="edit" data-source="@Url.Action("CreateVersion","DocMgr", new { id = o.tbl_docmgr_document.ID })"><i class="icon-edit"></i></button>
+            <button class="btn btn-med red-bg openDeleteDialog" title="Delete Document" data-id="@o.tbl_docmgr_document.ID" data-mode="delete" data-source="@Url.Action("Delete", "DocMgr", new { id = o.ID })"><i class="icon-">&#xf057;</i></button>
+        </td>
+    </tr>
+}

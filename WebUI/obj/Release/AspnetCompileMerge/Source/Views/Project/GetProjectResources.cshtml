@@ -1,0 +1,10 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_proj_allocation>
+<select name="@ViewBag.itemName" id="@ViewBag.itemName" class="specialCombo form-control col-md-12 @((ViewBag.reload != null) ? ViewBag.reload : "" )">
+    <option value=""  data-start=""  data-end="" selected>@((ViewBag.defaultItem != null) ? ViewBag.defaultItem : "Select...")</option>
+@foreach (var item in Model)
+{
+    <option value="@item.tbl_Org_EmployeeID" @((ViewBag.selectedItem == item.tbl_Org_EmployeeID) ? "selected" : "" )  data-start="@item.PlannedStartDate.ToString(Globals.DateFormatString)" data-end="@item.PlannedEndDate.GetValueOrDefault().ToString(Globals.DateFormatString)">@item.tbl_org_employee.GivenName @item.tbl_org_employee.FamilyName</option>
+}
+
+</select>

@@ -1,0 +1,87 @@
+﻿@model seededSections
+
+@{
+    if (Model.seed == null)
+    {
+        return;     // No Group found
+    }
+    var grpDetails = Model.tbl_process_proc_group.Where(o => o.ID == Model.seed).Single();
+<li class="branch-in" id="L@(grpDetails.ID)">
+        <input type="hidden" name="tbl_process_proc_group.Index" value="@(grpDetails.ID)" />
+        <input type="hidden" name="tbl_process_proc_group[@(grpDetails.ID)].ID" value="@(grpDetails.ID)"/>
+        <input type="hidden" name="tbl_process_proc_group[@(grpDetails.ID)].Name" id= "name@(grpDetails.ID)" value="@(grpDetails.Name)"/>
+        <input type="hidden" name="tbl_process_proc_group[@(grpDetails.ID)].SequenceNo" class="sequence" value="@(grpDetails.SequenceNo)"/>
+        <input type="hidden" name="tbl_process_proc_group[@(grpDetails.ID)].ParentGroup"  class="Parent" data-lnode="L@(grpDetails.ID)" value="@(grpDetails.ID)"/>
+        <input type="hidden" name="tbl_process_proc_group[@(grpDetails.ID)].IsParent" value="false"/>
+        <input type="hidden" name="tbl_process_proc_group[@(grpDetails.ID)].Level"  class="level" data-lnode="L@(grpDetails.ID)" value="@(grpDetails.Level)"/>
+        <input type="hidden" name="tbl_process_proc_group[@(grpDetails.ID)].tbl_Process_ProcedureID" value="@(grpDetails.tbl_Process_ProcedureID)"/>
+        <a class="editGroup" data-id="@(grpDetails.ID)" data-toggle="modal" href="Javascript:;"><i class="icon-edit"></i></a> 
+        <a href="Javascript:;" role="branch in" class="tree-toggle" data-toggle="branch" role="branch" data-id="@(grpDetails.ID)" id="@(grpDetails.ID)">@(grpDetails.Name)</a>
+
+        <ul class="sortable-list branch in" id="C@(grpDetails.ID)" data-groupid="@(grpDetails.ID)">
+            @{var sectionsInGroup = Model.tbl_process_proc_section.Where(o => o.tbl_Process_Proc_GroupID == Model.seed).OrderBy(o => o.SequenceNo).GetEnumerator(); // Sections in this group
+              var groupsInGroup = Model.tbl_process_proc_group.Where(o => o.ParentGroup == Model.seed).OrderBy(o => o.SequenceNo).GetEnumerator(); // Sub groups in this group
+              short sectionSequence = 0; // First sequence in the section
+              short groupSequence = 0;   // First sequence in the group
+              var keepProcessing = true;
+              var sectionsFound = true;
+              var groupsFound = true;
+
+              if (sectionsInGroup.MoveNext()) { sectionSequence = sectionsInGroup.Current.SequenceNo; } else { sectionsFound = false; }
+              if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }
+              if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+              
+              while (keepProcessing)    // Handling sequence of groups and sections under this group. As the sequence can be intermixed
+              {
+                  // If the section comes first in sequence, print the section first
+                  if (sectionsFound && (!groupsFound || sectionSequence < groupSequence))
+                  {
+                    <li class="sortable-item MainSection" id="Section@(sectionsInGroup.Current.ID)">
+                        <div class="row">
+                            <div class="col-lg-12 panel colored">
+                                <div class="panel-heading  blue-bg"  id="Detail@(sectionsInGroup.Current.ID)Title">
+                                    <input type="hidden" name="tbl_process_proc_section.Index" value="@(sectionsInGroup.Current.ID)" />
+                                    <input type="hidden" name="tbl_process_proc_section[@(sectionsInGroup.Current.ID)].ID" value="@(sectionsInGroup.Current.ID)" />
+                                    <input type="hidden" name="tbl_process_proc_section[@(sectionsInGroup.Current.ID)].SequenceNo" class="sequence" value="@(sectionsInGroup.Current.SequenceNo)" />
+                                    <input type="hidden" name="tbl_process_proc_section[@(sectionsInGroup.Current.ID)].tbl_Process_ProcedureID" value="@(sectionsInGroup.Current.tbl_Process_ProcedureID)" />
+                                    <input type="hidden" name="tbl_process_proc_section[@(sectionsInGroup.Current.ID)].tbl_Process_Proc_GroupID" class="Parent" data-lnode="Section@(sectionsInGroup.Current.ID)" value="@(sectionsInGroup.Current.tbl_Process_Proc_GroupID)" />
+                                        <h1 class="panel-title"><span id="sectionTitle@(sectionsInGroup.Current.ID)Div">@(sectionsInGroup.Current.Title == null || sectionsInGroup.Current.Title == "" ? "Provide Title" : sectionsInGroup.Current.Title)</span></h1>
+                                        <ul class="pull-right toolbar">
+                                            <li><a href="#" class="icon-button minimise"><i class="icon-">&#xf0aa;</i></a></li>
+                                            <li><a href="#" class="icon-button confirmAction" data-messagetitle="Confirm Deletion" data-message="Do you want to delete this section ?" data-class="deleteSection" data-classparams="data-id='@(sectionsInGroup.Current.ID)'"><i class="icon-">&#xf057;</i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-lg-12">
+                                            <label>Title</label>
+                                            <div class="controls">
+                                                <input type="text" class="form-control sectionTitle" id="sectionTitle@(sectionsInGroup.Current.ID)" name="tbl_process_proc_section[@(sectionsInGroup.Current.ID)].Title" value="@(sectionsInGroup.Current.Title)"/>
+                                                @Html.ValidationMessage("tbl_process_proc_section[" + sectionsInGroup.Current.ID + "].Title")
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="DetailRow@(sectionsInGroup.Current.ID)">
+                                        <textarea class="col-lg-12 sectionDetail" rows="5" id="Detail@(sectionsInGroup.Current.ID)" name="tbl_process_proc_section[@(sectionsInGroup.Current.ID)].Detail">@(sectionsInGroup.Current.Detail)</textarea>
+                                        @Html.ValidationMessage("tbl_process_proc_section[" + sectionsInGroup.Current.ID + "].Detail")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    if (sectionsInGroup.MoveNext()) { sectionSequence = sectionsInGroup.Current.SequenceNo; } else { sectionsFound = false; }  // Get the next section
+                  }
+                  if (groupsFound && (!sectionsFound || groupSequence < sectionSequence))
+                  {
+                      Model.seed = groupsInGroup.Current.ID;
+                      Model.isParent = false;
+                      @Html.Partial("_showSections", Model)  // Recursive call to print sub-nodes
+                      if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }
+                  }
+                  if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+              }
+              }
+            <li><a href="Javascript:;" class="newSection btn btn-med blue-bg" data-parent="@(grpDetails.ID)" data-proc="@(grpDetails.tbl_Process_ProcedureID)"  data-type="proc">Add Section</a><hr /></li>
+        </ul>
+    </li>
+}

@@ -1,0 +1,81 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@model IEnumerable<mstr_process_levelInput>
+@{
+    Layout = null;
+}
+            @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                 <div class="panel colored col-md-4">
+                    <div class="panel-heading orange-bg">
+                        <h3 class="panel-title">Add / Update Levels</h3>
+            		</div>
+					<form role="form">
+                    <div class="panel-body">
+					
+					<div class="row">
+					<div class="col-md-12">
+                            <div class="form-group">
+                                <label>Sequence No</label>
+                                <input type="text" class="form-control">
+                            </div>                        
+                            <div class="form-group">
+                                <label>Short Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Long Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Description</label>
+                                <textarea  class="form-control popovers" data-original-title="Description" data-content="Provide a detailed description of this level" data-trigger="hover" data-placement="right"></textarea>
+                            </div>
+					</div>		
+					</div>
+                        
+                    </div>
+					<div class="panel-footer">
+						<div class="form-group">
+						<div class="row">
+                            <div class="col-lg-12">
+                            <button class="btn blue-bg" type="submit">Save</button>
+                            <input type="reset" class="btn gray-bg">
+                            </div>
+                        </div>
+						</div>
+					</div>
+					</form>
+                </div>  
+
+                <div class="panel colored col-md-8">
+                    <div class="panel-heading green-bg">
+                        <h3 class="panel-title">Process Levels</h3>
+                        <ul class="pull-right toolbar">
+                            <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                            <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                            <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                        </ul>
+                    </div>
+                    @Html.Awe().Form().FormClass("GetItems").Url(Url.Action("GetItems","ProcessLevel")).Success("loadLevels")
+                    <div class="panel-body"  id="tableList">
+                    </div>
+                </div>                
+            </div>
+
+<script>
+    function loadLevels(o) {
+        $("#tableList").html(o);
+    };
+
+    $('#processTable').dataTable({
+        "sPaginationType": "bootstrap",
+        "aLengthMenu": [
+                        [5, 10, 15, -1],
+                        [5, 10, 15, "All"] // change per page values here
+        ],
+        // set the initial value
+        "iDisplayLength": 5
+    });
+</script>

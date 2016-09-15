@@ -1,0 +1,30 @@
+﻿@model IEnumerable<mstr_org_function>
+@{
+    Layout = null;
+}
+<ul class="branch">
+    @if (Model.Any()) {
+        foreach (var o in Model)
+        {
+            <li><a href="javascript:" class="showMapping" data-param="functionID=@(o.ID)" data-name="@o.LongName"><i class="icon-wrench"></i></a>
+                 &nbsp;&nbsp;<a href="javascript:;" role="branch" class="tree-toggle" data-toggle="branch" data-value="Bootstrap_Tree"><span class="label label-success">@o.LongName</span></a>
+                <ul class="branch in" id="Function@(o.ID)">
+                    @if (o.mstr_org_sub_in_function.Any()) 
+                    {
+                        foreach (var s in o.mstr_org_sub_in_function)
+                        {
+                            <li id="F@(o.ID)S@(s.ID)">
+                                <a href="javascript:" class="showMapping" data-param="functionID=@(o.ID)&subFuncID=@(s.mstr_Org_Sub_FunctionID)" data-name="@s.mstr_org_sub_function.LongName"><i class="icon-wrench"></i></a>
+                                    <a href="javascript:;">&nbsp;&nbsp;@s.mstr_org_sub_function.LongName</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </li>
+        }
+    }
+    else
+    {
+        <li>Functions not defined yet</li>
+    }
+</ul>

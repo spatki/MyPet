@@ -1,0 +1,332 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="javascript:;" id="showfilter" class="pull-left">Report Filter <i class="icon-">&#xf00e;</i></a>
+                </div>
+                <hr />
+                <div class="panel colored" id="filterParams">
+                    <div class="panel-body filter-bg">                      
+                        <div class="row col-md-12 show-border">
+                            <label class="show-border-title col-md-12">Reporting Period</label>
+                            <div class="row col-md-3">
+                                <label class="control-label col-md-3">From</label>
+                                <div class="col-md-9"><input type="text" class="mask_date2 form-control" /></div>
+                            </div>
+                            <div class="row col-md-3">
+                                <label class="control-label col-md-3">To</label>
+                                <div class="col-md-9"><input type="text" class="mask_date2 form-control" /></div>
+                            </div>
+                            <div class="row col-md-4">
+                                <label class="control-label col-md-3">Current</label>
+                                <select class="chzn-select-no-single col-md-9" id="Select5"><option value="1">Select</option><option value="2">Week</option><option value="3">Month</option><option value="4">Year</option></select>
+                            </div>                            
+                            <div class="row col-md-2">
+                                <div class="input-group-btn pull-right"><button class="btn btn-med blue-bg searchProcedure">GO</button></div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12 show-border">                            
+                            <label class="show-border-title col-md-12">Report Grouping</label>
+                            <div class="row col-md-4">
+                                <label class="control-label col-md-3">Period</label>
+                                <select class="chzn-select-no-single col-md-9" id="timeGroup"><option value="1">Consolidated</option><option value="2">Week-wise</option><option value="3" selected="selected">Month-wise</option><option value="4">Year-wise</option></select>
+                            </div>
+                            <div class="row col-md-4">
+                                <label class="control-label col-md-3">Project </label>
+                                <select class="chzn-select-no-single col-md-9" id="projectGroup"><option value="1">Consolidated</option><option value="2">Project-wise</option><option value="3">Phase-wise</option></select>
+                            </div>
+                            <div class="row col-md-4">
+                                <label class="control-label col-md-4">Org. Level </label>
+                                <select class="chzn-select-no-single col-md-8" id="Select2"><option value="1">Consolidated</option><option value="2">Company</option><option value="3">Branch</option><option value="3" selected="selected">Location</option><option value="3">Business Unit</option><option value="3">Department</option></select>
+                            </div>
+                        </div>
+                        <div class="row col-md-12 show-border">                            
+                            <label class="show-border-title col-md-12">Data Filter</label>
+                            <div class="row col-md-12">
+                                <label class="control-label col-md-5">Audit Status</label>
+                                <select class="chzn-select-no-single col-md-7" id="Select1"><option value="1">Not Planned</option><option value="2">Not Scheduled</option><option value="3">Scheduled</option><option value="4">In Progress</option><option value="5">Closed</option></select>
+                            </div>
+                            <div class="row col-md-12">
+                                <label class="control-label col-md-5">Project (Applicable only with Project Group)</label>
+                                <select class="chzn-select-no-single col-md-7" id="Select3" multiple><option value="1">Payroll Processing</option><option value="2">Humana</option><option value="3">Transcore</option><option value="4">Insurance Application</option><option value="5">Underwriting Software</option></select>
+                            </div>
+                            <div class="row col-md-12">
+                                <label class="control-label col-md-5">Org. Level (Based on Grouping)</label>
+                                <select class="chzn-select-no-single col-md-7" id="Select4" multiple><option value="1">Mumbai</option><option value="2">Pune</option><option value="3">Noida</option><option value="4">Kolkatta</option><option value="5">Chennai</option></select>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row col-md-12">
+                                    <label class="checkbox demotest"><input type="checkbox" class="icheck" data-skin="flat" data-color="red" name="flat-checkbox"> Show Only Delayed Audits</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12 show-border">                            
+                            <label class="show-border-title col-md-12">Report Layout</label>
+                            <div class="row col-md-12">
+                                <label class="control-label col-md-3">Additional Columns</label>
+                                <select class="chzn-select-no-single col-md-9" id="repColumns" multiple><option value="C_ALL" selected="selected">All</option><option value="S1">Scheduled (Delayed)</option><option value="S2">Scheduled (Total)</option><option value="I1">In Progress (Delayed)</option><option value="I2">In Progress (Total)</option><option value="P1">Pending (Delayed)</option><option value="P2">Pending (Total)</option><option value="C1">Closed (Delayed)</option><option value="C2">Closed (Total)</option></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered advanced-table" >
+                    <thead>
+                        <tr>
+                            <th class="docTableHeader-bg">Month</th>
+                            <th class="docTableHeader-bg">Not Planned</th>
+                            <th class="docTableHeader-bg">Planned</th>
+                            <th class="docTableHeader-bg C_ALL S1">Scheduled (Delayed)</th>
+                            <th class="docTableHeader-bg C_ALL S2">Scheduled (Total)</th>
+                            <th class="docTableHeader-bg C_ALL I1">In Progress (Delayed)</th>
+                            <th class="docTableHeader-bg C_ALL I2">In Progress (Total)</th>
+                            <th class="docTableHeader-bg C_ALL P1">Pending (Delayed)</th>
+                            <th class="docTableHeader-bg C_ALL P2">Pending (Total)</th>
+                            <th class="docTableHeader-bg C_ALL C1">Closed (Delayed)</th>
+                            <th class="docTableHeader-bg C_ALL C2">Closed (Total)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jan-14</td>
+                            <td>0</td>
+                            <td>14</td>
+                            <td class=" C_ALL S1">4</td>
+                            <td class=" C_ALL S2">5</td>
+                            <td class=" C_ALL I1">1</td>
+                            <td class=" C_ALL I2">1</td>
+                            <td class=" C_ALL P1">0</td>
+                            <td class=" C_ALL P2">1</td>
+                            <td class=" C_ALL C1">0</td>
+                            <td class=" C_ALL C2">4</td>
+                        </tr>
+                        <tr>
+                            <td>Feb-14</td>
+                            <td>20</td>
+                            <td></td>
+                            <td class=" C_ALL S1">0</td>
+                            <td class=" C_ALL S2">0</td>
+                            <td class=" C_ALL I1">0</td>
+                            <td class=" C_ALL I2">0</td>
+                            <td class=" C_ALL P1">0</td>
+                            <td class=" C_ALL P2">0</td>
+                            <td class=" C_ALL C1">0</td>
+                            <td class=" C_ALL C2">0</td>
+                        </tr>
+                        <tr>
+                            <td>Mar-14</td>
+                            <td>0</td>
+                            <td>3</td>
+                            <td class=" C_ALL S1">0</td>
+                            <td class=" C_ALL S2">3</td>
+                            <td class=" C_ALL I1">0</td>
+                            <td class=" C_ALL I2">0</td>
+                            <td class=" C_ALL P1">2</td>
+                            <td class=" C_ALL P2">3</td>
+                            <td class=" C_ALL C1">1</td>
+                            <td class=" C_ALL C2">2</td>
+                        </tr>
+                        <tr>
+                            <td>Apr-14</td>
+                            <td>5</td>
+                            <td>30</td>
+                            <td class=" C_ALL S1">4</td>
+                            <td class=" C_ALL S2">30</td>
+                            <td class=" C_ALL I1">2</td>
+                            <td class=" C_ALL I2">10</td>
+                            <td class=" C_ALL P1">3</td>
+                            <td class=" C_ALL P2">12</td>
+                            <td class=" C_ALL C1">10</td>
+                            <td class=" C_ALL C2">4</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="row">
+                    <div class="panel colored col-md-12">
+					<form role="form">				
+                            <div class="panel-body">
+                                <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	            <div class="row pull-right panel-footer">
+                                        <div class="col-lg-12 col-lg-offset-1">
+                                            <button type="button" class="btn blue-bg" id="Export">Export</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>					
+					</form>
+                </div>  
+            </div>
+    
+    <div class="modal fade" id="reqPlanDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Audit Plan </h4>
+		</div>
+		<div class="modal-body">
+            <div class="container-fluid">
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Audit Start</label>
+                        <input type="text" id="AuditFrmDt" class="form-control mask_date" value="15/01/2014">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Audit Finish</label>
+                        <input type="text" id="AuditToDt" class="form-control mask_date" value="16/01/2014">
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Auditor Role(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="SQA" selected="selected">SQA</option> <option value="MR">MR</option><option value="Sr. Manager">Sr. Manager</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Auditor Name(s)</label>
+                            <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Kapil Khanna" selected="selected">Kapil Khanna</option> <option value="Surekha Shetty">Surekha Shetty</option></select>
+                    </div>                                
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Auditee Role(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Project Manager" selected="selected">Project Manager</option> <option value="Project Leader">Project Leader</option><option value="Developer">Developer</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Auditee Name(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Prakash Mehta" selected="selected">Prakash Mehta</option> <option value="Ajit Pawar">Ajit Pawar</option><option value="Rahul Gandhi">Rahul Gandhi</option></select>
+                    </div>                                
+                </div>
+                <hr />
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label class="control-label">Audit Type</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="One Time" selected="selected">One Time</option> <option value="Recurring">Recurring</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Recurring Period</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="Daily">Daily</option> <option value="Weekly" selected="selected">Weekly</option> <option value="Monthly">Monthly</option></select>
+                        <i class="icon-info-sign"></i><i class="info">(Applicable only for Recurring Audits)</i>
+                    </div>                                
+                </div>
+            </div>
+        </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="viewPrj" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Project Information</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Name</b></label>
+                        <label class="form-control col-md-12">Payroll Processing</label>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Status</b></label>
+                        <label class="form-control col-md-12">In Progress</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Description</b></label>
+                        <textarea class="form-control col-md-12" rows="4" disabled>Payroll processing for a HRM package. This will be addded as an enhancement to the existing application</textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Type</b></label>
+                        <label class="form-control col-md-12">Development</label>
+                        <label class="control-label col-md-12"><b>Planned Start</b></label>
+                        <label class="form-control col-md-12">11-Jan-14</label>
+                        <label class="control-label col-md-12"><b>Planned Finish</b></label>
+                        <label class="form-control col-md-12">30-Nov-14</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Manager</b></label>
+                        <label class="form-control col-md-12">Sandeep Honawar</label>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>SQA</b></label>
+                        <label class="form-control col-md-12">Kirti Desai</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Sponser</b></label>
+                        <label class="form-control col-md-12">Bharat Desai</label>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Approver</b></label>
+                        <label class="form-control col-md-12">Anil Jain</label>
+                    </div>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    
+	<script type="text/javascript">
+	    var newTaskParams = true;
+
+		var config = {
+		  '.chzn-select-no-single' : {disable_search_threshold:10},
+		}
+		for (var selector in config) {
+		  $(selector).chosen(config[selector]);
+		}
+
+		$("#showfilter").click();
+
+		$('#reqPlanDetails').on('shown.bs.modal', function () {
+		    if (newTaskParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newTaskParams = false;
+		    }
+		})
+
+		$("body").delegate(".group", "click", function () {
+		    $("#" + $(this).data("childid")).toggle();
+		    $(this).toggleClass("closed");
+		});
+
+		$(document).on("change", "#repColumns", function () {
+		    $(".C_ALL").hide();
+		    $(this).find("option:selected").each(function () {
+		        $("." + $(this).val()).show();
+		    })
+		});
+    </script> 
+   
+
+    
+}

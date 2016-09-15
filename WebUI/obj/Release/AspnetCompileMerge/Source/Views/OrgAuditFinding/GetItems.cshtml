@@ -1,0 +1,75 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_audit_schedule>
+@{
+    Layout = null;
+    var today = System.DateTime.Now.Date;
+    AuditActivityType ActivityType = new AuditActivityType();
+    AuditPlanStatus AuditStatus = new AuditPlanStatus();
+    AuditFrequencyType FrequencyType = new AuditFrequencyType();
+}
+
+<div class="panel">
+    <div class="panel-body" id="AuditSchedule">
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"  id="AuditScheduleTable" >
+            <thead>
+                <tr>
+                    <th>Ref.ID</th>
+                    <th>Planned Start</th>
+                    <th>Planned Finish</th>
+                    <th>Schedule Start</th>
+                    <th>Schedule Finish</th>
+                    <th>Status</th>
+                    <th>Track Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="ScheduleListing">
+                @if (Model.Any())
+                {
+                    foreach (var sch in Model)
+                    {
+                        <tr class="sch@(sch.tbl_Org_Audit_PlanID)" id="sch@(sch.ID)">
+                            <td>@if (sch.Status == 1)
+                                {
+                                    @(sch.tbl_org_audit_plan.RefID + "-" + sch.ID)
+                                }
+                                else
+                                {
+                                    <a href="Javascript:;" class="openDialog" data-source="@Url.Action("ScheduleAudit","OrgAudit", new { id = sch.ID })" title="Click to view schedule">@sch.tbl_org_audit_plan.RefID-@sch.ID</a>
+                                }
+                            </td>
+                            <td>@sch.Planned_Start.ToString(Globals.DateFormatString)</td>
+                            <td>@sch.Planned_Finish.ToString(Globals.DateFormatString)</td>
+                            <td>@(sch.Status == 1 ? "" : sch.Start.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                            <td>@(sch.Status == 1 ? "" : sch.Finish.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                            <td>@AuditStatus.getTypeName((short) sch.Status)</td>
+                            <td>@Html.Raw(FrequencyType.TrackingStatus(sch.Planned_Start, sch.Planned_Finish, sch.Start, sch.Audit_Date, (short)sch.Status))</td>
+                            <td>
+                                @switch (sch.Status)
+                                {
+                                    case 1: // Planned
+                                        <a href="Javascript:;" class="openDialog btn btn-med blue-bg" data-source="@Url.Action("ScheduleAudit","OrgAudit", new { id = sch.ID })">Schedule</a>
+                                        break;
+                                    case 2: // Scheduled
+                                        <a href="Javascript:;" class="btn btn-med green-bg subMenu" data-source="@Url.Action("Edit","OrgAuditFinding",new { id = sch.ID })">Conduct</a>
+                                        break;
+                                    case 3: // Audited
+                                        <a href="Javascript:;" class="btn btn-med black-bg subMenu" data-source="@Url.Action("Edit","OrgAuditFinding",new { id = sch.ID })">Report</a>
+                                        break;
+                                    case 4: // Closed
+                                        <a href="Javascript:;" class="btn btn-med gray-bg subMenu" data-source="@Url.Action("ShowReadOnlyReport","OrgAuditFinding",new { id = sch.ID })">View Report</a>
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    jsTable('AuditScheduleTable');
+</script>

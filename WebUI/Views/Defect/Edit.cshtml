@@ -1,0 +1,297 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_defectInput
+@{
+    Layout = null;
+    IQueryable<tbl_workflow> workflow;
+    ViewBag.DialogOption = "openExtraWorkflow";
+    ViewBag.SaveOption = "saveExtraWorkflow";
+    ViewBag.UpdateID = "openDialogBox";
+    ViewBag.Key = Model.ID.ToString();
+    ViewBag.ProjectID = Model.tbl_Org_ProjectID;
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else
+    {
+        workflow = null;
+    }
+    @Scripts.Render("~/bundles/editor")
+}
+<div class="modal-dialog" style="width:90%">
+	<div class="modal-content">
+	    <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h4 class="modal-title" id="dialogTitle">Edit Defect ( <strong>@Model.mstr_process_lc_status.Status</strong> )</h4>
+	    </div>
+        <form method="post" action="@Url.Action("Edit")" id="WFForm">
+            <input type="hidden" id="FinalResult" value="@(ViewBag.Result == true ? "True" : "False")" />
+            <div class="modal-body"> 
+                @Html.ValidationSummary(true)
+
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#Detail">Defect Detail</a></li>
+                    <li><a data-toggle="tab" href="#ImpactAnalysis">Impact Analysis</a></li>
+                    <li><a data-toggle="tab" href="#LifeCycle">Life Cycle</a></li>
+                </ul>
+                <div class="tab-content">
+                    <br />
+                    <div id="Detail" class="tab-pane fade in active">
+        		        <div class="row">
+                            <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+                            <input type="hidden" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" value="@Model.tbl_Org_ProjectID" />
+                            <input type="hidden" id="ClientID" name="ClientID" value="@Model.ClientID" />
+                            <input type="hidden" id="Short_Description" name="Short_Description" value="@Model.Short_Description" />
+                            <input type="hidden" id="CreatedOn" name="CreatedOn" value="@Model.CreatedOn.GetValueOrDefault().ToString(Globals.DateFormatString)" />
+                            <input type="hidden" id="CreatedBy" name="CreatedBy" value="@Model.CreatedBy" />
+                            <input type="hidden" value="" id="workflow_status" name="mstr_Process_LC_StatusID" />
+                            <input type="hidden" value="1" id="StatusType" name="StatusType" />
+                            <input type="hidden" value="false" id="followWF" name="followWF" />
+                            <input type="hidden" value="0" id="statusWF" name="statusWF" />  
+                            <input type="hidden" value="@WebSecurity.CurrentUserId" id="workflowUser" name="workflowUser" />
+                            <input type="hidden" name="mstr_process_lc_status.ID" value="@Model.mstr_process_lc_status.ID" />
+                            <input type="hidden" name="mstr_process_lc_status.Status" value="@Model.mstr_process_lc_status.Status" />
+                            <input type="hidden" name="mstr_process_lc_status.Description" value="@Model.mstr_process_lc_status.Description" />
+                            <input type="hidden" name="mstr_process_lc_status.Type" value="@Model.mstr_process_lc_status.Type" />
+                            <input type="hidden" name="mstr_process_lc_status.IsDefault" value="@Model.mstr_process_lc_status.IsDefault.ToString()" />
+                            <input type="hidden" name="mstr_process_lc_status.IsComplete" value="@Model.mstr_process_lc_status.IsComplete.ToString()" />
+                            <input type="hidden" name="mstr_process_lc_status.IsPublish" value="@Model.mstr_process_lc_status.IsPublish.ToString()" />
+                            <input type="hidden" name="mstr_process_lc_status.IsInactive" value="@Model.mstr_process_lc_status.IsInactive.ToString()" />
+                            <input type="hidden" name="mstr_process_lc_status.IsReview" value="@Model.mstr_process_lc_status.IsReview.ToString()" />
+                            <input type="hidden" name="mstr_process_lc_status.SequenceNo" value="@Model.mstr_process_lc_status.SequenceNo" />
+                            <input type="hidden" name="mstr_process_lc_status.Prev_Status" value="@Model.mstr_process_lc_status.Prev_Status" />
+                            <input type="hidden" name="mstr_process_lc_status.Next_Status" value="@Model.mstr_process_lc_status.Next_Status" />
+                            <input type="hidden" name="mstr_process_lc_status.DefaultReviewRoleID" value="@Model.mstr_process_lc_status.DefaultReviewRoleID" />
+                            <input type="hidden" name="mstr_process_lc_status.CreatedBy" value="@Model.mstr_process_lc_status.CreatedBy" />
+                            <input type="hidden" name="mstr_process_lc_status.CreateDate" value="@Model.mstr_process_lc_status.CreateDate" />
+                            <input type="hidden" name="mstr_process_lc_status.UpdatedBy" value="@Model.mstr_process_lc_status.UpdatedBy" />
+                            <input type="hidden" name="mstr_process_lc_status.UpdateDate" value="@Model.mstr_process_lc_status.UpdateDate" />
+                            <!-- Store Status Details -->
+                            <input type="hidden" value="null" id="workflow" name="workflow" />
+
+                            <div class="col-md-12">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label class="control-label">Short Description</label>
+                                        @if (Model.CreatedBy != WebSecurity.CurrentUserId)
+                                        {
+                                            <div class="form-control">@Model.Short_Description</div>
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(o => o.Short_Description, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(o => o.Short_Description)
+                                        } 
+                                    </div>    
+                                    <div class="form-group">
+                                        <label class="control-label">Details</label>
+                                        @if (Model.CreatedBy != WebSecurity.CurrentUserId)
+                                        {
+                                            <div class="col-md-12" style="height:300px">
+                                                <input type="hidden" value="@Model.Details" name="Details" id="Details">
+                                                <div class="onlyScrolls">
+                                                   @Html.Raw(Model.Details)
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <textarea class="form-control showEditor" name="Detail" id="Details">@Html.Raw(Model.Details)</textarea>
+                                            @Html.ValidationMessageFor(o => o.Details)
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label">Identified On</label>
+                                        <input type="text" value="@(Model.IdentifiedOn == null ? "" : Model.IdentifiedOn.GetValueOrDefault().ToString(Globals.DateFormatString))" name="IdentifiedOn" id="IdentifiedOn" class="form-control" @(Model.CreatedBy != WebSecurity.CurrentUserId ? "readonly='true'" : "")/>
+                                        @Html.ValidationMessageFor(o => o.IdentifiedOn)
+                                    </div>    
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label">Defect Type</label>
+                                        @Html.Action("getListItems", "DefectType", new { selectedItem = Model.Type, controlName = "Type", excludeIds = "", includeIds = "", reload = "" })
+                                        @Html.ValidationMessageFor(o => o.Type)
+                                    </div>    
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label">Severity</label>
+                                        @Html.Action("getListItems", "DefectSeverity", new { selectedItem = Model.SeverityID, controlName = "SeverityID", excludeIds = "", includeIds = "", reload = "" })
+                                        @Html.ValidationMessageFor(o => o.SeverityID)
+                                    </div>    
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label">Phase</label>
+                                        @Html.Action("getListItemsFor", "OrgPhaseInProj", new { selectedItem = Model.PhaseID.GetValueOrDefault(), controlName = "PhaseID", excludeIds = "", includeIds = "", projectTypeID = Model.ProjectType.GetValueOrDefault(), reload = "" })
+                                        @Html.ValidationMessageFor(o => o.PhaseID)
+                                    </div>    
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label">Group</label>
+                                        @Html.Action("getListItemsFor", "ProjGroup", new { selectedItem = Model.GroupID.GetValueOrDefault(), controlName = "GroupID", excludeIds = "", selectIds = "", projectID = Model.tbl_Org_ProjectID, allowNewClient = false, reload = "" })
+                                        @Html.ValidationMessageFor(o => o.GroupID)
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ImpactAnalysis" class="tab-pane">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Affected Work Product</label>
+                                        @Html.TextBoxFor(o => o.AffectedWP, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(o => o.AffectedWP)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Cause</label>
+                                        <textarea name="Cause" id="Cause" class="form-control col-md-12" rows="5">@Model.Cause</textarea>
+                                        @Html.ValidationMessageFor(o => o.Cause)
+                                    </div>    
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                          <label class="control-label">Impact</label>
+                                        <textarea name="Impact" id="Impact" class="form-control col-md-12" rows="5">@Model.Impact</textarea>
+                                        @Html.ValidationMessageFor(o => o.Impact)
+                                    </div>
+                                </div>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label"><strong>Assigned To</strong></label>
+                                        <div class="form-control col-md-12">
+                                            @(Model.AssignedTo == null ? "Not Assigned" : (Model.AssignedToUser == null ? "Invalid Assignment" : Model.AssignedToUser.DisplayName))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                            <label class="control-label"><strong>Assigned On</strong></label>
+                                        <div class="form-control col-md-12">
+                                            @(Model.AssignedTo == null ? "NA" : (Model.AssignedOn == null ? "Invalid Date" : Model.AssignedOn.GetValueOrDefault().ToString(Globals.DateFormatString)))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                            <label class="control-label"><strong>Verified By</strong></label>
+                                        <div class="form-control col-md-12">
+                                            @(Model.VerifiedBy == null ? "Not Assigned" : (Model.VerifiedByUser == null ? "Invalid Assignment" : Model.VerifiedByUser.DisplayName))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                            <label class="control-label"><strong>Verified On</strong></label>
+                                        <div class="form-control col-md-12">
+                                            @(Model.VerifiedBy == null ? "NA" : (Model.VerifiedOn == null ? "Invalid Date" : Model.VerifiedOn.GetValueOrDefault().ToString(Globals.DateFormatString)))
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                          <label class="control-label"><strong>Resolution Date</strong></label>
+                                        <div class="form-control col-md-12">
+                                          @(Model.FixedOn == null ? "Not Resolved Yet" : (Model.FixedOn == null ? "Invalid Date" : Model.FixedOn.GetValueOrDefault().ToString(Globals.DateFormatString)))
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label"><strong>Resolution Efforts</strong></label>
+                                        <input type="text" class="form-control col-md-12" name="ResolutionEffortsPD" id="ResolutionEffortsPD" value="@Model.ResolutionEffortsPD" />
+                                        @Html.ValidationMessageFor(o => o.ResolutionEffortsPD)
+                                    </div>    
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <br />
+                                        <input type="checkbox" name="RepeatIssue" id="RepeatIssue" @(Model.RepeatIssue == true ? "checked" : "") value="1"/>
+                                        <label class="control-label">Is repeat issue ?</label>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="LifeCycle" class="tab-pane">
+                        <br />
+                        <div class="col-md-12">
+                            @Html.Action("ShowHistory", new { id = Model.ID })
+                        </div>
+                    </div>
+                </div>
+            </div>
+	        <div class="modal-footer">
+			    <div class="form-group">
+                    @if (workflow != null)
+                    {
+                        @Html.Partial("printWorkflow", workflow)
+                    }
+		            <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+			    </div>
+	        </div>        
+        </form>
+    </div>
+    <div id="parentUpdate" style="display:none;">
+        <div id="parentMode">@(ViewBag.Mode == "Add" ? "add" : "edit")</div>
+        <div id="parentSearchTable">processTable</div>
+        <div id="parentUpdateID">@(ViewBag.Mode == "Add" ? "listing" : Model.ID.ToString())</div>
+        <div >
+            <table>
+                <tbody id="parentContents">
+                    @{ tbl_org_defect entity = new tbl_org_defect()
+                       {
+                           ID = Model.ID,
+                           Short_Description = Model.Short_Description,
+                           Type = Model.Type,
+                           tbl_Org_ProjectID = Model.tbl_Org_ProjectID,
+                           PhaseID = Model.PhaseID,
+                           GroupID = Model.GroupID,
+                           TaskID = Model.TaskID,
+                           CreatedOn = Model.CreatedOn,
+                           CreatedBy = Model.CreatedBy,
+                           IdentifiedOn = Model.IdentifiedOn,
+                           AffectedWP = Model.AffectedWP,
+                           InjectedInPhaseID = Model.InjectedInPhaseID,
+                           Cause = Model.Cause,
+                           SeverityID = Model.SeverityID,
+                           Impact = Model.Impact,
+                           AssignedTo = Model.AssignedTo,
+                           AssignedOn = Model.AssignedOn,
+                           mstr_Process_LC_StatusID = Model.mstr_Process_LC_StatusID,
+                           ActionTaken = Model.ActionTaken,
+                           FixedOn = Model.FixedOn,
+                           VerifiedBy = Model.VerifiedBy,
+                           VerifiedOn = Model.VerifiedOn,
+                           Comments = Model.Comments,
+                           RepeatIssue = Model.RepeatIssue,
+                           ResolutionEffortsPD = Model.ResolutionEffortsPD,
+                           mstr_org_defect_type = Model.mstr_org_defect_type,
+                           mstr_org_defect_severity = Model.mstr_org_defect_severity,
+                           mstr_org_proj_phase = Model.mstr_org_proj_phase,
+                           tbl_org_proj_group = Model.tbl_org_proj_group,
+                           mstr_process_lc_status = Model.mstr_process_lc_status,
+                       };
+                        }
+                        @Html.Partial("GetItems", new[] { entity })
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $('#IdentifiedOn').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    configureCkEditor(".showEditor");
+</script>

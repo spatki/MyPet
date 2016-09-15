@@ -1,0 +1,39 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_proj_plan>
+@{
+    Layout = null;
+    var durationUnit = new DurationUnitTypes();
+    var resources = ""; 
+}
+@foreach (var o in Model)
+{
+    resources = "";
+    <tr id="@o.ID">
+        <td>@(o.tbl_org_proj_planname == null ? "" : o.tbl_org_proj_planname.Name)</td>
+        <td class="visible-lg">@(o.tbl_org_proj_group == null ? "" : o.tbl_org_proj_group.Name)</td>
+        <td>@o.TaskName.Trim()</td>
+        <td>@o.PlannedStartDate.ToString(Globals.DateFormatString)</td>
+        <td>@(o.PlannedEndDate == null ? "" : (o.PlannedEndDate.GetValueOrDefault()).ToString(Globals.DateFormatString))</td>
+        <td class="visible-lg">@o.PlannedDuration</td>
+        <td class="visible-lg">@(o.DurationUnit == null ? "" : durationUnit.getTypeName((short)o.DurationUnit))</td>
+        <td>@o.PercentComplete</td>
+        <td>@o.mstr_process_lc_status.Status</td>
+        <td class="visible-lg">
+            @if (o.tbl_org_plan_resource != null && o.tbl_org_plan_resource.Any())
+            {
+                foreach (var emp in o.tbl_org_plan_resource)
+                {
+                    resources = resources + (resources == "" ? "" : ",") + emp.tbl_org_employee.GivenName + " " + emp.tbl_org_employee.FamilyName;            
+                }
+                @resources
+            }
+            else
+            {
+                <span class="label label-danger"><strong>Not Assigned</strong></span>
+            }
+        </td>
+        <td>@Html.Raw(durationUnit.TrackingStatus(o.PlannedEndDate,o.PlannedEndDate,o.ActualStartDate, o.ActualEndDate, o.IsComplete.GetValueOrDefault(),System.DateTime.Now.Date,System.DateTime.Now.AddDays(6).Date))</td>
+        <td><button class="btn btn-med green-bg openDialog" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "ProjPlan", new { id = o.ID })"><i class="icon-">&#xf044;</i></button></td>
+        <td><button class="btn btn-med red-bg openDeleteDialog" data-id="@o.ID" data-mode="delete" data-source="@Url.Action("Delete", "ProjPlan", new { id = o.ID })"><i class="icon-">&#xf057;</i></button></td>
+    </tr>
+}

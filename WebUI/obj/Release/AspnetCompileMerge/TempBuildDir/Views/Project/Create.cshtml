@@ -1,0 +1,252 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_projectInput
+@{
+    Model.InitiationDate = System.DateTime.Now;
+    Model.CreateDate = System.DateTime.Now;
+    Model.PlannedStart = System.DateTime.Now;
+    Layout = null;
+    IQueryable<tbl_workflow> workflow;
+    ViewBag.DialogOption = "openWorkflow";
+    ViewBag.SaveOption = "saveWorkflow";
+    ViewBag.UpdateID = "containerDetails";
+    ViewBag.Key = "";
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else {
+        workflow = null;
+    }
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID, addOnBC = "New Project", addOnBcURL = "", HeaderTitle = "Initiate Project", HeaderHelptext = "Create a new project" })
+<div class="row">
+        <div class="panel colored col-md-12">
+		<form role="form" id="WFForm" name="WFForm" action="@Url.Action("Create")" method="post">
+					
+        <div class="panel-body">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a data-toggle="tab" href="#ProjDetails">Project Details</a></li>
+                <li><a data-toggle="tab" href="#ClientDetails">Client Information</a></li>
+                <li><a data-toggle="tab" href="#OrgLevels">Organisation Level *</a></li>
+            </ul>
+                        
+            <div class="tab-content" id="myTabContent">
+                <div id="ProjDetails" class="tab-pane fade in active">
+                @Html.ValidationSummary(true)
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>Project Code</label>
+                        <div class="controls">
+                            <input type="hidden" name="Code" id="Code" value="" />
+                            <input type="text" class="form-control" disabled><span class="help-block"><i class="icon-">&#xf05a;</i> Leave Blank. Will be provided when this request is submitted.</span>
+                        </div>
+                    </div>
+                </div>
+                            
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Date Of Initiation</label>
+                        <div >
+                            <div class="input-group date datepicker">
+                                <input type="text" class="form-control mask_date2" value="@(Model.InitiationDate == null ? "" : Model.InitiationDate.GetValueOrDefault().ToString(Globals.DateFormatString))" name="InitiationDate" id="InitiationDate"/>
+                                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                            </div>
+                            @Html.ValidationMessageFor(o => o.InitiationDate)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label>Project Name</label>
+                    <div class="controls"><input type="text" class="form-control" value="@Model.Name" name="Name" id="Name"><span class="help-block"><i class="icon-">&#xf05a;</i> Provide a brief description of this project</span></div>
+                    @Html.ValidationMessageFor(o => o.Name)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label>Project Type</label>
+                    <div class="controls">
+                        @Html.Action("getListItems","OrgProjType",new { selectedItem = Model.mstr_Org_Project_TypeID, controlName = "mstr_Org_Project_TypeID", excludeIds = "", includeIds = "", reload = ""})
+                        @Html.ValidationMessageFor(o => o.mstr_Org_Project_TypeID)
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                    <label>Project Description</label>
+                    <div class="controls"><textarea rows="4" class="col-md-12" name="Description" id="Description" >@Model.Description</textarea><span class="help-block"><i class="icon-">&#xf05a;</i> Provide a brief description of this project</span></div>
+                    @Html.ValidationMessageFor(o => o.Description)
+                    </div>
+                </div>
+            </div>
+                        
+            <div class="row">                           
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Planned Start Date</label>
+                        <div >
+                            <div class="input-group date datepicker">
+                                <input type="text" class="form-control" value="@(Model.PlannedStart == null ? "" : Model.PlannedStart.ToString(Globals.DateFormatString))" name="PlannedStart" id="PlannedStart">
+                                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                            </div>
+                            @Html.ValidationMessageFor(o => o.PlannedStart)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Planned Finish Date</label>
+                        <div >
+                            <div class="input-group date datepicker">
+                                <input type="text" class="form-control" value="@Model.PlannedEnd" name="PlannedEnd" id="PlannedEnd">
+                                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                            </div>
+                            @Html.ValidationMessageFor(o => o.PlannedEnd)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label>Project Sponser</label>
+                    <div class="controls">
+                        @Html.Action("getListItems","Employee",new { selectedItem = Model.SponseredBy.GetValueOrDefault(), controlName = "SponseredBy", excludeIds = "", includeIds = "", reload = ""})
+                        @Html.ValidationMessageFor(o => o.SponseredBy)
+                    </div>
+                    </div>
+                </div>
+                            
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label>Project Approver</label>
+                    <div class="controls">
+                        @Html.Action("getListApprovers","Employee",new { selectedItem = Model.ApprovedBy.GetValueOrDefault(), controlName = "ApprovedBy", excludeIds = "", includeIds = "", reload = ""})
+                    </div>
+                    @Html.ValidationMessageFor(o => o.ApprovedBy)
+                    </div>
+                </div>
+            </div>                             
+        </div>
+                <div id="ClientDetails" class="tab-pane">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Client Name</label>
+                                <div class="controls">
+                                    @Html.Action("getListItems","OrgClient",new { selectedItem = Model.orgClientID.GetValueOrDefault(), controlName = "orgClientID", excludeIds = "", includeIds = "", reload = ""})
+                                </div>
+                            </div>
+                        </div>
+                                 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Client Type</label>
+                                <div class="controls">
+                                    @Html.DropDownListFor(o => o.ClientType, (new ClientTypes()).getList(Model.ClientType), "Select ...", new { @class = "col-md-12 form-control" })
+                                    @Html.ValidationMessageFor(o => o.ClientType)
+                                </div>
+                            </div>
+                        </div>                            
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" id="newClientName">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <div class="controls">
+                                    <input type="text" class="form-control" value="@Model.ClientName" name="ClientName" id="ClientName" />
+                                    @Html.ValidationMessageFor(o => o.ClientName)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            <label>Client Details</label>
+                            <div class="controls"><textarea rows="3" class="form-control" name="ClientContactDetail" id="ClientContactDetail">@Model.ClientContactDetail</textarea></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            <label>Contact Person / Details</label>
+                            <div class="controls"><textarea rows="3" class="form-control" name="ClientContactPerson" id="ClientContactPerson">@Model.ClientContactPerson</textarea></div>
+                            </div>
+                        </div>                            
+                    </div>
+
+                </div>
+                <div id="OrgLevels" class="tab-pane">
+                    <br />
+                    <div class="col-md-12">
+                        <div class="col-md-12 notification blue-bg">
+                 	        <strong>Organisation Levels</strong> : Based on what levels have been configured for this organisation. Click to close this notification.
+                        </div>
+				    </div>
+
+                    @if (Model.tbl_org_proj_org_level != null && Model.tbl_org_proj_org_level.Any())
+                    {
+                        <div class="row">
+                        @foreach (var o in Model.tbl_org_proj_org_level)
+                        {
+                            <div class="col-md-6">
+                                <hr />
+                                <div class="form-group">
+                                    <label>@o.org_level_name</label>
+                                    <input type="hidden" name="tbl_org_proj_org_level.Index" id="tbl_org_proj_org_level.Index" value="@o.ID" />
+                                    <input type="hidden" name="tbl_org_proj_org_level[@(o.ID)].ID" id="tbl_org_proj_org_level[@(o.ID)].ID" value="@o.ID" />
+                                    <input type="hidden" name="tbl_org_proj_org_level[@(o.ID)].tbl_Org_ProjectID" id="tbl_org_proj_org_level[@(o.ID)].tbl_Org_ProjectID" value="@o.tbl_Org_ProjectID" />
+                                    <input type="hidden" name="tbl_org_proj_org_level[@(o.ID)].tbl_Org_LevelID" id="tbl_org_proj_org_level[@(o.ID)].tbl_Org_LevelID" value="@o.tbl_Org_LevelID" />
+                                    <input type="hidden" name="tbl_org_proj_org_level[@(o.ID)].org_level_name" id="tbl_org_proj_org_level[@(o.ID)].org_level_name" value="@o.org_level_name" />
+                                    <input type="hidden" name="tbl_org_proj_org_level[@(o.ID)].NewEntry" id="tbl_org_proj_org_level[@(o.ID)].NewEntry" value="true" />
+                                    <div class="controls">
+                                        @Html.Action("getListItemsFor","OrgLevelMaster",new { selectedItem = o.tbl_Org_Level_MasterID.GetValueOrDefault(), controlName = "tbl_org_proj_org_level[" + o.ID + "].tbl_Org_Level_MasterID", excludeIds = "", includeIds = "", levelID = o.tbl_Org_LevelID})
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Organistion Levels not defined</p>
+                    }
+                </div>
+            </div>             
+        </div>
+        <input type="hidden" value="" id="workflow_status" name="mstr_Process_LC_StatusID" />
+        <input type="hidden" value="false" id="followWF" name="followWF" />
+        <input type="hidden" value="0" id="statusWF" name="statusWF" />  
+        <input type="hidden" value="@Model.CreateDate.ToString(Globals.DateFormatString)" id="CreateDate" name="CreateDate" />
+        <input type="hidden" value="@WebSecurity.CurrentUserId" id="workflowUser" name="workflowUser" />
+        <input type="hidden" value="null" id="workflow" name="workflow" />
+            
+		<div class="panel-footer">
+			<div class="form-group" id="actionButtons">
+                @if (workflow != null)
+                {
+                    @Html.Partial("printWorkflow", workflow)
+                }
+			</div>
+		</div>
+		</form>
+    </div>  
+</div>
+
+<script>
+    $('.datepicker').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+
+</script>

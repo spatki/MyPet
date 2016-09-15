@@ -1,0 +1,26 @@
+﻿@model IEnumerable<tbl_tailored_general_task>
+@{
+    Layout = null;
+}
+<ul class="branch in" id="GT@(ViewBag.key)">
+    <li><a href="javascript:;" class="openDialog" data-source="@Url.Action("manageGeneralTasks", "PrjProcessTailor", new { projectID = ViewBag.projectID, repoID = ViewBag.repoID, projPhase = ViewBag.phaseID })" data-id="">Click to add/remove General Tasks</a></li>
+@if (Model.Any())
+{
+    foreach (var p in Model)
+    {
+        if (p.Exclude)
+        {
+           <li id = "LGT@(p.ID)"><a href="javascript:;" class="process" data-mode="edit" data-id="LGT@(p.ID)" data-source="@Url.Action("IncludeGeneralTask","PrjProcessTailor",new { id = p.ID })" 
+               data-param="@p.ID" data-message="General Task Included Successfully" title="Click to include this task"><i class="icon-ok"></i></a>&nbsp;&nbsp;<span class="label label-strikeThrough">@p.Name</span><span class='label label-danger'>Excluded</span></li>
+        }
+        else
+        {
+            <li id = "LGT@(p.ID)">&nbsp;&nbsp;<span class="label label-configured">@p.Name</span></li>
+        }
+    }
+}
+else
+{
+    <li id="NilGT@(ViewBag.key)" >No General Tasks found</li>
+}
+</ul>

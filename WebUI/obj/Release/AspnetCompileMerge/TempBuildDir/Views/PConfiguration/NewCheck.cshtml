@@ -1,0 +1,38 @@
+﻿@using ProcessAccelerator.WebUI
+@{
+    Layout = null;
+    var gtID = ViewBag.gtID;
+    var repoID = ViewBag.repoID;
+    var sequence = ViewBag.sequence;
+    var clientID = ViewBag.clientID;
+}
+<tr id="GT@(repoID)G@(gtID)">
+    <td ><a href="#" data-id="GT@(repoID)G@(gtID)" class="openDeleteDialog2" data-delete="client" data-mode="delete" data-source="@Url.Action("deleteGeneralTask", "PConfiguration", new { id = gtID, repoID = repoID })"><i data-pageid="GT@(gtID)" class="icon-">&#xf05c</i></a></td>
+    <td >@(sequence)</td>
+    <td >
+        <input type="hidden" name="tbl_process_general_task.Index" value="@(gtID)" />
+        <input type="hidden" name="tbl_process_general_task[@(gtID)].ID" value="@(gtID)" />
+        <input type="hidden" name="tbl_process_general_task[@(gtID)].ClientID" value="@(clientID)" />
+        <input type="hidden" name="tbl_process_general_task[@(gtID)].SequenceNo" value="@sequence" />
+        <input type="hidden" name="tbl_process_general_task[@(gtID)].tbl_Process_RepositoryID" value="@repoID" />
+        <input type="hidden" name="tbl_process_general_task[@(gtID)].CreatedBy" value="@(WebSecurity.CurrentUserId)" />
+        <input type="hidden" name="tbl_process_general_task[@(gtID)].CreateDate" value="@(System.DateTime.Now.Date.ToString(Globals.DateFormatString))" />
+        <input type="hidden" name="tbl_process_general_task[@(gtID)].UpdatedBy" value="@(WebSecurity.CurrentUserId)" />
+        <input type="hidden" name="tbl_process_general_task[@(gtID)].UpdateDate" value="@(System.DateTime.Now.Date.ToString(Globals.DateFormatString))" />        
+        <input type="text" name="tbl_process_general_task[@(gtID)].Name" value="" class="form-control col-md-12" />
+    </td>
+    <td class="col-lg-4 CheckDetail" data-width="40px"><input type="text" name="tbl_process_general_task[@(gtID)].Description" value="" class="form-control col-md-12" /></td>
+    <td class="col-lg-3 CheckItem" data-width="20px" >@Html.Action("getMultiSelectList","ProcessRole",new { selectedItems = "", controlName = "tbl_process_general_task[" + gtID + "].roleIDs", excludeIds = "", includeIds = "", reload = "" })</td>
+</tr>                                                  
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        @if (sequence > 0)
+        {
+            <text>
+            multiComboConfig(".specialCombo");
+            </text>
+        }
+    });
+
+</script>

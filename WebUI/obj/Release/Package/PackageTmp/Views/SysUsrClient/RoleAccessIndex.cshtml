@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+}
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            	<div class="panel col-md-12">
+                    <form role="form">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                        <div class="col-md-6"><input type="radio" name="roleType" id="orgRole" value="1" checked="checked" class="roleType" />&nbsp;&nbsp;&nbsp;<label>Org Roles</label></div>
+                                        <div class="col-md-6"><input type="radio" name="roleType" id="sysRole" value="2"  class="roleType"/>&nbsp;&nbsp;&nbsp;<label>System Roles</label></div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        @Html.Action("getListItems","OrgRole",new { selectedItem = 0, controlName = "role", excludeIds = "", includeIds = "", reload = "getRoleAccess"})
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6" id="MenuAccess">
+                                    <!-- Menu Access -->
+                                    <div class="panel resizable">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Menu Access</h3>
+                                        </div>
+                                        <div class="panel-body onlyScrolls">
+                                            <ul class="tree" id="processTree">
+                                                @Html.Action("getMenuStructure","Menu")
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="DataAccess">
+                                    <!-- Data Access -->
+                                    <div class="panel resizable">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Data Access</h3>
+                                        </div>
+                                        <div class="panel-body onlyScrolls">
+                                            <ul class="tree">
+                                                <li><input type="checkbox" id="MReportingOptionCB" data-id="E1" class="chkSelect"/>
+                                                    <a href="#" role="branch" data-value="Bootstrap_Tree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-root">Include data of Reporting Employees</span></a>
+                                                </li>
+                                                @Html.Action("getOrgStructure","OrgLevel")
+                      	                    </ul>                       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>

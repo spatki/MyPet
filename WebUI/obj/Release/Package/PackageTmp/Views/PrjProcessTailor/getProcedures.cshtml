@@ -1,0 +1,27 @@
+﻿@model IEnumerable<tbl_tailored_rep_procedure>
+@{
+    Layout = null;
+}
+<ul class="branch in" id="Proc@(ViewBag.key)">
+    <li><a href="javascript:;" class="openDialog" data-source="@Url.Action("manageProjProcedures", "PrjProcessTailor", new { projectID = ViewBag.projectID, repoID = ViewBag.repoID, projPhase = ViewBag.phaseID })" data-id="">Click to add/remove procedures</a></li>
+@if (Model.Any())
+{
+    foreach (var p in Model)
+    {
+        <li id = "LProc@(p.ID)"><a href="javascript:;" class="process" data-mode="edit" data-id="LProc@(p.ID)" data-source="@Url.Action((p.Exclude == true ? "IncludeProc" : "ExcludeProc"), "PrjProcessTailor", new { id = p.ID })"
+             data-param="@(p.ID)" data-message="Changes Saved" title="Click to include this task"><i class="icon-@(p.Exclude == true ? "ok" : "remove")"></i></a>&nbsp;&nbsp;
+            <span class="label label-@((p.Exclude ? "strikeThrough" : "configured"))">
+                <a href="javascript:" class="label-configured openDialog" data-id="" data-source="@Url.Action("showPreview", "PProcedure", new { id = p.tbl_Process_ProcedureID })">@p.tbl_process_procedure.Name</a>
+            </span>
+            @if (p.Exclude)
+            {
+             <span class='label label-danger'>Excluded</span>   
+            }
+        </li>
+    }
+}
+else
+{
+    <li id="NilProc@(ViewBag.key)" >No Process Artifacts found</li>
+}
+</ul>

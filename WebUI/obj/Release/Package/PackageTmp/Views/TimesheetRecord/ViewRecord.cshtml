@@ -1,0 +1,30 @@
+﻿@model tbl_org_plan_filled_document
+@{
+    Layout = null;
+}
+
+<div class="modal-dialog" style="width:80%;height:80%;">
+	<div class="modal-content">
+        <div class="modal-body"> 
+            <div class="container-fluid">
+                <div class="panel colored">
+                    <div class="panel-body"  id="filledContents">
+                        @if (Model == null)
+                        {
+                            <p>Record not found</p>
+                        }
+                        else
+                        {
+                            @Html.Raw(Model.Contents)
+                        }
+                    </div>
+                    <div class="panel-footer">
+		                <div class="form-group" id="actionButtons">
+		                    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		                </div>
+	                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using System.Web.Script.Serialization
+@model mstr_clientInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Edit Client</h4>
+	</div>
+    <form method="post" action="@Url.Action("Edit")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Client Name</label>
+                            @Html.TextBoxFor(o => o.ClientName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.ClientName)
+                        </div>
+                        <div class="form-group">    
+                            <label>Short Name</label>
+                            @Html.TextBoxFor(o => o.ShortName , new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.ShortName)
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Description</label>    
+                            @Html.TextAreaFor(o => o.Description, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Description)
+                        </div>
+                        @using (Html.BeginForm("uploadCompanyLogo", "DocMgr", FormMethod.Post, new { id = "changeProfilePic" }))
+                        {
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Company Logo</h3>
+                                </div>
+                                <div class="panel-body">
+			                        <div class="col-md-12">
+                                        <div class="panel-body">
+                                            <img id="companyLogo" src="@Url.Content("~/Content/images/" + Model.Logo)"  title='Company Logo' alt='Company Logo'/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-med blue-bg openGeneralDialog" data-dialogbox="openLogoUploadBox" data-source="@Url.Action("uploadCompanyLogo","DocMgr")">Upload Logo</button>
+                                </div>
+                            </div>
+                        }
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveDefault" data-mode="edit" data-id="@Model.ID" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+<!-- Modal -->
+<div class="modal fade" id="openLogoUploadBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div><!-- /.modal -->
+
+<script>
+    // specialDropDown (".specialCombo")
+</script>

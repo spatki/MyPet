@@ -1,0 +1,52 @@
+﻿@using Omu.AwesomeMvc
+@model IEnumerable<UserProfile>
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Select Workflow User</h4>
+	</div>
+    <form id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group">    
+                        <label>Request will be sent to the selected user</label>
+                        <div >
+                            <select name="reviewUser" id="reviewUser" class="specialCombo form-control col-md-12">
+                                @foreach (var item in Model)
+                                {
+                                    <option value="@item.ID">@item.DisplayName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+
+		        <button type="button" class="btn gray-bg closeDialog">Cancel</button>
+		        <button type="button" class="btn blue-bg selectUser" data-id="@ViewBag.key" 
+                    data-updateid = "@ViewBag.updateID"
+                    data-form="@ViewBag.formName" data-source="@ViewBag.source" 
+                    data-method = "@ViewBag.method"
+                    data-statustype ="@ViewBag.statusType"
+                    data-status = "@ViewBag.status"
+                    data-message="@ViewBag.message" 
+                    data-workflow="@ViewBag.workflow"
+                    data-displayid="@ViewBag.displayID">Confirm</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    // specialDropDown (".specialCombo")
+</script>

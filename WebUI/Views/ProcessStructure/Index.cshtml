@@ -1,0 +1,36 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@model tbl_process_structure
+@{
+    Layout = null;
+}
+            @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="panel colored col-md-12">
+                    <div class="panel-heading green-bg">
+                        <h3 class="panel-title">Process Level Classification</h3>
+                        <ul class="pull-right toolbar">
+                            <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                            <li><a href="javascript:printStructure('@Url.Action("getStructure","PStructure")','PStructure', 'Add Role','@Url.Action("Create")', '@Url.Action("Edit")');" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                            <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body" id="structContainer">
+                       <div class="row">
+                            <ul class="col-md-8 tree" id="PStructure">
+                                <li id="L0">
+                                    <a class="openDialog" data-toggle="modal" id="newNode" href="javascript:;" data-id="" data-source="@Url.Action("Create", new {level=1,parent=0})">Add Role</a>
+                                </li>
+                      	    </ul>
+                       </div>
+                    </div>
+                </div>                
+            </div>
+
+
+<script src="~/Scripts/pa/bootstrap-tree/bootstrap-tree.js"></script>
+<script>
+    printStructure("@Url.Action("getStructure","PStructure")", "PStructure", "Add Role", "@Url.Action("Create")", "@Url.Action("Edit")");
+</script>
+
+

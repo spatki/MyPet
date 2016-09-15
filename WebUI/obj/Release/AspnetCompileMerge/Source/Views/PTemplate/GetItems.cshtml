@@ -1,0 +1,23 @@
+﻿@model IEnumerable<tbl_process_template>
+@{
+    Layout = null;
+}
+@if (!Model.Any())
+{
+    <p>No Templates Found</p>
+} 
+else {
+    foreach (var o in Model)
+    {
+        <tr id="@o.ID">
+                <td>@o.Name</td>
+            <td>@o.UserProfile.UserName</td>
+            <td>@(o.UserProfile1 == null ? " " : o.UserProfile1.UserName)</td>
+            <td>@o.mstr_process_lc_status.Status</td>
+            <!--td><button class="btn btn-med orange-bg openDialog" data-id="@o.ID" data-mode="" data-source="@Url.Action("AssignReview", "PTemplate", new { id = o.ID })"><i class="icon-eye-open"></i></button></!--td-->
+            <td><button class="btn btn-med green-bg subMenu" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "PTemplate", new { id = o.ID })"><i class="icon-">&#xf044;</i></button>
+                <button class="btn btn-med red-bg openDeleteDialog" data-id="@o.ID" data-mode="delete" data-source="@Url.Action("Delete", "PTemplate", new { id = o.ID })"><i class="icon-">&#xf057;</i></button>
+            </td>
+        </tr>
+    }
+}

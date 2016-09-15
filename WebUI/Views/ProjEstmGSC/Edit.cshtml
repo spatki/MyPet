@@ -1,0 +1,55 @@
+﻿@model tbl_org_estm_gsc_masterInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4>Edit General System Characteristic</h4>
+	</div>
+    <form method="post" action="@Url.Action("Edit","ProjEstmGSC")" id="addNewGSCForm">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+                <input type="hidden" value="@Model.ID" name="ID" id="ID" />
+                <input type="hidden" value="@Model.ClientID" name="ClientID" id="ClientID" />
+			    <div class="col-md-12">
+                    <div class="form-group">    
+                        <label>GSC Name</label>
+                        @Html.TextBoxFor(o => o.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(o => o.Name)
+                    </div>
+                </div>
+			    <div class="col-md-12">
+                    <hr />
+                    <h4><strong>Help Text</strong></h4>
+                </div>
+			    <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <textarea rows="7" cols="20" id="HelpText" name="HelpText">@Model.HelpText</textarea>
+                            @Html.ValidationMessageFor(o => o.HelpText)
+                        </div>
+                    </div>
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <a href="javascript:;" class="btn gray-bg closeDialog">Cancel</a>
+		        <button type="button" class="btn blue-bg save" data-mode="editDropDown" data-id="GSCOption@(Model.ID)" data-form="addNewGSCForm">Update</button>
+		        <button type="button" class="btn blue-bg save" data-mode="delete" data-id="GSCOption@(Model.ID)" data-form="submitDelete">Delete</button>
+			</div>
+	    </div>
+    </form>
+    <form name="submitDelete" id="submitDelete" method="post" action="@Url.Action("Delete", "ProjGSCParams", new { id = Model.ID })">
+        <input type="hidden" value="@Model.ID" name="ID" />
+    </form>
+
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script>
+    var editor = CKEDITOR.replace('HelpText');
+</script>

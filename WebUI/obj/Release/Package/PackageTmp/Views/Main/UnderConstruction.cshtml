@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Coming soon...</h4>
+	</div>
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <p>This functionality is currently under construction !</p>
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+			</div>
+	    </div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+

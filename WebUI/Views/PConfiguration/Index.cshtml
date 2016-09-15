@@ -1,0 +1,32 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@model tbl_process_structure
+@{
+    Layout = null;
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+<div class="row" id="repositoryTree">
+    <div class="panel colored col-md-12">
+        <div class="search_form clearfix col-lg-12">
+            <div ><input type="text" id="searchText" placeholder="Search the repository..."><input type="button" id="searchbtn" class="icon-" value="&#xf002;"></div>
+        </div>
+        <div class="col-lg-12 note" id="filterMessage"></div>
+        <br />
+        <div class="panel-body" id="structContainer" >
+            <div class="row">
+                <ul class="col-md-8 tree" id="PConfiguration">
+                    <li id="L0">
+                        <a class="openDialog" data-toggle="modal" id="newNode" href="javascript:;" data-id="" data-source="@Url.Action("Create", new {level=1,parent=0})">Add Repository</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>                
+</div>
+<div class="row"  id="configureProcess"></div>
+
+<script>
+    printConfiguration("@Url.Action("getConfiguration", "PConfiguration")", "PConfiguration", "Add Repository", "@Url.Action("Create")", "@Url.Action("Edit")");
+</script>
+
+

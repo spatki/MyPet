@@ -1,0 +1,72 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@{
+    Layout = null;
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            
+<div class="row">
+            
+    <div class="col-md-12">
+		<div class="panel colored">
+        <div class="panel-body">
+            <div class="row">
+            <form method="post" action="@Url.Action("GetItems")" id="searchData" >
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">Template Name</label>
+                    <div class="col-lg-8">
+                        <div class="input-group">
+                        <input type="text" class="form-control" name="srchByTmplName" id="srchByTmplName">
+						<div class="input-group-btn">
+                        <button type="button" class="btn btn-med blue-bg saveDefault" id="searchTemplate" data-mode="search" data-form="searchData" data-id="searchResult">GO</button>
+						</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                            <a href="javascript:;" class="mehroon-bg btn btn-med showcase-btn subMenu" data-source="@Url.Action("Create")"><i class="icon-file-alt"></i> Add New</a>
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div class="row">
+                <div class="panel colored">
+                <div class="panel-heading blue-bg">
+                    <h3 class="panel-title">Templates</h3>
+                    <ul class="pull-right toolbar">
+                        <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                        <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                    </ul>
+                </div>
+                <div class="panel-body" id="dataList">					
+                    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="processTable">
+                        <thead>
+                            <tr>
+                                <th>Template Name</th>
+                                <th>Created By</th>
+                                <th>Reviewed By</th>
+                                <th>Status</th>
+                                <!--th >Assign Review</!--th-->
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="searchResult">
+                            @Html.Action("GetItems")
+                        </tbody>
+                    </table>
+                       
+                </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+    </div> 
+                                                
+</div> 
+
+<script>
+
+    jsTable('processTable');
+
+</script>
+

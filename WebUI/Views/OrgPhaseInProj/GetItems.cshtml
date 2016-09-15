@@ -1,0 +1,22 @@
+﻿@model mstr_org_project_type
+@{
+    Layout = null;    
+    ViewBag.Title = "GetItems";
+}
+<ul class="branch in" id="ProjType@(Model.ID)">
+    <li><a href="javascript:" data-toggle="modal" class="openDialog" data-id="ProjType@(Model.ID)" data-source="@(Url.Action("linkPhase","OrgPhaseInProj", new  { projID = Model.ID }))"><span id="subTitleP1">Add Project Phase</span></a>
+    @if (Model.mstr_org_phase_in_proj.Any()) 
+    {
+        
+        foreach (var s in Model.mstr_org_phase_in_proj.OrderBy(l => l.mstr_org_proj_phase.SequenceNo))
+        {
+            <li id="P@(Model.ID)P@(s.ID)">
+                <a class="confirmAction" data-id="P@(Model.ID)P@(s.ID)" data-message="Do you want to remove this project phase ?" data-messagetitle="Confirm Delete" data-class="deleteOnServer" data-classparams="data-source='@Url.Action("Delete","OrgPhaseInProj",new { id = s.ID })' data-updateid='P@(Model.ID)P@(s.ID)'"><i class="icon-remove-sign"></i></a>
+                <span >                           
+                    @s.mstr_org_proj_phase.LongName
+                </span>
+            </li>
+        }
+    }
+    </li>
+</ul>

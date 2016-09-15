@@ -1,0 +1,9 @@
+﻿@{
+    Layout = null;
+}
+
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+
+<div id="DataListing">
+    @Html.Action("GetAuditsForClosure","OrgAuditFinding")
+</div>

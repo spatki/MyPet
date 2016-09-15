@@ -1,0 +1,190 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<vw_timesheetEntry>
+@{
+    ViewBag.Title = "Review Timesheet";
+    ViewBag.headerText = "Review Timesheet for " + ViewBag.EmployeeName;
+    ViewBag.headerHelp = "Review timesheets submitted for your review and accordingly approve or reject it.";
+    ViewBag.breadcrumb = new string[] { "Record", "Timesheet", "Review Timesheets" };
+    ViewBag.breadcrumbURLs = new string[] { "/Main/Record", "", "" };
+    DateTime startDate = (DateTime)ViewBag.StartDate;
+    Layout = null;
+
+    int Type = 0;
+    string GroupName = "";
+    string SubGroupName = "";
+    short processDay = 0;
+    int T_ID;
+    decimal periodDuration = 0;
+    decimal? actualDuration = 0;
+    TSTaskType TaskType = new TSTaskType();
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Partial("_Header")
+<div class="row col-md-12">
+    <div class="panel col-md-12">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span id="viewTitle">Timesheet for Week: <span id="vTitlePrefix"> Starting </span><span id="weekStart" class="TableDisabledLabel">@startDate.ToString(Globals.DateFormatString)</span> )
+                <a href="#" class="nav_options subMenu" data-source="@Url.Action("ShowTSForApproval","Timesheet", new { type = ViewBag.Type, empID = ViewBag.EmployeeID, startDate = startDate.AddDays(-7).ToString(Globals.DateFormatString) })"><i class="icon-double-angle-left"></i> Prev</a>
+                <a href="#" class="nav_options subMenu" data-source="@Url.Action("ShowTSForApproval","Timesheet", new { type = ViewBag.Type, empID = ViewBag.EmployeeID, startDate = System.DateTime.Now.Date.ToString(Globals.DateFormatString) })"><i class="icon-double-angle-down"></i> current</a>
+                <a href="#" class="nav_options subMenu" data-source="@Url.Action("ShowTSForApproval","Timesheet", new { type = ViewBag.Type, empID = ViewBag.EmployeeID, startDate = startDate.AddDays(7).ToString(Globals.DateFormatString) })">Next <i class="icon-double-angle-right"></i></a>
+            </h3>
+            @if (Model != null && Model.Any())
+            {
+                <ul class="pagination pull-right" style="margin:-1px 0;">
+                    <li class="active green-bg"><a href="javascript:;">@(ViewBag.Type == 1 ? "Timesheet is Pending for Approval" : "Timesheet is Approved")</a></li>
+                </ul>
+            }
+        </div>
+        <div class="panel-body" id="dataList">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="TSHeader" rowspan="2">Activity</th>
+                        <th class="TSHeader TSHours" rowspan="2">Assigned Hrs</th>
+                        <th class="TSHeader TSHours" rowspan="2">Total Hrs</th>
+                        <th class="TSHeader TSHours" rowspan="2">Week Total</th>
+                        <th class="TSHeader TSHours">MON</th>
+                        <th class="TSHeader TSHours">TUE</th>
+                        <th class="TSHeader TSHours">WED</th>
+                        <th class="TSHeader TSHours">THUR</th>
+                        <th class="TSHeader TSHours">FRI</th>
+                        <th class="TSHeader TSHours">SAT</th>
+                        <th class="TSHeader TSHours">SUN</th>
+                    </tr>
+                    <tr>
+                        <th class="TSSubHeader TSHours" id="weekDt1">@startDate.ToString("dd-MMM")</th>
+                        <th class="TSSubHeader TSHours" id="weekDt2">@startDate.AddDays(1).ToString("dd-MMM")</th>
+                        <th class="TSSubHeader TSHours" id="weekDt3">@startDate.AddDays(2).ToString("dd-MMM")</th>
+                        <th class="TSSubHeader TSHours" id="weekDt4">@startDate.AddDays(3).ToString("dd-MMM")</th>
+                        <th class="TSSubHeader TSHours" id="weekDt5">@startDate.AddDays(4).ToString("dd-MMM")</th>
+                        <th class="TSSubHeader TSHours" id="weekDt6">@startDate.AddDays(5).ToString("dd-MMM")</th>
+                        <th class="TSSubHeader TSHours" id="weekDt7">@startDate.AddDays(6).ToString("dd-MMM")</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var timesheet = Model.OrderBy(o => o.Type).ThenBy(k => k.GroupName).ThenBy(l => l.SubGroupName).ThenBy(p => p.tbl_Org_Proj_PlanID).ThenBy(d => d.TSDate).GetEnumerator();
+                        var keepProcessing = false; 
+                        if (timesheet.MoveNext()) { keepProcessing = true; }
+                        while (keepProcessing)    // Assigned
+                        {
+                            var t = timesheet.Current;
+                            periodDuration = 0;
+                            actualDuration = t.ActualDuration;
+                            processDay = 1;
+                            T_ID = (t.Type == 3 ? t.tbl_General_TaskID.GetValueOrDefault() : t.tbl_Org_Proj_PlanID.GetValueOrDefault());
+                            if (t.Type != Type)
+                            {
+                                Type = t.Type;
+                                <tr>
+                                    <th colspan="11" class="TableDisabledLabel"><a href="javascript:;" class="group tree-toggle" data-childid="T@(t.Type)">@TaskType.getTypeName((short)t.Type)</a></th>
+                                </tr>
+                            }
+                            if (GroupName != (t.GroupName == null ? "" : t.GroupName))
+                            {
+                                GroupName = (t.GroupName == null ? "" : t.GroupName);
+                                if (GroupName != "" && t.Type != 3)
+                                {
+                                    <tr>
+                                        <th colspan="11" class="TSSubGroup T@(t.Type)">Project : @t.GroupName</th>
+                                    </tr>
+                                }
+                            }
+                            if (SubGroupName != (t.SubGroupName == null ? "" : t.SubGroupName))
+                            {
+                                SubGroupName = (t.SubGroupName == null ? "" : t.SubGroupName);
+                                if (SubGroupName != "" && t.Type != 3)
+                                {
+                                    <tr>
+                                        <th colspan="11" class="TSSubGroup T@(t.Type)">Group : @t.SubGroupName</th>
+                                    </tr>
+                                }
+                            }
+                            <tr class="T@(t.Type)">
+                                <td >@t.TaskName.Trim()</td>
+                                @if (t.Type != 3)
+                                {
+                                    <td >@t.PlannedDuration</td>
+                                    <td>@t.ActualDuration</td>
+                                    <td>@(Model.Where(o => o.GroupName == t.GroupName &&
+                                                      ((o.SubGroupName == null && t.SubGroupName == null) || (o.SubGroupName == t.SubGroupName)) && 
+                                                      ((o.tbl_Org_Proj_PlanID == null && t.tbl_Org_Proj_PlanID == null) || (o.tbl_Org_Proj_PlanID == t.tbl_Org_Proj_PlanID)))
+                                                      .Sum(o => o.Duration))</td>
+                                }
+                                else
+                                {
+                                    <td ></td>  <!-- Planned Hrs not applicable -->
+                                    <td></td>   <!-- Total Hrs not applicable -->
+                                    <td id="T@(t.Type)I@(T_ID)Total">@(Model.Where(o => o.tbl_General_TaskID != null && o.tbl_General_TaskID == t.tbl_General_TaskID).Sum(o => o.Duration))</td>
+                                }
+            
+                                @while (processDay <= 7)
+                                {
+                                    if (t.ActualEnd == null)
+                                    {
+                                        <td class="@(t.Type != 3 && t.TSDate >= t.PlannedStart && t.TSDate <= t.PlannedEnd ? "TSAssigned" : "")">@(t.Duration == 0 ? "0" : t.Duration.ToString())</td>
+                                    }
+                                    else
+                                    {
+                                        <td id="T@(t.Type)I@(t.ID)Day@(processDay)" data-id="DurationT@(t.Type)I@(t.ID)" class="@(t.Type != 3 && t.TSDate >= t.PlannedStart && t.TSDate <= t.PlannedEnd ? "TSAssigned" : "")">@(t.Duration == 0 ? "0" : t.Duration.ToString())</td>
+                                    }
+                                    periodDuration += t.Duration;
+                                    if (timesheet.MoveNext()) 
+                                    { 
+                                        t = timesheet.Current;
+                                        processDay += 1; 
+                                    } 
+                                    else 
+                                    { 
+                                        keepProcessing = false;
+                                        processDay = 8;
+                                    }
+                               }
+                                </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="11">No Entries sent for review</td></tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-lg-12 navbar-fixed-bottom pull-right" id="actions">
+                <div class="row pull-right panel-footer">
+                    <div class="col-lg-12 col-lg-offset-1">
+                        @if (Model != null && Model.Any())
+                        {
+                            if (ViewBag.Type == 1)
+                            {
+                                <a href="javascript:;" class="btn btn-med blue-bg confirmAction" 
+                                    title="Approve this timesheet" data-messagetitle="Confirm to Approve"
+                                    data-message="Do you want to approve this timesheet ?" data-class="loadDetails" 
+                                    data-classparams="data-element='containerDetails' data-mode='timesheet' data-source='@Url.Action("ApproveTSHours","Timesheet",new { empID = ViewBag.EmployeeID, startDate = startDate.ToString(Globals.DateFormatString), endDate = startDate.AddDays(6).ToString(Globals.DateFormatString) })'">
+                                    Approve
+                                </a>
+                            }
+                            <a href="javascript:;" class="btn btn-med blue-bg confirmAction" 
+                                    title="Reject this timesheet" data-messagetitle="Confirm to Reject"
+                                    data-message="Do you want to reject this timesheet ?" data-class="loadDetails" 
+                                    data-classparams="data-element='containerDetails' data-mode='timesheet' data-source='@Url.Action("RejectTSHours","Timesheet",new { empID = ViewBag.EmployeeID, startDate = startDate.ToString(Globals.DateFormatString), endDate = startDate.AddDays(6).ToString(Globals.DateFormatString) })'">
+                                Reject
+                            </a>
+                        }
+                        <a href="javascript:;" class="btn btn-med blue-bg subMenu" data-source="@Url.Action("ApproveTS","Timesheet")">
+                            Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>                
+</div>
+<script>
+    jsTable('processTable');
+</script>
+
+
+}

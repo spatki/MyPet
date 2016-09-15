@@ -1,0 +1,92 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_process_rep_task_ref_docsInput
+@{
+    Layout = null;
+    var totalDocs = (Model.refDocs != null && Model.refDocs.Any() ? Model.refDocs.Max(o => o.ID) + 1 : 1);
+    DocReferenceType docRef = new DocReferenceType();
+}
+    <form method="post" action="@Url.Action("manageActivityRefDocs","PrjProcessTailor")" id="submitLevel">
+        @Html.HiddenFor(o => o.tbl_Process_Repository_ID)
+        @Html.HiddenFor(o => o.tbl_Process_Rep_TaskID)
+        <div class="panel-body"> 
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+		    <div class="col-md-12">
+                <table class="table table-striped table">
+                    <thead>
+                        <th></th>
+                        <th>Document</th>
+                        <th>Remarks</th>
+                        <th>Mandatory</th>
+                    </thead>
+                    <tbody data-count="1">
+                        @if (Model.refDocs != null && Model.refDocs.Any())
+                        {
+                            foreach (var i in Model.refDocs)
+                            {
+                                if (i.followWF == true)
+                                {
+                                    <tr id="Doc@(i.ID)">
+                                        <td>
+                                            <input type="hidden" name="refDocs.Index" value="@i.ID" />
+                                            <input type="hidden" name="refDocs[@i.ID].ID" value="@i.ID" />
+                                            <input type="hidden" name="refDocs[@i.ID].ClientID" value="@i.ClientID" />
+                                            <input type="hidden" name="refDocs[@i.ID].DocType" value="@i.DocType" id="refDocs@(i.ID)refKeyDocType" />
+                                            <input type="hidden" name="refDocs[@i.ID].referenceID" value="@i.referenceID" id="refDocs@(i.ID)refKeyRefID" />
+                                            <input type="hidden" name="refDocs[@i.ID].DocumentName" value="@i.DocumentName>" id="refDocs@(i.ID)refKeyDocumentName" />
+                                            <a href="javascript:;" class="loadDetails" data-element="Doc@(i.ID)" data-source="@Url.Action("IncludeTaskDoc", "PrjProcessTailor", new { id = i.ID })" 
+                                                data-mode="edit" title="Include this document"><i class="icon-ok"></i></a>
+                                        </td>
+                                        <td>
+                                            <label class="label-strikeThrough control-label">@i.DocumentName</label>
+                                        </td>
+                                        <td>
+                                            <label class="label-strikeThrough control-label">@i.Remarks</label>
+                                        </td>
+                                        <td>
+                                            <label class="label-strikeThrough control-label">@docRef.getTypeName((short)i.Mandatory.GetValueOrDefault())</label>
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr id="Doc@(i.ID)">
+                                        <td>
+                                            <input type="hidden" name="refDocs.Index" value="@i.ID" />
+                                            <input type="hidden" name="refDocs[@i.ID].ID" value="@i.ID" />
+                                            <input type="hidden" name="refDocs[@i.ID].ClientID" value="@i.ClientID" />
+                                            <input type="hidden" name="refDocs[@i.ID].DocType" value="@i.DocType" id="refDocs@(i.ID)refKeyDocType" />
+                                            <input type="hidden" name="refDocs[@i.ID].referenceID" value="@i.referenceID" id="refDocs@(i.ID)refKeyRefID" />
+                                            <input type="hidden" name="refDocs[@i.ID].DocumentName" value="@i.DocumentName>" id="refDocs@(i.ID)refKeyDocumentName" />
+                                            <a href="javascript:;" class="deleteRow" data-id="Doc@(i.ID)" data-dialogname="deleteDialogBox" 
+                                                data-clientdelete="N" data-source="@Url.Action("DeleteActivityDoc", "PrjProcessTailor", new { id = i.ID })"><i class="icon-remove"></i></a>
+                                        </td>
+                                        <td>
+                                            @Html.Action("GetReferenceData","PrjProcessTailor", new { id = i.DocType, taskID = Model.tbl_Process_Repository_ID, selectedValue = i.refKey, controlName = "refDocs[" + i.ID + "].refKey", reload = "updateDocType" })
+                                            @Html.ValidationMessage("refDocs[" + i.ID + "].referenceID")
+                                        </td>
+                                        <td>
+                                            @Html.TextBox("refDocs[" + i.ID + "].Remarks", i.Remarks, new { @class = "form-control" })
+                                            @Html.ValidationMessage("refDocs[" + i.ID + "].Remarks")
+
+                                        </td>
+                                        <td>
+                                            @Html.DropDownList("refDocs[" + i.ID + "].Mandatory",new DocReferenceType().getList((short)i.Mandatory.GetValueOrDefault()),"Select ...", new { @class = "col-md-12 form-control" })
+                                            @Html.ValidationMessage("refDocs[" + i.ID + "].Mandatory")
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        <tr id="newSuppDoc">
+                            <td>
+                                <a href="javascript:;" class="loadDetails" data-element="newSuppDoc" data-source="@Url.Action("addSupportingDoc","PrjProcessTailor", new { taskID = Model.tbl_Process_Repository_ID, projectID = Model.tbl_Process_Rep_TaskID, key = totalDocs })" data-mode="edit" ><i class="icon-plus"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+		    </div>
+	    </div>
+    </form>
+

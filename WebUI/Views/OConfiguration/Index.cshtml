@@ -1,0 +1,44 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@model mstr_org_structure
+@{
+    Layout = null;
+}
+            @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="panel colored col-md-12">
+                    <div class="panel-body" id="structContainer">
+                       <div class="row">
+                            <ul class="tree">
+                                <!-- Organisation Levels -->
+                                <li>
+                                    <a href="javascript:;" role="branch" class="tree-toggle closed" data-toggle="branch">
+                                        <span class="label label-root">Organisation Levels</span></a>
+                                    <ul class="branch"  id="OLevelStructure">
+                                        <li id="L0">
+                                            <a class="openDialog" data-toggle="modal" id="newNode" href="javascript:;" data-id="" data-source="@Url.Action("Create", new {level=1,parent=0})">Add Node</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!-- Project Types -->
+                                <li>
+                                    <a href="javascript:;" role="branch" class="tree-toggle closed" data-toggle="branch"><span class="label label-root">Project Classification</span></a>
+                                    @Html.Action("getConfiguration","OrgProjType")
+                                </li>
+                                <!-- Functions -->
+                                <li>
+                                    <a href="javascript:;" role="branch" class="tree-toggle closed" data-toggle="branch"><span class="label label-root">Functions</span></a>
+                                    @Html.Action("getConfiguration","OrgFunction")
+                                </li>
+                      	    </ul>
+                       </div>
+                    </div>
+                </div>                
+            </div>
+
+
+<script>
+    printStructure("@Url.Action("getStructure")", "OLevelStructure", "Add Node", "@Url.Action("Create")", "@Url.Action("Edit")");
+</script>
+
+

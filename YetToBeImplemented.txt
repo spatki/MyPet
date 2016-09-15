@@ -1,0 +1,5 @@
+1. Advanced search in employees
+2. Define -> Process -> Masters -> Documents
+	Currently shows all documents. Even those uploaded by projects.
+	This should be changed to show only process related documents.
+3. Add dept reporting and hr reporting in Employee

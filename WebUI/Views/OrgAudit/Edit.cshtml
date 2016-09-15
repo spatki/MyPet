@@ -1,0 +1,140 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_audit_planInput
+@{
+    Layout = null;
+    var today = System.DateTime.Now.Date;
+}
+
+<div class="modal-dialog" style="width: 60%;">
+	<div class="modal-content">
+	    <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h4 class="modal-title" id="dialogTitle">Edit Org Level Audit Plan</h4>
+	    </div>
+        <div class="modal-body"> 
+            <form method="post" action="@Url.Action("Edit")" id="submitLevel" role="form">
+                <div class="panel-body">
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(o => o.ID)
+                    @Html.HiddenFor(o => o.RefID)
+                    @Html.HiddenFor(o => o.ClientID)
+                    @Html.HiddenFor(o => o.Status)
+		            <div class="row">
+			            <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Execution Frequency</label>
+                                <div class="controls">
+                                    @Html.DropDownListFor(o => o.AuditType, new AuditFrequencyType().getList((short)Model.AuditType), "Select ...", new { @class = "col-md-12 form-control showFrequency" })
+                                </div>
+                                @Html.ValidationMessageFor(o => o.AuditType)
+                            </div>
+                        </div>
+		                <div class="col-md-8" id="FrequencyDetails" style="display:@(Model.AuditType == 2 ? "block" : "none");">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label row col-md-12">Audit Duration </label>
+                                    <div class="row col-md-5">
+                                        <input type="text" name="Duration" id="Duration" value="@Model.Duration" size="7" class="form-control pull-right"/>
+                                        @Html.ValidationMessageFor(o => o.Duration)
+                                    </div>
+                                    <label class="control-label col-md-7 row">&nbsp;Day(s)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label row col-md-12">Recurring every </label>
+                                    <div class="row col-md-5">
+                                        <input type="text" name="Period" id="Period" value="@Model.Period" size="7" class="form-control pull-right"/>
+                                        @Html.ValidationMessageFor(o => o.Period)
+                                    </div>
+                                    <div class="row col-md-6">
+                                        @Html.DropDownListFor(o => o.Frequency,new AuditFrequency().getList((short)Model.Frequency.GetValueOrDefault()), new { @class = "col-md-12 form-control pull-left" })
+                                        @Html.ValidationMessageFor(o => o.Frequency)
+                                    </div>
+                                </div>
+                            </div>
+		                </div>
+                    </div>
+		            <div class="row">
+                        <br />
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Description</label>
+                                <div class="controls">
+                                    <textarea rows="3" name="Comments" id="Comments" class="col-md-12 form-control">@Model.Comments</textarea>
+                                </div>
+                                @Html.ValidationMessageFor(o => o.Comments)
+                            </div>
+                        </div>
+                    </div>
+		            <div class="row">
+                        <br />
+			            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" id="StartLabel">Planned Start</label>
+                                <div class="controls">
+                                    <div class="input-group date" id="startDatepicker">
+                                        <input type="text" value="@(Model.Start == new DateTime() ? today.ToString(Globals.DateFormatString) : Model.Start.ToString(Globals.DateFormatString))" class="form-control" name="Start" id="Start">
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-format="dd/mm/yyyy" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(o => o.Start)
+                            </div>
+                        </div>
+			            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" id="FinishLabel">Planned Finish</label>
+                                <div class="controls">
+                                    <div class="input-group date" id="finishDatepicker">
+                                        <input type="text" value="@(Model.Finish == new DateTime() ? today.ToString(Globals.DateFormatString) : Model.Finish.ToString(Globals.DateFormatString))" class="form-control" name="Finish" id="Finish">
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-format="dd/mm/yyyy" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(o => o.Finish)
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <br />
+			            <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Participant Roles</label>
+                                <div class="controls">
+                                    @Html.Action("getListBoxItems", "OrgRole", new { selectedItems = Model.AuditorRoles, controlName = "AuditorRoles", excludeIds = "", selectIds = "", reload = "" })
+                                </div>
+                                @Html.ValidationMessageFor(o => o.AuditorRoles)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+	            <div class="modal-footer">
+			        <div class="form-group">
+		                <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		                <button type="button" class="btn blue-bg saveAuditPlan" data-form="submitLevel" data-mode="add" data-id="@Model.ID">Save</button>
+			        </div>
+	            </div>
+            </form>
+	    </div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+<script type="text/javascript">
+    specialDropDown(".specialCombo");
+
+    $("#startDatepicker").datetimepicker({         // Create new datepickers
+        daysOfWeekDisabled: [0, 6],
+       // format: 'DD/MM/YYYY',
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    $("#finishDatepicker").datetimepicker({         // Create new datepickers
+        daysOfWeekDisabled: [0, 6],
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false,
+        useCurrent: false
+    });
+    $("#startDatepicker").on("dp.change", function (e) {
+        $('#finishDatepicker').data("DateTimePicker").minDate(e.date);
+    });
+    $("#finishDatepicker").on("dp.change", function (e) {
+        $('#startDatepicker').data("DateTimePicker").maxDate(e.date);
+    });
+</script>

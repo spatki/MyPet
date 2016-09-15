@@ -1,0 +1,38 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@{
+    Layout = null;
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+<div class="panel colored col-md-12">
+    <form name="auditPlanForm" method="post" action="@Url.Action("GetAuditPlan","Audit")" id="auditPlanForm">
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-2">Select Project</label>
+                <div class="controls col-md-8" id="ProjectParams" data-source="@Url.Action("GetAuditPlan","Audit")" data-id="DataListing">
+                    @Html.Action("getListItems","Project",new { selectedItem = "0", controlName = "Project", excludeIds = "", selectIds = ViewBag.SelectedIDs, reload = "loadProjectData"})
+                </div>
+                <div class="col-md-2"><a href="Javascript:;" onclick="javascript: $('#Project').change();return false;" class="btn btn-med blue-bg">Get Audit Plans</a></div>
+            </div>
+        </div>
+    </form>
+</div>
+<hr />
+<div id="DataListing">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a data-toggle="tab" href="#AuditPlan">Plan</a></li>
+        <li><a data-toggle="tab" href="#AuditTrack">Schedule</a></li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        <div id="AuditPlan" class="tab-pane fade in active">
+            <label class="control-label">Select a Project to view information</label>                
+        </div>
+        <div id="AuditTrack" class="tab-pane">
+        </div>
+    </div>
+</div>
+
+<script>
+    if ($("#Project").find("option:selected").eq(0).val() > 0) $("#Project").change();
+</script>

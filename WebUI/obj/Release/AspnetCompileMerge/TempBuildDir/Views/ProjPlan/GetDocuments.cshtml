@@ -1,0 +1,33 @@
+﻿@model IEnumerable<tbl_org_plan_document>
+@{
+    Layout = null;
+    var doc = new DocType();
+    var docRef = new DocReferenceType();
+}
+@foreach (var o in Model)
+{
+    <tr id="SD@(o.ID)">
+        <td>
+            <input type="hidden" name="tbl_org_plan_document.Index" value="@o.ID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_Org_PlanID" value="@o.tbl_Org_PlanID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].DocType" value="@o.DocType" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].Name" value="@(o.tbl_DocMgr_DocumentID == null ? (o.tbl_Process_ProcedureID == null ?
+                                                                                  (o.tbl_Process_ChecklistID == null ? o.tbl_process_template.Name : 
+                                                                                   o.tbl_process_checklist.Name) : o.tbl_process_procedure.Name) : o.tbl_docmgr_document.Name)" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_DocMgr_DocumentID" value="@o.tbl_DocMgr_DocumentID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_Process_ProcedureID" value="@o.tbl_Process_ProcedureID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_Process_ChecklistID" value="@o.tbl_Process_ChecklistID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_Process_TemplateID" value="@o.tbl_Process_TemplateID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].Source" value="@o.Source" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].Remarks" value="@o.Remarks" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].ReferenceType" value="@o.ReferenceType" />
+        </td>
+        <td>@doc.getTypeName(o.DocType)</td>
+        <td>@(o.tbl_DocMgr_DocumentID == null ? (o.tbl_Process_ProcedureID == null ?
+             (o.tbl_Process_ChecklistID == null ? o.tbl_process_template.Name : 
+              o.tbl_process_checklist.Name) : o.tbl_process_procedure.Name) : o.tbl_docmgr_document.Name)</td>
+        <td>@o.Remarks </td>
+        <td>@docRef.getTypeName((byte)o.ReferenceType.GetValueOrDefault())</td>
+        <td class="hidden-sm"></td>
+    </tr>
+}

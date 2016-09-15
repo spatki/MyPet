@@ -1,0 +1,56 @@
+﻿@model seededTemplateSections
+
+    @{ var sequencePrefix = Model.sequencePrefix == "" ? "" + Model.sequence : Model.sequencePrefix + "." + Model.sequence;
+       Model.sequencePrefix = sequencePrefix;
+        var grpDetails = Model.tbl_process_tmpl_group.Where(o => o.ID == Model.seed).Single(); }
+    <tr>
+        <th class="docTableSequence-bg">@sequencePrefix</th>
+        <td><a href="#PGroup@(grpDetails.ID)">@grpDetails.Name</a>
+    @{var sectionsInGroup = Model.tbl_process_tmpl_section.Where(o => o.tbl_Process_Tmpl_GroupID == Model.seed).OrderBy(o => o.SequenceNo).GetEnumerator(); // Sections in this group
+            var groupsInGroup = Model.tbl_process_tmpl_group.Where(o => o.ParentGroup == Model.seed).OrderBy(o => o.SequenceNo).GetEnumerator(); // Sub groups in this group
+            short sectionSequence = 0; // First sequence in the section
+            short groupSequence = 0;   // First sequence in the group
+            var keepProcessing = true;
+            var sectionsFound = true;
+            var groupsFound = true;
+
+            if (sectionsInGroup.MoveNext()) { sectionSequence = sectionsInGroup.Current.SequenceNo; } else { sectionsFound = false; }
+            if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }
+            if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+              
+            if (keepProcessing) { 
+                <table  class="table table-bordered">
+                    <tbody>
+                        @{  var indexCount = 1;
+                            while (keepProcessing)    // Handling sequence of groups and sections under this group. As the sequence can be intermixed
+                            {
+                                // If the section comes first in sequence, print the section first
+                                if (sectionsFound && (!groupsFound || sectionSequence < groupSequence))
+                                {
+                                    <tr>
+                                        <th class="docTableSequence-bg">@(sequencePrefix + "." + indexCount)</th>
+                                        <td><a href="#PSection@(sectionsInGroup.Current.ID)">@sectionsInGroup.Current.Title</a></td>
+                                    </tr>
+                                    indexCount = indexCount + 1;
+                                    if (sectionsInGroup.MoveNext()) { sectionSequence = sectionsInGroup.Current.SequenceNo; } else { sectionsFound = false; }  // Get the next section
+                                }
+
+                                if (groupsFound && (!sectionsFound || groupSequence < sectionSequence))
+                                {
+                                    Model.seed = groupsInGroup.Current.ID;
+                                    Model.sequence = indexCount;
+                                    Model.sequencePrefix = sequencePrefix;
+                                    @Html.Partial("_showTOCPreview", Model)
+                                    indexCount = indexCount + 1;
+                                    if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }  
+                                }
+                                if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing                  
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </td>
+</tr>
+

@@ -1,0 +1,215 @@
+﻿@using ProcessAccelerator.WebUI
+@using Omu.AwesomeMvc
+@using System.Linq;
+@model tbl_process_checklistInput
+@{
+    Layout = null;
+}
+<div class="panel colored">
+    <div class="panel-body" id="filledContents">
+        <div class="panel-header">
+            <h1>@Model.Name</h1>
+        </div>
+        <div class="row">
+            <div class="panel">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <th class="docTableHeader-bg" colspan="4">Document Release Note</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="docTableLabel-bg">Project Name</th>
+                                <td colspan="3">Not Applicable</td>
+                            </tr>
+                            <tr>
+                                <th class="docTableLabel-bg">Document Name</th>
+                                <td colspan="3">@Model.Name</td>
+                            </tr>                                                
+                            <tr>
+                                <th class="docTableLabel-bg">Version</th>
+                                <td colspan="3">@((Model.tbl_process_chklst_revision.LastOrDefault().version == "") ? "" : Model.tbl_process_chklst_revision.LastOrDefault().version + "." )@(Model.tbl_process_chklst_revision.Count() - 1)</td>
+                            </tr>                                                
+                            <tr>
+                                <th class="docTableLabel-bg">Release Date</th>
+                                <td colspan="3">@(Model.PublishDate == null ? "" : Model.PublishDate.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                            </tr>
+                            <tr>
+                                <th class="docTableLabel-bg">Prepared By</th>
+                                <td >@((Model.CreatedByName == "") ? Model.UpdatedByName : Model.CreatedByName)</td>
+                                <th class="docTableLabel-bg">Date</th>
+                                <td>@Model.CreateDate.ToString(Globals.DateFormatString)</td>
+                            </tr>             
+                            <tr>
+                                <th class="docTableLabel-bg">Reviewed By</th>
+                                <td ></td>
+                                <th class="docTableLabel-bg">Date</th>
+                                <td></td>
+                            </tr>             
+                            <tr>
+                                <th class="docTableLabel-bg">Approved By</th>
+                                <td ></td>
+                                <th class="docTableLabel-bg">Date</th>
+                                <td></td>
+                            </tr>             
+                            <tr>
+                                <th class="docTableHeader-bg" colspan="4">Revision History</th>
+                            </tr>
+                            <tr>
+                                <th class="docTableLabel-bg">SNo</th>
+                                <th class="docTableLabel-bg">Revision Date</th>
+                                <th class="docTableLabel-bg">Revision Description</th>
+                                <th class="docTableLabel-bg">Release Date</th>
+                            </tr>    
+                            @{var revCounter = 0;
+                            foreach (var revision in Model.tbl_process_chklst_revision)
+                            {
+                                revCounter = revCounter + 1;
+                                <tr>
+                                    <th>@revCounter</th>
+                                    <th>@revision.RevisionDate.ToString(Globals.DateFormatString)</th>
+                                    <th>@revision.Comments</th>
+                                    <th>@(revision.PublishDate == null ? "" : revision.PublishDate.GetValueOrDefault().ToString(Globals.DateFormatString))</th>
+                                </tr>                                                         
+                            }         
+                            var SNO_caption = (Model.C_SNO == null || Model.C_SNO == "") ? "SNO" :  Model.C_SNO;
+                            var SNO_Len = (Model.C_SNO_Len == null || Model.C_SNO_Len == 0) ? 5 :  Model.C_SNO_Len;
+                            var CP_caption = (Model.C_ChkPt == null || Model.C_ChkPt == "") ? "Checklist Item" : Model.C_ChkPt;
+                            var CP_Len = (Model.C_ChkPt_Len == null || Model.C_ChkPt_Len == 0) ? 70 : Model.C_ChkPt_Len;
+                            var Result_caption = (Model.C_Result == null || Model.C_Result == "") ? "Y/N" : Model.C_Result;
+                            var Result_Len = (Model.C_Result_Len == null || Model.C_Result_Len == 0) ? 10 : Model.C_Result_Len;
+                            var Rem_caption = (Model.C_Remarks == null || Model.C_Remarks == "") ? "Remarks" : Model.C_Remarks;
+                            var Rem_Len = (Model.C_Remarks_Len == null || Model.C_Remarks_Len == 0) ? 15 : Model.C_Remarks_Len;
+                            <tr>
+                                <td colspan="4">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th class="docTableHeader-bg" style="width:@(SNO_Len)%;max-width:@(SNO_Len)%;min-width:@(SNO_Len)%">@(SNO_caption)</th>
+                                            <th class="docTableHeader-bg" style="width:@(CP_Len)%;max-width:@(CP_Len)%;min-width:@(CP_Len)%">@(CP_caption)</th>
+                                            <th class="docTableHeader-bg" style="width:@(Result_Len)%;max-width:@(Result_Len)%;min-width:@(Result_Len)%">@(Result_caption)</th>
+                                            <th class="docTableHeader-bg" style="width:@(Rem_Len)%;max-width:@(Rem_Len)%;min-width:@(Rem_Len)%">@(Rem_caption)</th>
+                                        </tr>             
+                                            @{seededChklstItems items = new seededChklstItems { seed = null, isParent = true, tbl_process_chklst_item = Model.tbl_process_chklst_item, tbl_process_chklst_group = Model.tbl_process_chklst_group };
+                                                var groups = Model.tbl_process_chklst_group.Where(o => o.Level == 1).OrderBy(o => o.SequenceNo);   
+                                            var sequence = 0;
+                                            var groupCounter = 1;
+
+                                            foreach (var grp in groups) // Print contents
+                                            {
+                                                groupCounter = Model.tbl_process_chklst_group.Where(o => o.SequenceNo <= grp.SequenceNo).Count();
+                                                if (grp.IsParent) {
+                                                        var itemsInGroup = Model.tbl_process_chklst_item.Where(o => o.tbl_Process_Chklst_GroupID == grp.ID).OrderBy(o => o.SequenceNo).GetEnumerator(); // Items in this group
+                                                        var groupsInGroup = Model.tbl_process_chklst_group.Where(o => o.ParentGroup == grp.ID).OrderBy(o => o.SequenceNo).GetEnumerator(); // Sub groups in this group
+                                                        short itemSequence = 0; // First sequence in the item
+                                                        short groupSequence = 0;   // First sequence in the group
+                                                        var keepProcessing = true;
+                                                        var itemsFound = true;
+                                                        var groupsFound = true;
+                                                        var resultOptions = "";
+                                                    
+                                                        if (itemsInGroup.MoveNext()) { itemSequence = itemsInGroup.Current.SequenceNo; } else { itemsFound = false; }
+                                                        if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }
+                                                        if (!itemsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+              
+                                                        if (keepProcessing) { 
+                                                            while (keepProcessing)    // Handling sequence of groups and items under this group. As the sequence can be intermixed
+                                                            {
+                                                                // If the item comes first in sequence, print the item first
+                                                                if (itemsFound && (!groupsFound || itemSequence < groupSequence))
+                                                                {
+                                                                    sequence = sequence + groupCounter;
+                                                                    resultOptions = "";
+                                                                    if (itemsInGroup.Current.ChklstOptionList != null && itemsInGroup.Current.ChklstOptionList.Any())
+                                                                    {
+                                                                        foreach (var o in itemsInGroup.Current.ChklstOptionList)
+                                                                        {
+                                                                            resultOptions = resultOptions + (resultOptions == "" ? "" : ",") + (o == "1" ? "Yes" : (o == "2" ? "No" : "NA"));
+                                                                        }
+                                                                    }
+                                                                    <tr>
+                                                                        <td>@(itemsInGroup.Current.SequenceNo - 1)</td>
+                                                                        <td>@Html.Raw(itemsInGroup.Current.ItemDescription)</td>
+                                                                        <td ><select id="fillItem@(itemsInGroup.Current.ID)" name="fillItem@(itemsInGroup.Current.ID)" class="form-control selectOption">
+                                                                                <option value="0">NA</option>
+                                                                                <option value="1">Yes</option>
+                                                                                <option selected="selected" value="2">No</option>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div id="FillDetail@(itemsInGroup.Current.ID)" class="col-md-12 @((ViewBag.Editable != null && ViewBag.Editable == true) ? "EditEditor" : "")" contenteditable="@((ViewBag.Editable != null && ViewBag.Editable == true) ? "true" : "false")">
+                                                                                @Html.Raw(itemsInGroup.Current.Remarks)
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    if (itemsInGroup.MoveNext()) { itemSequence = itemsInGroup.Current.SequenceNo; } else { itemsFound = false; }  // Get the next item
+                                                                }
+
+                                                                if (groupsFound && (!itemsFound || groupSequence < itemSequence))
+                                                                {
+                                                                    items.seed = groupsInGroup.Current.ID;
+                                                                    items.sequence = sequence;
+                                                                    items.isParent = false;
+                                                                    @Html.Partial("_showItemsPreview", items)
+                                                                    sequence = items.sequence;
+                                                                    if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }  
+                                                                }
+                                                                if (!itemsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing                  
+                                                            }
+                                                        }
+                                                    }
+                                                    else {
+                                                        items.seed = grp.ID;
+                                                        items.isParent = grp.IsParent;
+                                                        items.sequence = sequence;
+                                                        @Html.Partial("_showItemsPreview", items)
+                                                    }
+                                                }
+                                            }
+                                    </table>
+                                </td>
+                            </tr>
+                        }                                                
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (ViewBag.ProjectID == null || ViewBag.ProjectID == "")
+    { 
+        <form name="saveRecording" id="saveRecording" method="post" action="@Url.Action("saveRecord","TimesheetRecord")">
+            <input type="hidden" name="tbl_Org_PlanID" id="tbl_Org_PlanID" value="@ViewBag.PlanID" />
+            <input type="hidden" name="tbl_Org_Plan_ResourceID" id="tbl_Org_Plan_ResourceID" value="@ViewBag.ResourceID" />
+            <input type="hidden" name="tbl_Org_Plan_DocumentID" id="tbl_Org_Plan_DocumentID" value="@ViewBag.DocID" />        
+            <input type="hidden" name="Type" id="Type" value="4" />
+            <input type="hidden" name="Contents" id="Contents" value="" />
+        </form>
+        <div class="panel-footer">
+		    <div class="form-group" id="actionButtons">
+                <a href="javascript:;" class="btn btn-med blue-bg saveRecord" data-id="P@(ViewBag.PlanID)R@(ViewBag.ResourceID)" data-form="saveRecording" data-mode="update" data-message="Saved Successfully">Save</a>
+                <a href="javascript:;" class="btn btn-med gray-bg navigateBack">Back</a>
+		    </div>
+	    </div>
+    }
+    else
+    {
+        <form name="saveRecording" id="saveProjectRecording" method="post" action="@Url.Action("saveRecord", "Project")">
+            <input type="hidden" name="tbl_Org_ProjectID" id="tbl_Org_ProjectID" value="@ViewBag.ProjectID" />
+            <input type="hidden" name="Name" id="Name" value="@Model.Name" />
+            <input type="hidden" name="SourceType" id="SourceType" value="2" />        
+            <input type="hidden" name="Type" id="Type" value="4" />
+            <input type="hidden" name="ProcessDoc_RefID" id="ProcessDoc_RefID" value="@Model.ID" />
+            <input type="hidden" name="Contents" id="Contents" value="" />
+        </form>
+        <div class="panel-footer">
+		    <div class="form-group" id="actionButtons">
+                <a href="javascript:;" class="btn btn-med blue-bg saveRecord" data-id="T4D@(Model.ID)" data-form="saveProjectRecording" data-mode="update" data-message="Saved Successfully">Save</a>
+                <a href="javascript:;" class="btn btn-med gray-bg navigateBack">Back</a>
+		    </div>
+	    </div>
+    }
+</div>    
+
+<script>
+    configureInlineCkEditor(".EditEditor");
+</script>    

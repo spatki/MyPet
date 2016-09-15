@@ -1,0 +1,229 @@
+﻿@using ProcessAccelerator.WebUI
+@model orgAuditRecordingInput
+@{
+    Layout = null;
+    NCCategory ncCategory = new NCCategory();
+}
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Audit Dates: </label>
+                    <label class="control-label"><strong>@Model.Start.GetValueOrDefault().ToString(Globals.DateFormatString)</strong> - <strong>@Model.Finish.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Audit Date : <strong>@Model.Audit_Date.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Time Spent (Hrs) : <strong>@Model.TimeSpentHrs</strong></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a data-toggle="tab" href="#NCForm"><i class="icon-file-alt"></i>&nbsp;&nbsp;NC Report</a></li>
+            <li><a data-toggle="tab" href="#AuditStrengths"><i class="icon-thumbs-up"></i>&nbsp;&nbsp;Strengths</a></li>
+            <li><a data-toggle="tab" href="#AuditWeakness"><i class="icon-thumbs-down"></i>&nbsp;&nbsp;Weakness</a></li>
+            <li><a data-toggle="tab" href="#AuditParticipants"><i class="icon-user"></i>&nbsp;&nbsp;Participants</a></li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div id="NCForm" class="tab-pane fade in active">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"  id="NCListTable" >
+                    <thead>
+                        <tr>
+                            <th class="docTableSequence-bg AuditCL_Header" rowspan="2"></th>
+                            <th class="AuditCL_Header" rowspan="2">NC / Observation</th>
+                            <th class="AuditCL_Header" rowspan="2">Objective Evidence / Ref. Docs</th>
+                            <th class="AuditCL_Header" rowspan="2">Category</th>
+                            <th class="AuditCL_Header" rowspan="2">Clause</th>
+                            <th class="AuditCL_Header" rowspan="2">Ref</th>
+                            <th class="AuditCL_Header" rowspan="2">Root Cause Analysis</th>
+                            <th class="AuditCL_SubHeader" colspan="2">Corrective Action</th>
+                            <th class="AuditCL_Header" colspan="2">Preventive Action</th>
+                            <th class="AuditCL_Header" rowspan="2">NC Closure Status</th>
+                        </tr>
+                        <tr>
+                            <th class="AuditCL_Header">Details</th>
+                            <th class="AuditCL_Header">Target Date</th>
+                            <th class="AuditCL_SubHeader">Details</th>
+                            <th class="AuditCL_SubHeader">Target Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listing">
+                        @if (Model.tbl_org_audit_observation != null && Model.tbl_org_audit_observation.Any())
+                        {
+                            var counter = 0;
+                            foreach (var obs in Model.tbl_org_audit_observation)
+                            {
+                                counter += 1;
+                                <tr id="obs@(obs.ID)">
+                                    <td>@counter</td>
+                                    <td id="NCObservation@(obs.ID)">@Html.Raw(obs.NCObservation)</td>
+                                    <td id="EvidenceRefDocs@(obs.ID)">@Html.Raw(obs.EvidenceRefDocs)</td>
+                                    <td id="Category@(obs.ID)">@(obs.Category != null && obs.Category != 0 ? ncCategory.getTypeName((short) obs.Category.GetValueOrDefault()) : "")</td>
+                                    <td id="Clause@(obs.ID)">@obs.Clause</td>
+                                    <td id="Reference@(obs.ID)">@obs.Reference</td>
+                                    <td>@obs.RootCauseAnalysis</td>
+                                    <td>@obs.CorrectiveAction</td>
+                                    <td>@(obs.TargetDateCA == null ? "" : obs.TargetDateCA.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                                    <td>@obs.PreventiveAction</td>
+                                    <td>@(obs.TargetDatePA == null ? "" : obs.TargetDatePA.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                                    <td>@(obs.ActualCloseDate == null || obs.ActualCloseDate == new DateTime() ? "Open" : "Closed")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="AuditStrengths" class="tab-pane">
+                <table class="table table-bordered" id="AuditChklstTable">
+                    <thead>
+                        <tr>
+                            <th class="docTableSequence-bg AuditCL_Header"></th>
+                            <th class="AuditCL_Header">Strength</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.tbl_org_audit_addln_obs != null && Model.tbl_org_audit_addln_obs.Where(o => o.Type == 1).Any())
+                        {
+                            var counter = 0;
+                            foreach (var cl in Model.tbl_org_audit_addln_obs.Where(o => o.Type == 1))
+                            {
+                                counter = counter + 1;
+                                <tr >
+                                    <td>@counter</td>
+                                    <td >@Html.Raw(cl.Observation)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td></td>
+                                <td>No Strengths mentioned</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>                    
+            </div>
+            <div id="AuditWeakness" class="tab-pane">
+                <table class="table table-bordered" id="AuditWeaknessTable">
+                    <thead>
+                        <tr>
+                            <th class="docTableSequence-bg AuditCL_Header"></th>
+                            <th class="AuditCL_Header">Weakness</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.tbl_org_audit_addln_obs != null && Model.tbl_org_audit_addln_obs.Where(o => o.Type == 2).Any())
+                        {
+                            var counter = 0;
+                            foreach (var cl in Model.tbl_org_audit_addln_obs.Where(o => o.Type == 2))
+                            {
+                                counter = counter + 1;
+                                <tr >
+                                    <td>@counter</td>
+                                    <td >@Html.Raw(cl.Observation)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td></td>
+                                <td>No Weakness mentioned</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div id="AuditParticipants" class="tab-pane">
+                <br />
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Auditor (s)
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                @if (Model.tbl_org_audit_participant != null && Model.tbl_org_audit_participant.Where(o => o.Type == 1).Any())
+                                {
+                                    <ol>
+                                        @foreach (var pt in Model.tbl_org_audit_participant.Where(o => o.Type == 1))
+                                        {
+                                            <li>
+                                                @pt.Name
+                                                <input type="hidden" name="tbl_org_audit_participant.Index" id="tbl_org_audit_participant.Index" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].ID" id="tbl_org_audit_participant[@(pt.ID)].ID" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].tbl_Org_Audit_ScheduleID" id="tbl_org_audit_participant[@(pt.ID)].tbl_Org_Audit_ScheduleID" value="@pt.tbl_Org_Audit_ScheduleID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" id="tbl_org_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" value="@pt.tbl_Org_EmployeeID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].Type" id="tbl_org_audit_participant[@(pt.ID)].Type" value="@pt.Type" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].ClientID" id="tbl_org_audit_participant[@(pt.ID)].ClientID" value="@pt.ClientID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].Name" id="tbl_org_audit_participant[@(pt.ID)].Name" value="@pt.Name" />
+                                            </li>
+                                        }
+                                    </ol>
+                                }
+                                else
+                                {
+                                    <label class="control-label">Not Selected</label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Auditee (s)
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                @if (Model.tbl_org_audit_participant != null && Model.tbl_org_audit_participant.Where(o => o.Type == 2).Any())
+                                {
+                                    <ol>
+                                        @foreach (var pt in Model.tbl_org_audit_participant.Where(o => o.Type == 2))
+                                        {
+                                            <li>
+                                                @pt.Name
+                                                <input type="hidden" name="tbl_org_audit_participant.Index" id="tbl_org_audit_participant.Index" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].ID" id="tbl_org_audit_participant[@(pt.ID)].ID" value="@pt.ID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].tbl_Org_Audit_ScheduleID" id="tbl_org_audit_participant[@(pt.ID)].tbl_Org_Audit_ScheduleID" value="@pt.tbl_Org_Audit_ScheduleID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" id="tbl_org_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" value="@pt.tbl_Org_EmployeeID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].Type" id="tbl_org_audit_participant[@(pt.ID)].Type" value="@pt.Type" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].ClientID" id="tbl_org_audit_participant[@(pt.ID)].ClientID" value="@pt.ClientID" />
+                                                <input type="hidden" name="tbl_org_audit_participant[@(pt.ID)].Name" id="tbl_org_audit_participant[@(pt.ID)].Name" value="@pt.Name" />
+                                            </li>
+                                        }
+                                    </ol>
+                                }
+                                else
+                                {
+                                    <label class="control-label">Not Selected</label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+		    <div class="form-group">
+                @if (ViewBag.Mode == 1 && Model.Status == 3)     // View report for closure
+                {
+		            <button type="button" class="btn blue-bg openDialog" data-source="@Url.Action("CloseObs","OrgAuditFinding",new { id = Model.ID })">Close Observations</button>
+                }
+                <a href="javascript:;" class="btn btn-med gray-bg subMenu" data-source="@Url.Action("BackToIndex", "OrgAuditFinding", new { viewName = (ViewBag.Mode == 1 ? "AuditCloseIndex" : "Index") })">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+

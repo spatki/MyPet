@@ -1,0 +1,824 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+     
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a data-toggle="tab" href="#ProjPlan">Schedule</a></li>
+                <li><a data-toggle="tab" href="#ProjTrack" id="QA_Obsv">Audtit Recordings</a></li>
+            </ul>
+            
+            <div class="tab-content" id="myTabContent">
+                <div id="ProjPlan" class="tab-pane fade in active">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="javascript:;" id="showfilter" class="pull-left">Filter Tasks <i class="icon-">&#xf00e;</i></a>
+                        </div>
+                        <hr />
+                        <div class="panel colored" id="filterParams">
+                            <div class="panel-body filter-bg">
+                                <div class="row col-md-12">
+                                    <div class="col-md-5">
+                                            <label class="col-md-2 pull-left filterParams">From</label>
+                                            <div class="col-md-9">
+                                                <div class="input-group date datepicker">
+                                                    <input type="text" id="filter_fromDt" class="form-control col-md-9 filterParams">
+                                                    <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="col-md-2 pull-left filterParams">To</label>
+                                        <div class="col-md-9">
+                                            <div class="input-group date datepicker">
+                                                <input type="text" id="filter_toDt" class="form-control col-md-9 filterParams">
+                                                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-med blue-bg searchProcedure pull-right filterParams">GO</button>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="col-md-2 pull-left filterParams">Plan Status</label>
+                                            <div class="col-md-9">
+                                                <select class="col-md-12 filterParams chzn-select-no-single">
+                                                    <option value="1">Not Scheduled</option>
+                                                    <option value="1">Scheduled</option>
+                                                    <option value="2">In Progress</option>
+                                                    <option value="2">Pending</option>
+                                                    <option value="2">Complete</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="col-md-2 pull-left filterParams">Track Status</label>
+                                            <div class="col-md-9">
+                                                <select class="chzn-select-no-single col-md-12 filterParams">
+                                                    <option value="1">Delayed</option>
+                                                    <option value="2">Not Conducted</option>
+                                                    <option value="3">Open</option>
+                                                    <option value="3">On Time</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>     
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered advanced-table" >
+                            <thead>
+                                <tr>
+                                    <th class="docTableHeader-bg">Ref. ID</th>
+                                    <th class="docTableHeader-bg">Audit Start</th>
+                                    <th class="docTableHeader-bg">Audit Finish</th>
+                                    <th class="docTableHeader-bg">Auditor Role</th>
+                                    <th class="docTableHeader-bg">Auditor Name</th>
+                                    <th class="docTableHeader-bg">Auditee Role</th>
+                                    <th class="docTableHeader-bg">Auditee Name</th>
+                                    <th class="docTableHeader-bg">Audit Status</th>
+                                    <th class="docTableHeader-bg">Track Status</th>
+                                    <th class="docTableHeader-bg">Action</th>
+                                    <th class="docTableHeader-bg">Cancel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>P122-O1</td>
+                                    <td>10-Nov-14</td>
+                                    <td>10-Nov-14</td>
+                                    <td>SQA</td>
+                                    <td>Surekha Shetty</td>
+                                    <td>Project Manager</td>
+                                    <td>Prakash Goel</td>
+                                    <td>Not Scheduled</td>
+                                    <td><span class="label label-danger col-md-12">Delayed</span></td>
+                                    <td><a href="#reqPlanDetails" class="btn btn-med blue-bg col-md-12" data-toggle="modal"><i class="icon-bell"></i>&nbsp;&nbsp;Schedule&nbsp;&nbsp;&nbsp;</a></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>P012-O1</td>
+                                    <td>01-Jan-14</td>
+                                    <td>02-Jan-14</td>
+                                    <td>SQA</td>
+                                    <td>Surekha Shetty</td>
+                                    <td>Project Manager</td>
+                                    <td>Prakash Goel</td>
+                                    <td>Scheduled</td>
+                                    <td><span class="label label-danger col-md-12">Delayed</span></td>
+                                    <td><a href="#reqPlanDetails" class="btn btn-med orange-bg col-md-12" data-toggle="modal"><i class="icon-bell"></i>&nbsp;&nbsp;Re-Schedule</a></td>
+                                    <td><a href="#confirmModal" class="btn btn-med red-bg col-md-12" role="button" data-toggle="modal"><i class="icon-remove"></i></a></td>
+                                </tr>                        
+                                <tr>
+                                    <td>P132-O2</td>
+                                    <td>24-Mar-14</td>
+                                    <td>24-Mar-14</td>
+                                    <td>SQA</td>
+                                    <td>Kapil Khanna</td>
+                                    <td>Project Manager</td>
+                                    <td>Supriya Mehta</td>
+                                    <td>Complete</td>
+                                    <td><span class="label label-success col-md-12">On Time</span></td>
+                                    <td><a href="#" class="btn btn-med black-bg col-md-12 report" data-id="P132-02"><i class="icon-file-alt"></i>&nbsp;&nbsp;Report</a></td>
+                                    <td></td>
+                                </tr>                        
+                                <tr>
+                                    <td>P435-O1</td>
+                                    <td>01-Apr-14</td>
+                                    <td>01-Apr-14</td>
+                                    <td>SQA</td>
+                                    <td>Kapil Khanna</td>
+                                    <td>Project Manager</td>
+                                    <td>Tapan Tiwari</td>
+                                    <td>Complete</td>
+                                    <td><span class="label label-warning col-md-12">Open</span></td>
+                                    <td><a href="#" class="btn btn-med black-bg col-md-12 report" data-id="P435-01"><i class="icon-file-alt"></i>&nbsp;&nbsp;Report</a></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div id="ProjTrack" class="tab-pane  fade in active">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="row">
+                                    <div class="col-md-3 pull-left">
+                                        <label class="col-md-12">Audit Date(s)</label>
+                                        <label class="col-md-12 small filter-bg"><strong>11-Jan-14</strong>&nbsp;&nbsp;to&nbsp;&nbsp;<strong>12-Jan-14</strong></label>
+                                    </div>
+                                    <div class="col-md-4 pull-right">
+                                        <div class="col-md-12"><input type="text" class="form-control" id="Audit_ID"  placeholder="Enter Audit Reference ID to search"/><input type="button" class="icon-" value="&#xf002;"/></div>
+                                    </div>
+                             </div>
+                            <div class="panel-body" id="obs_sheet">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" id="formTitle">NC Report</h3>
+                                    <ul class="pagination pull-right" style="margin:-1px 0;">
+                                        <li class="active"><a href="#" class="selectTabOption" id="NCForm"><i class="icon-file-alt"></i>&nbsp;&nbsp;NC Report</a></li>
+                                        <li ><a href="#" class="selectTabOption" id="strength"><i class="icon-thumbs-up"></i>&nbsp;&nbsp;Strengths</a></li>
+                                        <li ><a href="#" class="selectTabOption" id="weakness"><i class="icon-thumbs-down"></i>&nbsp;&nbsp;Weakness</a></li>
+                                    </ul>
+                                </div>
+                                <br />
+                                <div class="panel-body" id="NCFormDetails">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label">Audit Date:</label>
+                                                <div class="col-md-8"><input class="form-control mask_date2" type="text" /></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label">Department / Project</label>
+                                                <div class="col-md-8">
+                                                    <select class="col-md-12 chzn-select-no-single" multiple>
+                                                        <option value="Payroll Processing">Payroll Processing</option>
+                                                        <option value="CoE">CoE</option>
+                                                        <option value="ADMIN">ADMIN</option>
+                                                        <option value="HRM">HRM</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="col-md-12"><a href="#linkToProjects" class="btn btn-sm brown-bg" data-toggle="modal">Link Project/Function</a></div>
+                                        </div>                                
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="tblActionIcon"></th>
+                                                    <th class="col-md-3">NC / Observation</th>
+                                                    <th class="col-md-3">Objective Evidence / Ref. Docs</th>
+                                                    <th class="col-md-1">Category</th>
+                                                    <th>Clause</th>
+                                                    <th>Ref.</th>
+                                                    <th>Status Updated On</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-count="1">
+                                                <tr id="R1" class="EditRow">
+                                                    <td><a href="#" data-id="R1" class="addObs nav" data-navkey="EditObs" data-toggle="modal" data-key="R"><i class="icon-">&#xf055</i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="panel-body" id="strengthDetails" style="display:none;">
+                                    <hr />
+                                    <div class="row">
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="tblActionIcon"></th>
+                                                    <th class="col-md-12">Strength</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-count="1">
+                                                <tr id="S1" class="EditRow">
+                                                    <td><a href="#" data-id="S1" class="addAttribute nav" data-navkey="EditObs" data-toggle="modal" data-key="S"><i class="icon-">&#xf055</i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="panel-body" id="weaknessDetails" style="display:none;">
+                                    <hr />
+                                    <div class="row">
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th class="tblActionIcon"></th>
+                                                    <th class="col-md-12">Weakness</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-count="1">
+                                                <tr id="W1" class="EditRow">
+                                                    <td><a href="#" data-id="W1" class="addAttribute nav" data-navkey="EditObs" data-toggle="modal" data-key="W"><i class="icon-">&#xf055</i></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="panel colored col-md-12">
+					        <form role="form">				
+                                    <div class="panel-body">
+                                        <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	                    <div class="row pull-right panel-footer">
+                                                <div class="col-lg-12 col-lg-offset-1">
+                                                    <button type="button" class="btn blue-bg" id="Button1">Save</button>
+                                                    <button type="button" class="btn blue-bg" id="Button2">Export</button>
+                                                    <button type="button" class="btn blue-bg" id="Button3">Print</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>					
+					        </form>
+                        </div>  
+                    </div>
+                    </div>
+                </div>
+            </div>
+    
+    <div class="modal fade" id="reqPlanDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Schedule Audit</h4>
+		</div>
+		<div class="modal-body">
+            <div class="container-fluid">
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Audit Start</label>
+                        <input type="text" id="AuditFrmDt" class="form-control mask_date">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Audit Finish</label>
+                        <input type="text" id="AuditToDt" class="form-control mask_date">
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Auditor Role(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="SQA">SQA</option> <option value="MR">MR</option><option value="Sr. Manager">Sr. Manager</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Auditor Name(s)</label>
+                            <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Kapil Khanna">Kapil Khanna</option> <option value="Surekha Shetty">Surekha Shetty</option></select>
+                    </div>                                
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Auditee Role(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Project Manager">Project Manager</option> <option value="Project Leader">Project Leader</option><option value="Developer">Developer</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Auditee Name(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Prakash Mehta">Prakash Mehta</option> <option value="Ajit Pawar">Ajit Pawar</option><option value="Rahul Gandhi">Rahul Gandhi</option></select>
+                    </div>                                
+                </div>
+                <hr />
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label class="control-label">Audit Type</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="One Time">One Time</option> <option value="Recurring">Recurring</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Recurring Period</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="Daily">Daily</option> <option value="Weekly" selected="selected">Weekly</option> <option value="Monthly">Monthly</option></select>
+                        <i class="icon-info-sign"></i><i class="info">(Applicable only for Recurring Audits)</i>
+                    </div>                                
+                </div>
+            </div>
+        </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    <div class="modal fade" id="analyseNC" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;height:80%;overflow:auto;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Analyse Non-Conformance</h4>
+		</div>
+		<div class="modal-body">
+            <div class="container-fluid">
+                <div class="row col-md-12 show-border">
+                    <div class="show-border-title">Correction / Corrective Action Proposed / Taken by Auditee</div>
+                    <div class="col-md-6">
+                            <div class="col-md-12"><textarea class="form-control col-md-12" rows="3"></textarea></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-4">Target Date</label>
+                            <div class="col-md-8"><input type="text" id="Text2" class="form-control mask_date"></div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-4">Status</label>
+                            <div class="col-md-8"><select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="Open" selected="selected">Open</option> <option value="Close">Close</option></select></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12 show-border">
+                    <div class="show-border-title">Root Cause Analysis</div>
+                    <div class="col-md-12">
+                            <div class="col-md-12"><textarea class="form-control col-md-12" rows="3"></textarea></div>
+                    </div>
+                </div>
+                <div class="row col-md-12 show-border">
+                    <div class="show-border-title">Preventive Action Proposed / Taken by Auditee</div>
+                    <div class="col-md-6">
+                            <div class="col-md-12"><textarea class="form-control col-md-12" rows="3"></textarea></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-4">Target Date</label>
+                            <div class="col-md-8"><input type="text" id="Text3" class="form-control mask_date"></div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-4">Status</label>
+                            <div class="col-md-8"><select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="Open" selected="selected">Open</option> <option value="Close">Close</option></select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		    <button type="button" class="btn blue-bg" data-dismiss="modal">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+<div class="modal fade" id="linkToProjects" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;height:70%;overflow:auto;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Link Project / Function Observations</h4>
+		</div>
+		<div class="modal-body">
+            <div class="container-fluid">
+                <div class="panel-body filter-bg">
+                    <div class="row col-md-12">
+                        <div class="col-md-5">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-3 pull-left filterParams">From</label>
+                                <div class="col-md-9">
+                                    <div class="input-group date datepicker">
+                                        <input type="text" id="Text1" class="form-control col-md-9 filterParams">
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-3 pull-left filterParams">To</label>
+                                <div class="col-md-9">
+                                    <div class="input-group date datepicker">
+                                        <input type="text" id="Text4" class="form-control col-md-9 filterParams">
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group col-md-12">
+                                <button class="btn btn-med blue-bg searchProcedure pull-right filterParams">GO</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-5">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-3 pull-left filterParams">Project/Function</label>
+                                <div class="col-md-9">
+                                    <select class="col-md-12 filterParams chzn-select">
+                                        <option value="1">Select</option>
+                                        <option value="1">Payroll Processing</option>
+                                        <option value="2">PA</option>
+                                        <option value="2">CoE</option>
+                                        <option value="2">HRM</option>
+                                        <option value="2">ADMIN</option>
+                                        <option value="2">Finance</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group col-md-12">
+                                <div class="col-md-6">
+                                    <input type="checkbox" id="shwSelected" checked="checked"/>&nbsp;<label>Show Selected</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="checkbox" id="shwUnSelected" checked="checked"/>&nbsp;<label>Show Un-Selected</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th class="col-md-1">Audit ID</th>
+                                <th class="col-md-1">Project</th>
+                                <th class="col-md-10">NC Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="S">
+                                <td><input type="checkbox" checked="checked" class="obs"/></td>
+                                <td>P110-01</td>
+                                <td>Payroll Processing</td>
+                                <td>Testplans not reviewed</td>
+                            </tr>
+                            <tr class="S">
+                                <td><input type="checkbox" checked="checked" class="obs"/></td>
+                                <td>P110-01</td>
+                                <td>Payroll Processing</td>
+                                <td>PMP Not available</td>
+                            </tr>
+                            <tr class="S">
+                                <td><input type="checkbox" checked="checked" class="obs"/></td>
+                                <td>P230-01</td>
+                                <td>CoE</td>
+                                <td>PoC not carried out</td>
+                            </tr>
+                            <tr class="NS">
+                                <td><input type="checkbox" class="obs"/></td>
+                                <td>S140-01</td>
+                                <td>HR</td>
+                                <td>Employee Induction process not followed</td>
+                            </tr>
+                            <tr class="NS">
+                                <td><input type="checkbox" class="obs"/></td>
+                                <td>S140-02</td>
+                                <td>HR</td>
+                                <td>Exit Interviews not followed for all employee releases</td>
+                            </tr>
+                            <tr class="NS">
+                                <td><input type="checkbox"  class="obs"/></td>
+                                <td>S140-02</td>
+                                <td>HR</td>
+                                <td>For New Joinees, employee Verification not done for all employee</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn blue-bg" data-dismiss="modal">Save</button>
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<script type="text/javascript">
+	    var newTaskParams = true;
+	    var newAnalyseParams = true;
+	    var newLinkParams = true;
+
+	    $(".chzn-select-no-single").chosen({ "disable_search_threshold": 10 });
+	    $("#ProjTrack").removeClass("fade");
+	    $("#ProjTrack").removeClass("in");
+	    $("#ProjTrack").removeClass("active");
+
+        $("body").delegate("#Audit_ID", "change", function() {
+            if ($("#Audit_ID").val().trim() == "") $("#obs_sheet").hide();
+            else $("#obs_sheet").show("slow");
+        });
+
+		$("body").delegate(".report", "click", function () {
+		    $("#Audit_ID").val($(this).data("id"));
+            $("#obs_sheet").show();
+		    $("#QA_Obsv").click();
+		});
+
+		$("body").delegate(".selectTabOption", "click", function () {
+		    if (!$(this).parent().hasClass("active")) {
+		        switch ($(this).prop("id")) {
+		            case "NCForm":
+		                $("#strengthDetails").hide();
+		                $("#weaknessDetails").hide();
+		                $("#NCFormDetails").show();
+		                if ($("#strength").parent().hasClass("active")) $("#strength").parent().removeClass("active");
+		                if ($("#weakness").parent().hasClass("active")) $("#weakness").parent().removeClass("active");
+		                $(this).parent().addClass("active");
+		                $("#formTitle").html("NC Form")
+		                break;
+		            case "strength":
+		                $("#NCFormDetails").hide();
+		                $("#weaknessDetails").hide();
+		                $("#strengthDetails").show();
+		                if ($("#NCForm").parent().hasClass("active")) $("#NCForm").parent().removeClass("active");
+		                if ($("#weakness").parent().hasClass("active")) $("#weakness").parent().removeClass("active");
+		                $(this).parent().addClass("active");
+		                $("#formTitle").html("Strength");
+		                break;
+		            case "weakness":
+		                $("#NCFormDetails").hide();
+		                $("#strengthDetails").hide();
+		                $("#weaknessDetails").show();
+		                if ($("#NCForm").parent().hasClass("active")) $("#NCForm").parent().removeClass("active");
+		                if ($("#strength").parent().hasClass("active")) $("#strength").parent().removeClass("active");
+		                $(this).parent().addClass("active");
+		                $("#formTitle").html("Weakness");
+		                break;
+		            default:
+		                break;
+		        }
+		    }
+        });
+
+		$("body").delegate(".addObs", "click", function () {
+		    // add additional columns for edit
+		    var count = parseInt($(this).parent().parent().parent().data("count"));
+
+		    count = count + 1;
+		    var newColumns = '<td class="getEditor EditObs nav" data-field="NC" data-navkey="EditObs" data-class="EditObs"contenteditable="true"></td>' +
+                             '<td  class="getEditor EditObs nav" data-field="Attribution" data-navkey="EditObs" data-class="EditObs" contenteditable="true"></td>' +
+                             '<td  class="getEditor EditObs nav" data-field="Category" data-navkey="EditObs" data-class="EditObs"></td>' +
+                             '<td class="EditObs"  data-field="Clause" data-navkey="EditObs" data-class="EditObs"></td>' +
+                             '<td class="EditObs nav" data-navkey="EditObs" contenteditable="true"></td>' +
+                             '<td class="EditObs" data-field="SCDate" data-navkey="EditObs" data-class="EditObs"></td>' +
+                             '<td class="nav" data-navkey="EditObs"><a href="#analyseNC" data-toggle="modal" class="btn btn-sm black-bg"><i class="icon-zoom-in"></i></a></td>'
+		    ;
+		    $(this).parent().after(newColumns);
+		    $(this).parent().parent().parent().data("count", count);
+
+		    // Add the option to add more rows
+		    $(this).parent().parent().parent().append('<tr id="R' + count + '" class="EditRow"><td><a href="#" class="addObs nav" data-id="R' + count + '" ><i class="icon-">&#xf055</i></a></td></tr>');
+		    $(this).removeClass("addObs");d
+		    $(this).addClass("removeObs");
+		    $(this).children().first().html("&#xf00d");
+		    $(this).parent().next().click();
+		    // Go to the new rule
+		    $('html, body').animate({
+		        scrollTop: $(this).parent().next().offset().top
+		    }, 2000);
+		});
+
+		$("body").delegate(".addAttribute", "click", function () {
+		    // add additional columns for edit
+		    var count = parseInt($(this).parent().parent().parent().data("count"));
+		    var identifier = $(this).data("key");
+
+		    count = count + 1;
+		    var newColumns = '<td class="getEditor EditObs nav" data-navkey="EditObs" data-class="EditObs"contenteditable="true"></td>';
+		    $(this).parent().after(newColumns);
+		    $(this).parent().parent().parent().data("count", count);
+
+		    // Add the option to add more rows
+		    $(this).parent().parent().parent().append('<tr id="' + identifier + count + '" class="EditRow"><td><a href="#" class="addAttribute nav" data-id="' + identifier + count  + '"  data-key="' + identifier + '"><i class="icon-">&#xf055</i></a></td></tr>');
+		    $(this).removeClass("addAttribute"); 
+		    $(this).addClass("removeObs");
+		    $(this).children().first().html("&#xf00d");
+		    $(this).parent().next().click();
+		    // Go to the new rule
+		    $('html, body').animate({
+		        scrollTop: $(this).parent().next().offset().top
+		    }, 2000);
+		});
+
+		//CKEDITOR.inline(".getEditor");
+
+		$("#showfilter").click();
+
+		$(document).on("click", "#NewTask", function () {
+		    $("#reqPlanDetails").modal("show");
+		});
+
+		$('#reqPlanDetails').on('shown.bs.modal', function () {
+		    if (newTaskParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newTaskParams = false;
+		    }
+		})
+
+		$('#analyseNC').on('shown.bs.modal', function () {
+		    if (newAnalyseParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newAnalyseParams = false;
+		    }
+		    $(this).animate({
+		        scrollTop: $(this).top
+		    }, 2000);
+		})
+
+		$('#linkToProjects').on('shown.bs.modal', function () {
+		    if (newLinkParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newLinkParams = false;
+		    }
+		    $(this).animate({
+		        scrollTop: $(this).top
+		    }, 2000);
+		})
+
+		$("body").delegate(".group", "click", function () {
+		    $("." + $(this).data("id")).toggle();
+		    $(this).toggleClass("closed");
+		});
+
+		$("body").delegate(".EditObs", "click", function () {
+		    var field = $(this).data("field");
+		    var originalValue = $(this).text();
+
+		    keypressCode = -1;
+		    keypressShift = false;
+		    switch (field) {
+		        case "NC":
+                case "Attribution":
+                case "CrrAction":
+		            break;
+		        case "Status":
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue col-md-12' data-class='EditObs' data-navkey='EditObs'><option value='Open'>Open</option><option value='Closed'>Closed</option><option value='Escalated'>Escalated</option><option value='Withdrawn'>Withdrawn</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "Category":
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue' data-class='EditObs' data-navkey='EditObs'><option value='Major'>&nbsp;&nbsp;Major&nbsp;&nbsp;</option><option value='Minor'>&nbsp;&nbsp;Minor&nbsp;&nbsp;</option><option value='OFI'>&nbsp;&nbsp;OFI&nbsp;&nbsp;</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "Clause":
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue' data-class='EditObs' data-navkey='EditObs'><option value='QMS'>&nbsp;&nbsp;QMS&nbsp;&nbsp;</option><option value='Customer'>&nbsp;&nbsp;Customer&nbsp;&nbsp;</option><option value='Legal'>&nbsp;&nbsp;Legal&nbsp;&nbsp;</option><option value='Other'>&nbsp;&nbsp;Other&nbsp;&nbsp;</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "ECDate":
+                case "SCDate":                    
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<input type='text' size='12' id='mask_date2' class='inputValue' data-class='EditObs' data-navkey='EditObs'/>");
+		            $("#mask_date2").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		            if (originalValue != "") $(this).children().val(originalValue);
+		            $(this).children().first().focus();
+		            $(this).children().first().select();
+		            break;
+		        case "PCI_Inc":
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue' data-class='EditObs' data-navkey='EditObs'><option value='Yes'>&nbsp;&nbsp;Yes&nbsp;&nbsp;</option><option value='No'>&nbsp;&nbsp;No&nbsp;&nbsp;</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "PCI":
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue' data-class='EditObs' data-navkey='EditObs'><option value='FI'>&nbsp;&nbsp;FI&nbsp;&nbsp;</option><option value='LI'>&nbsp;&nbsp;LI&nbsp;&nbsp;</option><option value='PI'>&nbsp;&nbsp;PI&nbsp;&nbsp;</option><option value='NI'>&nbsp;&nbsp;NI&nbsp;&nbsp;</option><option value='NY'>&nbsp;&nbsp;NY&nbsp;&nbsp;</option><option value='NA'>&nbsp;&nbsp;NA&nbsp;&nbsp;</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        default:
+		            break;
+		    }
+		});
+
+		$("body").delegate(".removeObs", "click", function () {
+		    if (confirm("Do you want to delete this observation ? ")) {
+		        $("#" + $(this).data("id")).remove();
+		    }
+		});
+
+		var calculateValues = function () {
+		    var pci_Count = 0;
+		    var totalPC = 0;
+		    var totalPC_Count = 0;
+		    var phasePC = 0;
+		    var pci = 0;
+
+		    // Update individual scores
+		    $("td[data-field='PCI']").each(function () {
+		        $("#" + $(this).prop("id") + "_W").removeClass("Audit_NC");
+		        switch ($(this).text()) {
+		            case "FI":
+		                $("#" + $(this).prop("id") + "_W").text("1.00");
+		                $("#" + $(this).prop("id") + "_PC").children().first().text("100");
+		                break;
+		            case "LI":
+		                $("#" + $(this).prop("id") + "_W").text("0.75");
+		                if ($("#" + $(this).prop("id") + "_Inc").text() == "No") $("#" + $(this).prop("id") + "_PC").children().first().text("100");
+                        else $("#" + $(this).prop("id") + "_PC").children().first().text("75");
+		                break;
+                    case "PI":
+                        $("#" + $(this).prop("id") + "_W").text("0.50");
+                        if ($("#" + $(this).prop("id") + "_Inc").text() == "No") $("#" + $(this).prop("id") + "_PC").children().first().text("100");
+                        else $("#" + $(this).prop("id") + "_PC").children().first().text("50");
+                        break;
+                    case "NI":
+                        $("#" + $(this).prop("id") + "_W").text("NC");
+                        $("#" + $(this).prop("id") + "_W").addClass("Audit_NC");
+                        if ($("#" + $(this).prop("id") + "_Inc").text() == "No") $("#" + $(this).prop("id") + "_PC").children().first().text("100");
+                        else $("#" + $(this).prop("id") + "_PC").children().first().text("0");
+                        break;
+                    case "NY":
+                    case "NA":
+                        $("#" + $(this).prop("id") + "_W").text("");
+                        $("#" + $(this).prop("id") + "_PC").children().first().text("100");
+                        break;
+                }
+		    });
+
+		    totalPC = 0;
+		    totalPC_Count = 0;
+		    $(".phaseScore").each(function () {
+		        phasePC = 0;
+		        pci_Count = 0
+		        pci = 0
+		        $("." + $(this).prop("id")).each(function () {
+		            pci_Count = pci_Count + 1;
+		            pci = pci + parseInt($(this).children().first().text());
+		        });
+		        phasePC = parseFloat(pci / pci_Count).toFixed(0);
+		        totalPC = parseInt(totalPC) + parseInt(phasePC);
+		        totalPC_Count = totalPC_Count + 1
+		        $(this).text(phasePC + "%");
+		    });
+
+		    $("#projScore").text(parseFloat(totalPC / totalPC_Count).toFixed(0));
+		};
+
+		$(document).on("click", "#shwSelected", function () {
+		    if ($(this).prop("checked")) $(".S").show(); else $(".S").hide();
+		});
+
+		$(document).on("click", "#shwUnSelected", function () {
+		    if ($(this).prop("checked")) $(".NS").show(); else $(".NS").hide();
+		});
+
+		$("body").delegate(".obs", "click", function () {
+		    if ($(this).prop("checked")) {
+		        if ($(this).parent().parent().hasClass("NS")) $(this).parent().parent().removeClass("NS");
+		        if (!$(this).parent().parent().hasClass("NS")) $(this).parent().parent().addClass("S");
+		    }
+		    else {
+		        if ($(this).parent().parent().hasClass("S"))  $(this).parent().parent().removeClass("S");
+		        if (!$(this).parent().parent().hasClass("NS")) $(this).parent().parent().addClass("NS");
+		    }
+		});
+
+    </script> 
+   
+
+}

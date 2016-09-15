@@ -1,0 +1,49 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+
+@{
+    Layout = null;
+}
+            @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel colored resizable">
+                        <div class="panel-heading blue-bg">
+                            <h3 class="panel-title">Project Configuration</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a class="icon-button expandAll" data-id="orgContainer" href="javascript:;" title="Expand All"><i class="icon-plus"></i></a></li>
+                                <li><a class="icon-button collapseAll" data-id="orgContainer" href="javascript:;" title="Collapse All"><i class="icon-minus"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body onlyScrolls" id="orgContainer">
+                           <div class="row">
+                                <ul class="tree">
+                                    @Html.Action("projectTree","Project")
+                      	        </ul>
+                           </div>
+                        </div>
+                    </div>                
+                </div>
+                <div class="col-md-6" id="repositoryTree">
+                    <div class="panel colored resizable">
+                        <div class="panel-heading purple-bg">
+                            <h3 class="panel-title" id="selectedNode">Click <i class="icon-wrench"></i> icon to configure processes.</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a class="icon-button" id="resetMapping" data-updateid="PConfiguration" data-source="@Url.Action("ResetMapping")" data-project="" data-phase="" href="javascript:;" title="Refresh Process Mappings"><i class="icon-refresh"></i></a></li>
+                                <li><a class="icon-button expandAll" data-id="PConfiguration" href="javascript:;" title="Expand All"><i class="icon-plus"></i></a></li>
+                                <li><a class="icon-button collapseAll" data-id="PConfiguration" href="javascript:;" title="Collapse All"><i class="icon-minus"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body onlyScrolls" id="processContainer" data-param="" data-value="">
+                            <div class="row">
+                                
+                                <ul class="col-md-8 tree" id="PConfiguration">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>                
+                </div>
+            </div>
+
+
+

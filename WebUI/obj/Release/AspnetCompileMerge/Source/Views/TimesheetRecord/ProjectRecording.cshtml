@@ -1,0 +1,30 @@
+﻿@model IEnumerable<vw_task_recording>
+@{
+    ViewBag.Title = "TaskRecording";
+    Layout = null;
+    DocType docType = new DocType();
+}
+@if (Model != null && Model.Any())
+{
+    foreach (var r in Model)
+    {
+        <tr id="P@(r.planID)R@(r.ID)">
+            <td>@(r.Source == 1 ? "Assigned" : "Additional")</td>
+            <td>@docType.getTypeName((short)r.DocType)</td>
+            <td><a href="javascript:;" class="subMenu" data-source="@Url.Action("FillRecord","TimesheetRecord",new { docID = r.documentID, resourceID = r.ID, fillID = r.filled_DocID})"
+                                                      title="Click to fill" data-back="true">@(r.docName == null || r.docName == "" ? "Fill" : r.docName)</a></td>
+            <td>@(r.filled_DocID == null ? "To be Filled" : "Filled")</td>
+            <td><a href="javascript:;" class="openDialog" data-source="@Url.Action("EmployeeTimesheetForTask","Timesheet",new { resourceID = r.planID })" title="Click to view Tasks">Link to Tasks</a></td>
+            <td>@r.TaskStatus</td>
+            <td class="visible-lg visible-md">@r.ProjectName</td>
+            <td class="visible-lg visible-md">@r.groupName</td>
+            <td>@if (r.filled_DocID != null)
+                {
+                    <button id="delP@(r.planID)R@(r.ID)" class="btn btn-med red-bg openDeleteDialog" data-id="delP@(r.planID)R@(r.ID)" data-mode='delete' 
+                            data-source="@Url.Action("Delete", "TimesheetRecord", new { id = r.filled_DocID })" 
+                            title ="Delete filled document"><i class='icon-'>&#xf057;</i></button>
+                }
+            </td>
+        </tr>
+    }
+}

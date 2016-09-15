@@ -1,0 +1,15 @@
+﻿@model tbl_tailored_rep_task
+@{
+    Layout = null;
+}
+
+<li id="LTask@(Model.ID)">
+    <a href="javascript:;" class="process" data-mode="edit" data-id="LTask@(Model.ID)" data-source="/PrjProcessTailor/ExcludeTask/@(Model.ID)" data-param="@(Model.ID)" 
+        data-message="" title="Click to exclude this task"><i class="icon-remove"></i></a>
+        &nbsp;&nbsp;
+    <span class="label label-configured">
+        <a href="javascript:" class="label-configured openDialog" data-id="" data-source="/PrjProcessTailor/showActivity/@(Model.ID)">
+            @((Model.TailorName == "" || Model.TailorName == null ? Model.Name : Model.TailorName) + (Model.TailorNew != null && Model.TailorNew == true ? " - (Tailored: New)" : (Model.TailorName != null && Model.TailorName != Model.Name ? " - (Tailored: Name Changed)" : ""))),
+        </a>
+    </span>
+</li>

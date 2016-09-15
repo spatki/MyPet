@@ -1,0 +1,28 @@
+﻿@using ProcessAccelerator.WebUI
+@{
+    Layout = null;
+    int repoID = ViewBag.repoID;
+    int taskID = ViewBag.taskID;
+    int key = ViewBag.key;
+    var clientID = ViewBag.clientID;
+}
+
+<tr id="Doc@(key)">
+    <td>
+        <input type="hidden" name="refDocs.Index" value="@key" />
+        <input type="hidden" name="refDocs[@key].ID" value="@key" />
+        <input type="hidden" name="refDocs[@key].ClientID" value="@clientID" />
+        <input type="hidden" name="refDocs[@key].DocType" value="0" id="refDocs@(key)refKeyDocType" />
+        <input type="hidden" name="refDocs[@key].referenceID" value="" id="refDocs@(key)refKeyRefID" />
+        <a href="javascript:;" class="deleteRow" data-id="Doc@(key)" data-dialogname="deleteDialogBox" 
+            data-clientdelete="Y" data-source="@Url.Action("DeleteActivityDoc", "PConfiguration", new { id = key })"><i class="icon-remove"></i></a>
+    </td>
+    <td>@Html.Action("GetReferenceData","PConfiguration", new { id = 0, repoID = repoID, selectedValue = "", controlName = "refDocs[" + key + "].refKey", reload = "updateDocType" })</td>
+    <td>@Html.TextBox("refDocs[" + key + "].Remarks", "", new { @class = "form-control" })</td>
+    <td>@Html.DropDownList("refDocs[" + key + "].Mandatory",new DocReferenceType().getList(0),"Select ...", new { @class = "col-md-12 form-control" })</td>
+</tr>
+<tr id="newSuppDoc">
+    <td>
+        <a href="javascript:;" class="loadDetails" data-element="newSuppDoc" data-source="@Url.Action("addSupportingDoc","PConfiguration", new { repoID = repoID, taskID = taskID, key = key + 1 })" data-mode="edit" ><i class="icon-plus"></i></a>
+    </td>
+</tr>

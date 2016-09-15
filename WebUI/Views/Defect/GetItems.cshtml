@@ -1,0 +1,18 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_defect>
+@{
+    Layout = null;
+}
+@foreach (var o in Model)
+{
+    <tr id="@o.ID">
+        <td>@o.Short_Description</td>
+        <td>@(o.mstr_org_defect_type == null ? "" : o.mstr_org_defect_type.Type)</td>
+        <td>@(o.mstr_org_defect_severity == null ? "" : o.mstr_org_defect_severity.Severity)</td>
+        <td>@(o.mstr_org_proj_phase == null ? "" : o.mstr_org_proj_phase.ShortName)</td>
+        <td>@(o.tbl_org_proj_group == null ? "" : o.tbl_org_proj_group.Name)</td>
+        <td>@(o.IdentifiedOn == null ? "" : o.IdentifiedOn.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+        <td>@(o.mstr_process_lc_status == null ? "" : o.mstr_process_lc_status.Status)</td>
+        <td><button class="btn btn-med green-bg openDialog" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "Defect", new { id = o.ID })"><i class="icon-">&#xf044;</i></button></td>
+    </tr>
+}

@@ -1,0 +1,31 @@
+﻿@using System.Text.RegularExpressions
+@model IEnumerable<KeyListItem>
+@{
+    var list = Model.OrderBy(o => o.GroupName);
+    var groupName = "";
+    var counter = 0;
+    var pattern = @"(:|\.|\[|\]|,)";
+    Regex rgx = new Regex(pattern);
+}
+<select name="@ViewBag.itemName" id="@rgx.Replace(ViewBag.itemName,"")" class="specialCombo form-control col-md-12 @((ViewBag.reload != null) ? ViewBag.reload : "" )">
+    <option value="" selected>@((ViewBag.defaultItem != null) ? ViewBag.defaultItem : "Select...")</option>
+@while (counter < list.Count())
+{
+    if (list.ElementAt(counter).GroupName == "")       // No Need for grouping
+    {
+        <option data-value="@list.ElementAt(counter).ID" value="@list.ElementAt(counter).Key" @((ViewBag.selectedItem == list.ElementAt(counter).Key) ? "selected" : "" ) >@list.ElementAt(counter).DisplayText</option>    
+        counter++;
+    }
+    else
+    {
+        groupName = list.ElementAt(counter).GroupName;
+        <optgroup label="@list.ElementAt(counter).GroupName">
+            @while (counter < list.Count() && groupName == list.ElementAt(counter).GroupName)
+            {
+                <option data-value="@list.ElementAt(counter).ID" value="@list.ElementAt(counter).Key" @((ViewBag.selectedItem == list.ElementAt(counter).Key) ? "selected" : "" ) >&nbsp;&nbsp;&nbsp;@list.ElementAt(counter).DisplayText</option>    
+                counter++;
+            }
+        </optgroup>
+    }
+}    
+</select>

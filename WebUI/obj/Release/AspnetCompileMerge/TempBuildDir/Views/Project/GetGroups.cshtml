@@ -1,0 +1,33 @@
+﻿@model IEnumerable<tbl_org_proj_group>
+@{
+    Layout = null;
+    var groups = Model.Where(o => o.Level == 1);
+    var seed = new seededProjGroup() { tbl_org_proj_group = Model };
+}
+<ul class="col-md-8 tree" id="PStructure">
+
+@if (ViewBag.ProjectID == 0)
+{
+    <li id="L0">
+        Select a project to maintain groups
+    </li>
+}
+else
+{
+    <li id="L0">
+        <a class="openDialog" data-toggle="modal" id="newNode" href="javascript:;" data-id="" data-source="@Url.Action("AddProjGroup","Project", new { projID = ViewBag.ProjectID, level=1, parent=0})">Add Group</a>
+    </li>
+    if (groups.Any())
+    {
+        foreach (var o in groups)
+        {
+            seed.ProjectID = o.tbl_Org_ProjectID;
+            seed.GroupID = o.ID;
+            seed.GroupName = o.Name;
+            seed.Level = o.Level;
+            @Html.Partial("GetGroup", seed)
+        }
+    }
+    }
+
+</ul>

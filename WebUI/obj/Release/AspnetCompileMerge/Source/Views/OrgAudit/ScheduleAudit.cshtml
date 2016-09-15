@@ -1,0 +1,139 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_audit_scheduleInput
+@{
+    Layout = null;
+    var today = System.DateTime.Now.Date;
+    AuditActivityType auditActivity = new AuditActivityType();
+}
+
+<div class="modal-dialog" style="width: 60%;">
+	<div class="modal-content">
+	    <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h4 class="modal-title" id="dialogTitle">Schedule Org Level Audit</h4>
+	    </div>
+        <div class="modal-body"> 
+            <form method="post" action="@Url.Action("ScheduleAudit")" id="submitLevel" role="form">
+                <div class="panel-body">
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(o => o.ID)
+                    @Html.HiddenFor(o => o.ClientID)
+                    @Html.HiddenFor(o => o.tbl_Org_Audit_PlanID)
+                    @Html.HiddenFor(o => o.Planned_Start)
+                    @Html.HiddenFor(o => o.Planned_Finish)
+                    @Html.HiddenFor(o => o.Duration)
+                    @Html.HiddenFor(o => o.DurationUnit)
+                    @Html.HiddenFor(o => o.Status)
+                    <input type="hidden" value="@(Model.Audit_Date == null ? "" : Model.Audit_Date.GetValueOrDefault().ToString(Globals.DateFormatString))" name="Audit_Date" id="Audit_Date" />
+                    @Html.HiddenFor(o => o.TimeSpentHrs)
+                    @Html.HiddenFor(o => o.Description)
+                    @if (Model.Audit_Roles != null && Model.Audit_Roles.Any())
+                    {
+                        var counter = 0;
+                        foreach (var rl in Model.Audit_Roles)
+                        {
+                            counter += 1;
+                            <input type="hidden" name="Audit_Role[@(counter)]" id="Audit_Role[@(counter)]" value="rl" />
+                        }
+                    }
+                    @Html.ValidationSummary(false)
+		            <div class="row">
+			            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Planned Start</label>
+                                <div class="controls"><label class="form-control">@Model.Planned_Start.ToString(Globals.DateFormatString)</label></div>
+                            </div>
+                        </div>
+			            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Planned Finish</label>
+                                <div class="controls"><label class="form-control">@Model.Planned_Finish.ToString(Globals.DateFormatString)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+			            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" id="StartLabel">Actual Start</label>
+                                <div class="controls">
+                                    <div class="input-group date" id="startDatepicker">
+                                        <input type="text" value="@(Model.Start.GetValueOrDefault() == new DateTime() ? today.ToString(Globals.DateFormatString) : Model.Start.GetValueOrDefault().ToString(Globals.DateFormatString))" class="form-control" name="Start" id="Start">
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-format="dd/mm/yyyy" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(o => o.Start)
+                            </div>
+                        </div>
+			            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" id="FinishLabel">Actual Finish</label>
+                                <div class="controls">
+                                    <div class="input-group date" id="finishDatepicker">
+                                        <input type="text" value="@(Model.Finish.GetValueOrDefault() == new DateTime() ? today.ToString(Globals.DateFormatString) : Model.Finish.GetValueOrDefault().ToString(Globals.DateFormatString))" class="form-control" name="Finish" id="Finish">
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(o => o.Finish)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <br />
+			            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Auditor (s)</label>
+                                <div class="controls">
+                                    @Html.Action("getEmployeesInRole", "Employee", new { roles = Model.Audit_Roles, ProjectID = 0, controlName = "Auditors", selectedItems = Model.Auditors })
+                                </div>
+                                @Html.ValidationMessageFor(o => o.Auditors)
+                            </div>
+                        </div>
+			            <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Auditee (s)</label>
+                                <div class="controls">
+                                    @Html.Action("getEmployeesInRole", "Employee", new { roles = Model.Audit_Roles, ProjectID = 0, controlName = "Auditees", selectedItems = Model.Auditees })
+                                </div>
+                                @Html.ValidationMessageFor(o => o.Auditees)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+	            <div class="modal-footer">
+			        <div class="form-group">
+                        @if (Model.Status > 2)
+                        {
+		                    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+                        }
+                        else
+                        {
+		                    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		                    <button type="button" class="btn blue-bg saveAuditPlan" data-form="submitLevel" data-mode="editSchedule" data-id="sch@(Model.ID)">Save</button>
+                        }
+			        </div>
+	            </div>
+            </form>
+	    </div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+<script type="text/javascript">
+    specialDropDown(".specialCombo");
+    $("#startDatepicker").datetimepicker({         // Create new datepickers
+        daysOfWeekDisabled: [0, 6],
+        // format: 'DD/MM/YYYY',
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    $("#finishDatepicker").datetimepicker({         // Create new datepickers
+        daysOfWeekDisabled: [0, 6],
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false,
+        useCurrent: false
+    });
+    $("#startDatepicker").on("dp.change", function (e) {
+        $('#finishDatepicker').data("DateTimePicker").minDate(e.date);
+    });
+    $("#finishDatepicker").on("dp.change", function (e) {
+        $('#startDatepicker').data("DateTimePicker").maxDate(e.date);
+    });
+
+</script>

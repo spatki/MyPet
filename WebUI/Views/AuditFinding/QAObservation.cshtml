@@ -1,0 +1,231 @@
+﻿@using ProcessAccelerator.WebUI
+@model auditRecordingInput
+@{
+    Layout = null;
+    ActionItemStatus ActionStatus = new ActionItemStatus();
+}
+
+<div class="panel">
+    <form name="frmFinding" id="frmFinding" method="post" action="@Url.Action("Edit")" class="form form-horizontal">
+        @Html.HiddenFor(o => o.ClientID)
+        @Html.HiddenFor(o => o.Description)
+        @Html.HiddenFor(o => o.Duration)
+        @Html.HiddenFor(o => o.DurationUnit)
+        <input type="hidden" id="Finish" name="Finish" value="@(Model.Finish == null ? "" : Model.Finish.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+        @Html.HiddenFor(o => o.ID)
+        <input type="hidden" id="Planned_Finish" name="Planned_Finish" value="@Model.Planned_Finish.ToString(Globals.DateFormatString)" />
+        <input type="hidden" id="Planned_Start" name="Planned_Start" value="@Model.Planned_Start.ToString(Globals.DateFormatString)" />
+        <input type="hidden" id="Review_Finish" name="Review_Finish" value="@(Model.Review_Finish == null ? "" : Model.Review_Finish.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+        <input type="hidden" id="Review_Start" name="Review_Start" value="@(Model.Review_Start == null ? "" : Model.Review_Start.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+        <input type="hidden" id="Start" name="Start" value="@(Model.Start == null ? "" : Model.Start.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+        @Html.HiddenFor(o => o.Status)
+        @Html.HiddenFor(o => o.tbl_Audit_PlanID)
+        @Html.HiddenFor(o => o.tbl_Mstr_Org_FunctionID)
+        @Html.HiddenFor(o => o.tbl_Org_ProjectID)
+        @Html.HiddenFor(o => o.Type)
+        @Html.HiddenFor(o => o.ProjectName)
+        @Html.HiddenFor(o => o.Audit_Reference)
+        <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Audit Dates: </label>
+                            <label class="control-label"><strong>@Model.Start.GetValueOrDefault().ToString(Globals.DateFormatString)</strong> - <strong>@Model.Finish.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Review Period: </label>
+                            <label class="control-label"><strong>@Model.Review_Start.GetValueOrDefault().ToString(Globals.DateFormatString)</strong> - <strong>@Model.Review_Finish.GetValueOrDefault().ToString(Globals.DateFormatString)</strong></label>
+                            <span><a href="Javascript:;" class="openDialog" data-source="@Url.Action("ProjectTasksForReview","ProjPlan", new { id = Model.tbl_Org_ProjectID, startDate = Model.Review_Start.GetValueOrDefault().ToString(Globals.DateFormatString), endDate = Model.Review_Finish.GetValueOrDefault().ToString(Globals.DateFormatString) })" title="Click to view project tasks">(View Tasks for this duration)</a></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-6">Observation Date</label>
+                                <div class="col-md-6">
+                                    <div class="input-group date" id="obsDate">
+                                        @Html.TextBoxFor(o => o.RecordingDate,Globals.DateFormatValue, new { @class = "form-control" })
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                    @Html.ValidationMessageFor(o => o.RecordingDate)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-6">Time Spent (Hrs)</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(o => o.TimeSpentHrs, new { @class = "form-control", size = "5" })
+                                    @Html.ValidationMessageFor(o => o.TimeSpentHrs)
+                                </div>
+                            </div>
+                        </div>
+                    </div>                        
+                </div>
+                <hr />
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active"><a data-toggle="tab" href="#ObservationForm"><i class="icon-file-alt"></i>&nbsp;&nbsp;Observations</a></li>
+                    <li><a data-toggle="tab" href="#AuditParticipants"><i class="icon-user"></i>&nbsp;&nbsp;Participants</a></li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div id="ObservationForm" class="tab-pane fade in active">
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"  id="AuditPlanTable" >
+                            <thead>
+                                <tr>
+                                    <th class="docTableSequence-bg"></th>
+                                    <th>Observation</th>
+                                    <th>Possible Impact</th>
+                                    <th class="tblMediumWidth">Responsibility</th>
+                                    <th class="tblMediumWidth">Status</th>
+                                    <th class="tblMediumWidth">Date Completed</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listing">
+                                @if (Model.tbl_audit_observation != null && Model.tbl_audit_observation.Any())
+                                {
+                                    foreach (var obs in Model.tbl_audit_observation)
+                                    {
+                                        <tr id="obs@(obs.ID)">
+                                            <td>
+                                                <a href="Javascript:;" class="deleteRow" data-clientdelete="N" data-dialogname="openDialogBox" data-id="obs@(obs.ID)" data-source="@Url.Action("DeleteObservation","AuditFinding",new { id = obs.ID, scheduleID = Model.ID })" title="Click to remove this observation"><i class="icon-remove"></i></a>
+                                                <input type="hidden" name="tbl_audit_observation.Index" value="@obs.ID" />
+                                                <input type="hidden" name="tbl_audit_observation[@(obs.ID)].ID" id="tbl_audit_observation[@(obs.ID)].ID" value="@obs.ID" />
+                                                <input type="hidden" name="tbl_audit_observation[@(obs.ID)].tbl_Audit_ScheduleID" id="tbl_audit_observation[@(obs.ID)].tbl_Audit_ScheduleID" value="@obs.tbl_Audit_ScheduleID" />
+                                                <input type="hidden" name="tbl_audit_observation[@(obs.ID)].CorrectiveAction" id="tbl_audit_observation[@(obs.ID)].CorrectiveAction" value="@obs.CorrectiveAction" />
+                                                <input type="hidden" name="tbl_audit_observation[@(obs.ID)].EstimatedCloseDate" id="tbl_audit_observation[@(obs.ID)].EstimatedCloseDate" value="@(obs.EstimatedCloseDate == null ? "" : obs.EstimatedCloseDate.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+                                                <input type="hidden" name="tbl_audit_observation[@(obs.ID)].ActualCloseDate" id="tbl_audit_observation[@(obs.ID)].ActualCloseDate" value="@(obs.ActualCloseDate == null ? "" : obs.ActualCloseDate.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+                                                <input type="hidden" name="tbl_audit_observation[@(obs.ID)].Comments" id="tbl_audit_observation[@(obs.ID)].Comments" value="@obs.Comments" />
+                                                <input type="hidden" name="tbl_audit_observation[@(obs.ID)].NC_Observation" id="NC_Observation@(obs.ID)Input" value="@obs.NC_Observation" />
+                                                <input type="hidden" name="tbl_audit_observation[@(obs.ID)].PossibleImpact_Attr" id="PossibleImpact_Attr@(obs.ID)Input" value="@obs.PossibleImpact_Attr" />
+
+                                            </td>
+                                            <td>
+                                                <div id="NC_Observation@(obs.ID)" contenteditable="true" class="EditDetail takeHtmlInput">@Html.Raw(obs.NC_Observation)</div>
+                                                @Html.ValidationMessage("tbl_audit_observation[" + obs.ID + "].NC_Observation")
+                                            </td>
+                                            <td>
+                                                <div id="PossibleImpact_Attr@(obs.ID)" contenteditable="true" class="EditDetail takeHtmlInput">@Html.Raw(obs.PossibleImpact_Attr)</div>
+                                                @Html.ValidationMessage("tbl_audit_observation[" + obs.ID + "].PossibleImpact_Attr")
+                                            </td>
+                                            <td>
+                                                <select name="tbl_audit_observation[@(obs.ID)].Responsibility" id="tbl_audit_observation[@(obs.ID)].Responsibility" class="specialCombo form-control col-md-12">
+                                                    <option value="" @(obs.Responsibility == null ? "selected" : "")>Select...</option>
+                                                    @if (Model.tbl_audit_participant != null && Model.tbl_audit_participant.Any())
+                                                    {
+                                                        foreach (var item in Model.tbl_audit_participant)
+                                                        {
+                                                            <option value="@item.tbl_Org_EmployeeID" @(obs.Responsibility == item.tbl_Org_EmployeeID ? "selected" : "" ) >@item.Name</option>
+                                                        }
+                                                    }
+                                                    @Html.ValidationMessage("tbl_audit_observation[" + obs.ID + "].tbl_Org_EmployeeID")
+                                                </select>
+                                            </td>
+                                            <td>
+                                                @Html.DropDownList("tbl_audit_observation[" + obs.ID + "].Status",ActionStatus.getList((short)obs.Status),"Select ...", new { @class = "specialCombo form-control col-md-12" })
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <div class="input-group date" id="StatusDate@(obs.ID)">
+                                                        <input type="text" class="form-control" name="tbl_audit_observation[@(obs.ID)].StatusUpdateDate" id="tbl_audit_observation[@(obs.ID)].StatusUpdateDate" value="@(obs.StatusUpdateDate != null && obs.StatusUpdateDate != new DateTime() ? obs.StatusUpdateDate.GetValueOrDefault().ToString(Globals.DateFormatString) : "")" />
+                                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                                    </div>
+                                                    @Html.ValidationMessage("tbl_audit_observation[" + obs.ID + "].StatusUpdateDate")
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                @if (Model.Status != 4)
+                                {
+                                    <tr id="newObs">
+                                        <td><a href="Javascript:;" class="addOption" data-source="@Url.Action("AddObs","AuditFinding",new { id = Model.ID, key = (Model.tbl_audit_observation == null || !Model.tbl_audit_observation.Any() ? 1 : (Model.tbl_audit_observation.Max(o => o.ID) + 1)) })" data-id="newObs"><i class="icon-plus"></i></a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="AuditParticipants" class="tab-pane">
+                        <br />
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Auditor (s)
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        @if (Model.tbl_audit_participant != null && Model.tbl_audit_participant.Where(o => o.Type == 1).Any())
+                                        {
+                                            <ol>
+                                                @foreach (var pt in Model.tbl_audit_participant.Where(o => o.Type == 1))
+                                                {
+                                                    <li>
+                                                        @pt.Name
+                                                        <input type="hidden" name="tbl_audit_participant.Index" id="tbl_audit_participant.Index" value="@pt.ID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ID" id="tbl_audit_participant[@(pt.ID)].ID" value="@pt.ID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" id="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" value="@pt.tbl_Audit_ScheduleID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" value="@pt.tbl_Org_EmployeeID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" value="@pt.tbl_Org_RoleID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Type" id="tbl_audit_participant[@(pt.ID)].Type" value="@pt.Type" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ClientID" id="tbl_audit_participant[@(pt.ID)].ClientID" value="@pt.ClientID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Name" id="tbl_audit_participant[@(pt.ID)].Name" value="@pt.Name" />
+                                                    </li>
+                                                }
+                                            </ol>
+                                        }
+                                        else
+                                        {
+                                            <label class="control-label">Not Selected</label>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Auditee (s)
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        @if (Model.tbl_audit_participant != null && Model.tbl_audit_participant.Where(o => o.Type == 2).Any())
+                                        {
+                                            <ol>
+                                                @foreach (var pt in Model.tbl_audit_participant.Where(o => o.Type == 2))
+                                                {
+                                                    <li>
+                                                        @pt.Name
+                                                        <input type="hidden" name="tbl_audit_participant.Index" id="tbl_audit_participant.Index" value="@pt.ID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ID" id="tbl_audit_participant[@(pt.ID)].ID" value="@pt.ID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" id="tbl_audit_participant[@(pt.ID)].tbl_Audit_ScheduleID" value="@pt.tbl_Audit_ScheduleID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_EmployeeID" value="@pt.tbl_Org_EmployeeID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" id="tbl_audit_participant[@(pt.ID)].tbl_Org_RoleID" value="@pt.tbl_Org_RoleID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Type" id="tbl_audit_participant[@(pt.ID)].Type" value="@pt.Type" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].ClientID" id="tbl_audit_participant[@(pt.ID)].ClientID" value="@pt.ClientID" />
+                                                        <input type="hidden" name="tbl_audit_participant[@(pt.ID)].Name" id="tbl_audit_participant[@(pt.ID)].Name" value="@pt.Name" />
+                                                    </li>
+                                                }
+                                            </ol>
+                                        }
+                                        else
+                                        {
+                                            <label class="control-label">Not Selected</label>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+        </div>
+        <div class="panel-footer">
+			<div class="form-group">
+                    @if (Model.Status != 4)
+                    {
+    					<a href="javascript:;" class="btn btn-med blue-bg saveAuditPlan" data-id="containerDetails" data-form="frmFinding" data-mode="saveFinding">Save</a>
+                    }
+                    <a href="javascript:;" class="btn btn-med gray-bg subMenu" data-source="@Url.Action("ProjectIndex","AuditFinding", new { id = Model.tbl_Org_ProjectID, viewName = "Index" })">Back</a>
+			</div>
+		</div>
+    </form>
+</div>
+

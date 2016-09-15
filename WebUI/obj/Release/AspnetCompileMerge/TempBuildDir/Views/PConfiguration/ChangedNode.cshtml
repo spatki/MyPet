@@ -1,0 +1,9 @@
+﻿@{
+    Layout = null;
+    var id = ViewBag.repoID;
+    var lvl = ViewBag.lvl;
+    var desc = ViewBag.lvlDesc;
+    var isActivity = ViewBag.IsActivity;
+    var sequence = ViewBag.Sequence;
+}
+<span id ="LvlDesc@(id)" class="@(isActivity == "Y" ? "blue-bg" : "")">@(sequence == null || sequence == 0 ? "" : sequence + ". ") @lvl : @desc&nbsp;&nbsp;</span>

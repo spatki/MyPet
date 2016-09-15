@@ -1,0 +1,21 @@
+*1. name or task (first drop down)
+*2. Default start date to current date. In fact also default the end date to the same date.
+*3. Set the status to the default value
+*4. Apply date masks to start and finish date
+*5. Duration and unit should also be mandatory
+
+6. On re-load in case of error, the tasks and plan name are not reloaded
+7. Provide option to delete resources and supporting documents.
+8. Add handler for deleteResource
+9. Apply date formatting to task start and end dates on similar lines as applied to resource start and end dates.
+10. Think about a method to edit add/delete of supporting documents in plan task.
+11. In ProjPlan -> Create the fixed functions does not return record where PrevStatus is null. for the time being changed have put in a temporary fix.
+12. Delete document while creating/editing tasks not working fine.
+
+openDialogBoxExtra
+
+<a href="javascript:;" title="Allocated from [object Object] to [object Object]"><i class="icon-info"></i></a>
+
+PENDING CHANGES
+
+1 - In project estimation only one construction phase can be added

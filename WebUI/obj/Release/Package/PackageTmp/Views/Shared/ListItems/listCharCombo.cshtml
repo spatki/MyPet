@@ -1,0 +1,14 @@
+﻿@using System.Text.RegularExpressions
+@model IEnumerable<SelectListItem>
+@{
+        var pattern = @"(:|\.|\[|\]|,)";
+        Regex rgx = new Regex(pattern);
+}
+<select name="@ViewBag.itemName" id="@rgx.Replace(ViewBag.itemName , "" )" class="specialCombo form-control col-md-12 @((ViewBag.reload != null) ? ViewBag.reload : "" )">
+    <option value="@((ViewBag.defaultItem != null) ? "0" : "")" selected>@((ViewBag.defaultItem != null) ? ViewBag.defaultItem : "Select...")</option>
+@foreach (var item in Model)
+{
+    <option value="@item.Value" @((ViewBag.selectedItem == item.Value) ? "selected" : "" ) >@item.Text</option>
+}
+
+</select>

@@ -1,0 +1,96 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_process_rep_generaltasks
+@{
+    Layout = null;
+    if (ViewBag.mode == null)
+    {
+        ViewBag.mode = "readOnly"; 
+    }
+}
+
+<div class="modal-dialog"  style="width:100%;height:70%;overflow:auto;">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="modal-title">Configure General Tasks</h4>
+	</div>
+	<div class="modal-body">
+        <form id="GTForm" name="GTForm" action="@Url.Action("manageGeneralTasks")" method="post">
+                  <div class="row">
+                 <div class="panel colored col-lg-12">
+                    <div class="panel-body" id="Div1">						
+                        <div class="row col-lg-12">
+                            <div class="col-lg-12 column left">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        @Html.HiddenFor(o => o.ID)
+                                        @Html.ValidationSummary()   
+                                        <tr>
+                                            <th class="docTableSequence-bg Check_Header">Action</th>
+                                            <th class="docTableSequence-bg Check_Header">SNO</th>
+                                            <th class="Check_Header">Task Name</th>
+                                            <th class="Check_Header">Description</th>
+                                            <th class="Check_Header">Roles</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="GeneralTask@(Model.ID)" data-checks="@(Model.tbl_process_general_task.Count() + 1)" data-key="@(Model.tbl_process_general_task.Any() ? "" + (Model.tbl_process_general_task.Last().ID + 1) : "1")" data-repo="@Model.ID">
+                                        @{  var sequence = 0;
+                                            if (Model.tbl_process_general_task.Any()) {
+                                              foreach (var m in Model.tbl_process_general_task)
+                                              {
+                                                    sequence = sequence + 1;
+                                                    <tr id="GT@(Model.ID)G@(m.ID)">
+                                                        <td ><a href="#" data-id="GT@(Model.ID)G@(m.ID)" class="openDeleteDialog2" data-delete="server" data-mode="delete" data-source="@Url.Action("deleteGeneralTask", "PConfiguration", new { id = m.ID, repoID = Model.ID })" data-pageid="GT@(Model.ID)"><i class="icon-">&#xf05c</i></a></td>
+                                                        <td >@(sequence)</td>
+                                                        <td >
+                                                            <input type="hidden" name="tbl_process_general_task.Index" value="@(m.ID)" />
+                                                            <input type="hidden" name="tbl_process_general_task[@(m.ID)].ID" value="@m.ID" />
+                                                            <input type="hidden" name="tbl_process_general_task[@(m.ID)].ClientID" value="@m.ClientID" />
+                                                            <input type="hidden" name="tbl_process_general_task[@(m.ID)].SequenceNo" value="@m.SequenceNo" />
+                                                            <input type="hidden" name="tbl_process_general_task[@(m.ID)].tbl_Process_RepositoryID" value="@Model.ID" />
+                                                            <input type="hidden" name="tbl_process_general_task[@(m.ID)].CreatedBy" value="@m.CreatedBy" />
+                                                            <input type="hidden" name="tbl_process_general_task[@(m.ID)].CreateDate" value="@(m.CreateDate == null ? "" : m.CreateDate.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+                                                            <input type="hidden" name="tbl_process_general_task[@(m.ID)].UpdatedBy" value="@m.UpdatedBy" />
+                                                            <input type="hidden" name="tbl_process_general_task[@(m.ID)].UpdateDate" value="@(m.UpdateDate == null ? "" : m.UpdateDate.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+                                                            <input type="text" name="tbl_process_general_task[@(m.ID)].Name" value="@m.Name" class="form-control col-md-12" />
+                                                        </td>
+                                                        <td class="col-lg-4 CheckDetail" data-width="40px">
+                                                            <input type="text" name="tbl_process_general_task[@(m.ID)].Description" value="@m.Description" class="form-control col-md-12" />
+                                                        </td>
+                                                        <td class="col-lg-3 CheckItem" data-width="20px" >@Html.Action("getMultiSelectList","ProcessRole",new { selectedItems = m.roleIDs, controlName = "tbl_process_general_task[" + m.ID + "].roleIDs", excludeIds = "", includeIds = "", reload = "" })</td>
+                                                    </tr>                                                  
+                                              }
+                                          }
+                                          }
+                                    <tr >
+                                        <td ><a href="#" data-id="GeneralTask@(Model.ID)" class="addCheck"><i class="icon-">&#xf055</i></a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                     </div>					
+                </div>  
+            </div>           
+        </form>
+	</div>
+	<div class="modal-footer">
+	  <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+	  <button type="button" class="btn blue-bg saveDefaultPage" data-mode="edit" data-id="GeneralTask@(Model.ID)" data-pageid="GT@(Model.ID)" data-form="GTForm">Save changes</button>
+	</div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="extraDialogBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	</div><!-- /.modal -->
+
+
+<script type="text/javascript">
+        @if (sequence > 0)
+        {
+            <text>
+            multiComboConfig(".specialCombo");
+            </text>
+        }
+</script>

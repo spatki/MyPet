@@ -1,0 +1,307 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="javascript:;" id="showfilter" class="pull-left">Filter Projects <i class="icon-">&#xf00e;</i></a>
+                </div>
+                <hr />
+                <div class="panel colored" id="filterParams">
+                    <div class="panel-body filter-bg">                      
+                        <div class="row col-md-12">
+                           <div class="form-group">        
+                               <div class="col-md-4">                            
+                                    <label class="control-label"><input type="radio" name="searchCode" value="1"/>  Project Name | <input type="radio"  name="searchCode" value="2"/>  Project Code
+                                   <input class="form-control col-md-12" type="text" />
+                               </div>
+                               <div class="col-md-4">
+                                   <label class="control-label col-md-12">Project Type</label>
+                                   <select class="chzn-select-no-single col-md-12"><option>ALL</option><option>Development</option><option>Agile</option><option>Migration</option><option>Testing</option></select>
+                                </div>
+                               <div class="col-md-4">
+                                   <label class="control-label">Project Satus</label>
+                                   <select class="chzn-select-no-single col-md-12"><option>Initiated</option><option>Approved</option><option>In Progress</option><option>Closed</option><option>On Hold</option></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                           <div class="form-group">        
+                               <div class="col-md-4">
+                                   <label class="control-label">From</label>
+                                   <input type="text" class="mask_date2 form-control col-md-12" />
+                                </div>
+                               <div class="col-md-4">
+                                   <label class="control-label">To</label>
+                                   <input type="text" class="mask_date2 form-control col-md-12" />
+                                </div>
+                               <div class="col-md-4">
+                                   <label class="control-label col-md-12">Track Status</label>
+                                   <select class="chzn-select-no-single col-md-12"><option>Not Planned</option><option>Not Scheduled</option><option>Scheduled</option><option>In Progress</option><option>Closed</option></select>
+                                   <div class="col-md-1 pull-right"><br /><div class="input-group-btn pull-right"><button class="btn btn-med blue-bg searchProcedure">GO</button></div></div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered advanced-table" >
+                    <thead>
+                        <tr>
+                            <th class="docTableHeader-bg">Proj.ID</th>
+                            <th class="docTableHeader-bg">Name</th>
+                            <th class="docTableHeader-bg">Type</th>
+                            <th class="docTableHeader-bg">Status</th>
+                            <th class="docTableHeader-bg">Audit Date</th>
+                            <th class="docTableHeader-bg">Duration (Days)</th>
+                            <th class="docTableHeader-bg">Delay (Days)</th>
+                            <th class="docTableHeader-bg">Track Status</th>
+                            <th class="docTableHeader-bg">Info</th>
+                            <th class="docTableHeader-bg">Report</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>P122</td>
+                            <td><a href="#viewPrj" data-toggle="modal">Payroll Processing</a></td>
+                            <td>Development</td>
+                            <td>In Progress</td>
+                            <td>13-Feb-14</td>
+                            <td>1</td>
+                            <td><label class="label label-success">0</label></td>
+                            <td><label class="label label-success">Closed</label></td>
+                            <td><a href="#reqPlanDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-info-sign"></i></a></td>
+                            <td><a href="#NCReport" class="btn btn-med orange-bg rejectProj" role="button" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>P122</td>
+                            <td><a href="#viewPrj" data-toggle="modal">Payroll Processing</a></td>
+                            <td>Development</td>
+                            <td>In Progress</td>
+                            <td>30-Nov-14</td>
+                            <td>3</td>
+                            <td><label class="label label-success">0</label></td>
+                            <td><label class="label label-info">Not Scheduled</label></td>
+                            <td><a href="#reqPlanDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-info-sign"></i></a></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>P124</td>
+                            <td><a href="#viewPrj" data-toggle="modal">Shaw Trust</a></td>
+                            <td>Migration</td>
+                            <td>In Progress</td>
+                            <td>29-Mar-14</td>
+                            <td>3</td>
+                            <td><label class="label label-success">0</label></td>
+                            <td><label class="label label-success">Scheduled</label></td>
+                            <td><a href="#reqPlanDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-info-sign"></i></a></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>P110</td>
+                            <td><a href="#viewPrj" data-toggle="modal">Humana</a></td>
+                            <td>Production Support</td>
+                            <td>In Progress</td>
+                            <td>01-Jan-14</td>
+                            <td>3</td>
+                            <td><label class="label label-danger">23</label></td>
+                            <td><label class="label label-danger">Scheduled</label></td>
+                            <td><a href="#reqPlanDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-info-sign"></i></a></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>P023</td>
+                            <td><a href="#viewPrj" data-toggle="modal">Transtel</a></td>
+                            <td>Agile</td>
+                            <td>In Progress</td>
+                            <td>15-Jan-14</td>
+                            <td>2</td>
+                            <td><label class="label label-danger">25</label></td>
+                            <td><label class="label label-danger">Not Planned</label></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="row">
+                    <div class="panel colored col-md-12">
+					<form role="form">				
+                            <div class="panel-body">
+                                <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	            <div class="row pull-right panel-footer">
+                                        <div class="col-lg-12 col-lg-offset-1">
+                                            <button type="button" class="btn blue-bg" id="Export">Export</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>					
+					</form>
+                </div>  
+            </div>
+    
+    <div class="modal fade" id="reqPlanDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Audit Plan </h4>
+		</div>
+		<div class="modal-body">
+            <div class="container-fluid">
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Audit Start</label>
+                        <input type="text" id="AuditFrmDt" class="form-control mask_date" value="15/01/2014">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Audit Finish</label>
+                        <input type="text" id="AuditToDt" class="form-control mask_date" value="16/01/2014">
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Auditor Role(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="SQA" selected="selected">SQA</option> <option value="MR">MR</option><option value="Sr. Manager">Sr. Manager</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Auditor Name(s)</label>
+                            <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Kapil Khanna" selected="selected">Kapil Khanna</option> <option value="Surekha Shetty">Surekha Shetty</option></select>
+                    </div>                                
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label>Auditee Role(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Project Manager" selected="selected">Project Manager</option> <option value="Project Leader">Project Leader</option><option value="Developer">Developer</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Auditee Name(s)</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Choose in Audit">Choose in Audit</option> <option value="Prakash Mehta" selected="selected">Prakash Mehta</option> <option value="Ajit Pawar">Ajit Pawar</option><option value="Rahul Gandhi">Rahul Gandhi</option></select>
+                    </div>                                
+                </div>
+                <hr />
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <label class="control-label">Audit Type</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="One Time" selected="selected">One Time</option> <option value="Recurring">Recurring</option></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Recurring Period</label>
+                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="Daily">Daily</option> <option value="Weekly" selected="selected">Weekly</option> <option value="Monthly">Monthly</option></select>
+                        <i class="icon-info-sign"></i><i class="info">(Applicable only for Recurring Audits)</i>
+                    </div>                                
+                </div>
+            </div>
+        </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="viewPrj" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Project Information</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Name</b></label>
+                        <label class="form-control col-md-12">Payroll Processing</label>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Status</b></label>
+                        <label class="form-control col-md-12">In Progress</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Description</b></label>
+                        <textarea class="form-control col-md-12" rows="4" disabled>Payroll processing for a HRM package. This will be addded as an enhancement to the existing application</textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Type</b></label>
+                        <label class="form-control col-md-12">Development</label>
+                        <label class="control-label col-md-12"><b>Planned Start</b></label>
+                        <label class="form-control col-md-12">11-Jan-14</label>
+                        <label class="control-label col-md-12"><b>Planned Finish</b></label>
+                        <label class="form-control col-md-12">30-Nov-14</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Manager</b></label>
+                        <label class="form-control col-md-12">Sandeep Honawar</label>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>SQA</b></label>
+                        <label class="form-control col-md-12">Kirti Desai</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Sponser</b></label>
+                        <label class="form-control col-md-12">Bharat Desai</label>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12"><b>Project Approver</b></label>
+                        <label class="form-control col-md-12">Anil Jain</label>
+                    </div>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<script type="text/javascript">
+	    var newTaskParams = true;
+
+		var config = {
+		  '.chzn-select-no-single' : {disable_search_threshold:10},
+		}
+		for (var selector in config) {
+		  $(selector).chosen(config[selector]);
+		}
+
+		
+		$("#showfilter").click();
+
+		$('#reqPlanDetails').on('shown.bs.modal', function () {
+		    if (newTaskParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newTaskParams = false;
+		    }
+		})
+
+		$("body").delegate(".group", "click", function () {
+		    $("#" + $(this).data("childid")).toggle();
+		    $(this).toggleClass("closed");
+		});
+
+    </script> 
+   
+
+}

@@ -1,0 +1,86 @@
+﻿@model tbl_org_project_documentsInput
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#uploadForm").ajaxForm({
+            success: function (data) {
+                $.pnotify({
+                    title: 'Project Document added',
+                    type: 'info'
+                });
+                $('#processTable').dataTable().fnDestroy();
+                $("#listing").append(data);
+                $("#openDialogBox").modal("hide");
+                jsTable("processTable");
+            },
+            error: function (data) {
+                $("#openDialogBox").html(data.responseText);
+            }
+        });
+    });
+</script>    
+
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Add Supporting Document</h4>
+	</div>
+    <form method="post" action="@Url.Action("AddNewProjDoc")" id="uploadForm"  enctype="multipart/form-data">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <input type="hidden" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" value="@Model.tbl_Org_ProjectID" />
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label >Document Type</label>
+                        <div class="controls">
+                            @Html.Action("getListItems","ProcessDocType",new { selectedItem = Model.mstr_Process_Doc_TypeID.GetValueOrDefault(), controlName = "mstr_Process_Doc_TypeID", excludeIds = "", includeIds = "", reload = ""})
+                            @Html.ValidationMessageFor(o => o.mstr_Process_Doc_TypeID)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label >Owner:</label>
+                        <div class="controls"><input type="text" class="col-md-12 form-control" name="Owner" id="Owner" value="@Model.Owner"></div>
+                        @Html.ValidationMessageFor(o => o.Owner)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <br />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <div class="controls"><textarea  rows="3" class="col-md-12" name="Comments" id="Comments">@Model.Comments</textarea></div>
+                        @Html.ValidationMessageFor(o => o.Comments)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <br />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Select File</label>
+                        <div class="controls">
+                            <input type="file" name="fileName" id="fileName" />
+                            @Html.ValidationMessageFor(o => o.fileName)
+                        </div>
+                    </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="submit" class="btn blue-bg " data-mode="add" data-id="listing" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+

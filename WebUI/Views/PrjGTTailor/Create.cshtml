@@ -1,0 +1,93 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using System.Web.Script.Serialization
+@model tbl_proj_general_tasksInput
+@{
+    Layout = null;
+    if (Model.Global == null) { Model.Global = true; }
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4>Add General Task</h4>
+	</div>
+    <form method="post" action="@Url.Action("Create")" id="submitLevel">
+        <div class="modal-body">
+            <div class="col-md-12">@Html.ValidationSummary(true)</div> 
+            @Html.HiddenFor(o => o.tbl_Org_ProjectID)
+            @Html.HiddenFor(o => o.ProjectName)
+            @Html.HiddenFor(o => o.Tailored)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-4">    
+                        <label>Sequence</label>
+                        @Html.TextBoxFor(o => o.Sequence, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(o => o.Sequence)
+                    </div>
+                    <div class="form-group col-md-8 pull-right">
+                        <label class="col-md-12">&nbsp;</label>
+                        <div class="pull-right">@Html.CheckBox("reSequence",Model.reSequence.GetValueOrDefault())&nbsp; Reorder sequence numbers for rest</div>
+                    </div>
+                </div>
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12">    
+                        <label>Select General Task</label>
+                        @Html.Action("getTasksFor", "GeneralTasks", new { selectedItem = Model.tbl_Org_General_TaskID, controlName = "tbl_Org_General_TaskID", reload = "ShowNameSection", projectID = Model.tbl_Org_ProjectID })
+                        @Html.ValidationMessageFor(o => o.tbl_Org_General_TaskID)
+                    </div>
+                </div>
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12" style="display:@(Model.tbl_Org_General_TaskID == null || Model.tbl_Org_General_TaskID == 0 ? "block" : "none");" id="NewTask">
+                        <label>New General Task</label>
+                        @Html.TextBoxFor(o => o.GeneralTask, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(o => o.GeneralTask)
+                    </div>
+                </div>
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Visibility</label>
+                        <div>
+                            <input type="radio" name="Global" id="GlobalY" value="true" class="ShowDiv" data-id="SelectedRoles" @(Model.Global == true ? "Checked" : "")/>&nbsp;&nbsp;Visible to All Roles
+                            &nbsp;|&nbsp;<input type="radio" name="Global" id="GlobalN" value="false" class="ShowDiv" data-id="SelectedRoles"  @(Model.Global == false ? "Checked" : "")/>&nbsp;&nbsp;Only to Selected Roles
+                        </div>
+                    </div>
+			    </div>	
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12" style="display:@(Model.Global == true ? "none" : "block")" id="SelectedRoles">
+                        <label class="control-label col-md-12 row">Select Roles</label>
+                        @Html.Action("getMultiSelectList", "OrgRole", new { selectedItems = Model.Roles, controlName = "Roles", excludeIds = "", selectIds = "", reload = "" })
+                        @Html.ValidationMessageFor(o => o.Roles)
+                    </div>
+                </div>
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group col-md-12">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveDefault" data-mode="add" data-id="listing" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script>
+    $("#tbl_Org_General_TaskID").on("change", function () {
+        if ($(this).val() == "0") {
+            $("#NewTask").show();
+        }
+        else {
+            $("#NewTask").hide();
+        }
+    });
+
+    @if (Model.Sequence == 0)
+    {
+        <text>
+        $("#Sequence").val("");
+        </text>
+    }
+    specialDropDown("#Roles");
+    $("#Sequence").focus();
+</script>
+

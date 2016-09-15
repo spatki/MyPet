@@ -1,0 +1,64 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using System.Web.Script.Serialization
+@using ProcessAccelerator.WebUI.Controllers
+@model tbl_org_level_organisationInput
+@{
+    Layout = null;
+    string updateId = "";
+
+    if (Model.mstr_Org_Level_ParentID == null) 
+    {
+        updateId = "OLevelStructure";
+    }
+    else {
+        updateId = "C" + Model.mstr_Org_Level_ParentID.ToString();
+    }
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Add New Node</h4>
+	</div>
+    <form method="post" action="@Url.Action("Create")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12">    
+                        <label >Organisation Level</label>
+                        @Html.Action("getListItemsFor","OrgLevel",new { selectedItem = (Model.mstr_Org_LevelID == null) ? 0 : Model.mstr_Org_LevelID, controlName = "mstr_Org_LevelID", excludeIds = "", selectIds = "", levelID = Model.Level, reload = "populateMaster" })
+                        @Html.ValidationMessageFor(o => o.mstr_Org_LevelID)
+                    </div>
+                    <div class="form-group col-md-12">    
+                        <label >Level Data</label>
+                        @Html.Action("getListItemsFor","OrgLevelMaster",new { selectedItem = (Model.mstr_Org_Level_MasterID == null) ? 0 : Model.mstr_Org_Level_MasterID, controlName = "mstr_Org_Level_MasterID", excludeIds = ViewBag.excludeMasterIDs, includeIds = "", levelID = Model.mstr_Org_LevelID })
+                        @Html.ValidationMessageFor(o => o.mstr_Org_Level_MasterID)
+                        <input name="excludeIDs" type="hidden" id="excludeIDs" value="@ViewBag.excludeMasterIDs" />
+                    </div>
+                    <div>
+                        <input type="hidden" name="Level" id="Level" value="@Model.Level" />
+                       <input type="hidden" name="mstr_Org_Level_ParentID" id="mstr_Org_Level_ParentID" value="@Model.mstr_Org_Level_ParentID" />
+                        <input type="hidden" name="StructPath" id="StructPath" value="@Model.StructPath" />
+                    </div>
+                    <div class="form-group  col-md-12">
+                        <label class="form-label col-md-12">Comments</label>
+                        @Html.TextAreaFor(o => o.Comments,new { @class = "form-control col-md-12" })
+                        @Html.ValidationMessageFor(o => o.Comments)
+                    </div>
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveStructure" data-mode="add" data-id="@updateId" data-form="submitLevel" data-dialog="openDialogBox">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    //specialDropDown(".specialCombo");
+</script>

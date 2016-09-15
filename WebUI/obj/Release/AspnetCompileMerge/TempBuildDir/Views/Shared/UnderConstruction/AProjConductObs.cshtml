@@ -1,0 +1,669 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+     
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2">Select Project</label>
+                    <div class="controls col-md-10"><select class="col-md-12 chzn-nopadd chzn-select-no-single"><option>Payroll System</option> <option>Code Migration</option></select></div>
+                </div>
+            </div>
+            <hr />
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a data-toggle="tab" href="#ProjPlan">Schedule</a></li>
+                <li><a data-toggle="tab" href="#ProjTrack" id="QA_Obsv">QA Observations</a></li>
+            </ul>
+            
+            <div class="tab-content" id="myTabContent">
+                <div id="ProjPlan" class="tab-pane fade in active">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="javascript:;" id="showfilter" class="pull-left">Filter Tasks <i class="icon-">&#xf00e;</i></a>
+                        </div>
+                        <hr />
+                        <div class="panel colored" id="filterParams">
+                            <div class="panel-body filter-bg">
+                                <div class="row col-md-12">
+                                    <div class="col-md-5">
+                                            <label class="col-md-2 pull-left filterParams">From</label>
+                                            <div class="col-md-9">
+                                                <div class="input-group date datepicker">
+                                                    <input type="text" id="filter_fromDt" class="form-control col-md-9 filterParams">
+                                                    <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="col-md-2 pull-left filterParams">To</label>
+                                        <div class="col-md-9">
+                                            <div class="input-group date datepicker">
+                                                <input type="text" id="filter_toDt" class="form-control col-md-9 filterParams">
+                                                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-med blue-bg searchProcedure pull-right filterParams">GO</button>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="col-md-2 pull-left filterParams">Plan Status</label>
+                                            <div class="col-md-9">
+                                                <select class="col-md-12 filterParams chzn-select-no-single">
+                                                    <option value="1">Not Scheduled</option>
+                                                    <option value="1">Scheduled</option>
+                                                    <option value="2">In Progress</option>
+                                                    <option value="2">Pending</option>
+                                                    <option value="2">Complete</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="col-md-2 pull-left filterParams">Track Status</label>
+                                            <div class="col-md-9">
+                                                <select class="chzn-select-no-single col-md-12 filterParams">
+                                                    <option value="1">Delayed</option>
+                                                    <option value="2">Not Conducted</option>
+                                                    <option value="3">Open</option>
+                                                    <option value="3">On Time</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>     
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered advanced-table" >
+                            <thead>
+                                <tr>
+                                    <th class="docTableHeader-bg">Ref. ID</th>
+                                    <th class="docTableHeader-bg">Audit Start</th>
+                                    <th class="docTableHeader-bg">Audit Finish</th>
+                                    <th class="docTableHeader-bg">Review From</th>
+                                    <th class="docTableHeader-bg">Review To</th>
+                                    <th class="docTableHeader-bg">Auditor Role</th>
+                                    <th class="docTableHeader-bg">Auditor Name</th>
+                                    <th class="docTableHeader-bg">Auditee Role</th>
+                                    <th class="docTableHeader-bg">Auditee Name</th>
+                                    <th class="docTableHeader-bg">Audit Status</th>
+                                    <th class="docTableHeader-bg">Track Status</th>
+                                    <th class="docTableHeader-bg">Action</th>
+                                    <th class="docTableHeader-bg">Cancel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>P122-O1</td>
+                                    <td>10-Nov-14</td>
+                                    <td>10-Nov-14</td>
+                                    <td>03-Nov-14</td>
+                                    <td>07-Nov-14</td>
+                                    <td>SQA</td>
+                                    <td>Surekha Shetty</td>
+                                    <td>Project Manager</td>
+                                    <td>Prakash Goel</td>
+                                    <td>Not Scheduled</td>
+                                    <td><span class="label label-danger col-md-12">Delayed</span></td>
+                                    <td><a href="#reqPlanDetails" class="btn btn-med blue-bg col-md-12" data-toggle="modal"><i class="icon-bell"></i>&nbsp;&nbsp;Schedule&nbsp;&nbsp;&nbsp;</a></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>P012-O1</td>
+                                    <td>01-Jan-14</td>
+                                    <td>02-Jan-14</td>
+                                    <td>03-Nov-14</td>
+                                    <td>07-Nov-14</td>
+                                    <td>SQA</td>
+                                    <td>Surekha Shetty</td>
+                                    <td>Project Manager</td>
+                                    <td>Prakash Goel</td>
+                                    <td>Scheduled</td>
+                                    <td><span class="label label-danger col-md-12">Delayed</span></td>
+                                    <td><a href="#reqPlanDetails" class="btn btn-med orange-bg col-md-12" data-toggle="modal"><i class="icon-bell"></i>&nbsp;&nbsp;Re-Schedule</a></td>
+                                    <td><a href="#confirmModal" class="btn btn-med red-bg col-md-12" role="button" data-toggle="modal"><i class="icon-remove"></i></a></td>
+                                </tr>                        
+                                <tr>
+                                    <td>P132-O2</td>
+                                    <td>24-Mar-14</td>
+                                    <td>24-Mar-14</td>
+                                    <td>20-Feb-14</td>
+                                    <td>05-Mar-14</td>
+                                    <td>SQA</td>
+                                    <td>Kapil Khanna</td>
+                                    <td>Project Manager</td>
+                                    <td>Supriya Mehta</td>
+                                    <td>Complete</td>
+                                    <td><span class="label label-success col-md-12">On Time</span></td>
+                                    <td><a href="#" class="btn btn-med black-bg col-md-12 report" data-id="P132-02"><i class="icon-file-alt"></i>&nbsp;&nbsp;Report</a></td>
+                                    <td></td>
+                                </tr>                        
+                                <tr>
+                                    <td>P435-O1</td>
+                                    <td>01-Apr-14</td>
+                                    <td>01-Apr-14</td>
+                                    <td>25-Mar-14</td>
+                                    <td>30-Mar-14</td>
+                                    <td>SQA</td>
+                                    <td>Kapil Khanna</td>
+                                    <td>Project Manager</td>
+                                    <td>Tapan Tiwari</td>
+                                    <td>Complete</td>
+                                    <td><span class="label label-warning col-md-12">Open</span></td>
+                                    <td><a href="#" class="btn btn-med black-bg col-md-12 report" data-id="P435-01"><i class="icon-file-alt"></i>&nbsp;&nbsp;Report</a></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div id="ProjTrack" class="tab-pane">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="col-md-12">Audit Date(s)</label>
+                                        <label class="col-md-12 small filter-bg"><strong>11-Jan-14</strong>&nbsp;&nbsp;to&nbsp;&nbsp;<strong>12-Jan-14</strong></label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-md-12">Review Period&nbsp;&nbsp;<a href="#getTasks" data-toggle="modal" title="Click to view project tasks"><i class="icon-list">&nbsp;&nbsp;</i></a></label>
+                                        <label class="col-md-12 small filter-bg"><strong>01-Jan-14</strong>&nbsp;&nbsp;to&nbsp;&nbsp;<strong>10-Jan-14</strong></label>
+                                    </div>
+                                    <div class="col-md-4 pull-right">
+                                        <div class="col-md-12"><input type="text" class="form-control" id="Audit_ID"  placeholder="Enter Audit Reference ID to search"/><input type="button" class="icon-" value="&#xf002;"/></div>
+                                    </div>
+                             </div>
+                            <div class="panel-body" id="obs_sheet">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">QA Observation Sheet</h3>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="col-md-6 control-label">Observation Date:</label>
+                                        <div class="col-md-6"><input class="form-control mask_date2" type="text" /></div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-md-8 control-label">Time Spent (hrs)</label>
+                                        <div class="col-md-4"><input class="col-md-9 form-control decimal" type="text" /></div>
+                                    </div>                                
+                                </div>
+                                <div class="row">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="tblActionIcon"></th>
+                                                <th class="col-md-3">Observation</th>
+                                                <th class="col-md-3">Possible Impact</th>
+                                                <th>Responsibility</th>
+                                                <th>Status</th>
+                                                <th>Date Completed</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-count="1">
+                                            <tr id="R1" class="EditRow">
+                                                <td><a href="#" data-id="R1" class="addObs nav" data-toggle="modal" data-key="R"><i class="icon-">&#xf055</i></a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="panel colored col-md-12">
+					        <form role="form">				
+                                    <div class="panel-body">
+                                        <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	                    <div class="row pull-right panel-footer">
+                                                <div class="col-lg-12 col-lg-offset-1">
+                                                    <button type="button" class="btn blue-bg" id="Button1">Save</button>
+                                                    <button type="button" class="btn blue-bg" id="Button2">Export</button>
+                                                    <button type="button" class="btn blue-bg" id="Button3">Print</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>					
+					        </form>
+                        </div>  
+                    </div>
+                    </div>
+                </div>
+            </div>
+    
+    <div class="modal fade" id="reqPlanDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Schedule Audit</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Audit Details</h3>
+                        </div>
+                            <div class="panel-body form-horizontal">
+                                <div class="row col-md-12">
+                                    <div class="col-md-6">
+                                        <label>Audit Start</label>
+                                        <input type="text" id="AuditFrmDt" class="form-control mask_date" value="17/01/2013">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Audit Finish</label>
+                                        <input type="text" id="AuditToDt" class="form-control mask_date" value="17/01/2013">
+                                    </div>
+                                </div>
+
+                                <div class="row col-md-12">
+                                    <div class="col-md-6">
+                                        <label>Auditor Role(s)</label>
+                                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="SQA" selected="selected">SQA</option> <option value="MR">MR</option><option value="Sr. Manager">Sr. Manager</option></select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Auditor Name(s)</label>
+                                            <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Kapil Khanna" selected="selected">Kapil Khanna</option> <option value="Surekha Shetty">Surekha Shetty</option></select>
+                                    </div>                                
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Review Information</h3>
+                        </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Tasks From</label>
+                                        <input type="text" id="Text1" class="form-control mask_date" value="03/01/2013">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Tasks Till</label>
+                                        <input type="text" id="Text2" class="form-control mask_date" value="10/01/2013">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Auditee Role(s)</label>
+                                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Project Manager" selected="selected">Project Manager</option> <option value="Project Leader">Project Leader</option><option value="Developer">Developer</option></select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Auditee Name(s)</label>
+                                        <select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select" multiple><option value="Prakash Mehta" selected="selected">Prakash Mehta</option> <option value="Ajit Pawar">Ajit Pawar</option><option value="Rahul Gandhi">Rahul Gandhi</option></select>
+                                    </div>                                
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="control-label">Comments</label>
+                    <textarea class="col-md-12" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="getTasks" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:80%;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Tasks for review period</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered advanced-table" >
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Task</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>% Complete</th>
+                                    <th>Status</th>
+                                    <th class="visible-lg">Resources</th>
+                                    <th>Track Status</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Requirements Gathering</td>
+                                        <td>01-Feb-14</td>
+                                        <td>30-Mar-14</td>
+                                        <td>30 %</td>
+                                        <td>In Progress</td>
+                                        <td class="visible-lg">Arvind Swami (50%), Sunanda Gupte, Krish Parekh</td>
+                                        <td><span class="label label-danger col-md-12">Delayed</span></td>
+                                        <td><a href="#reqTaskDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-edit"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Requirements Documentation</td>
+                                        <td>10-Feb-14</td>
+                                        <td>30-Mar-14</td>
+                                        <td>30 %</td>
+                                        <td>In Progress</td>
+                                        <td class="visible-lg">Arvind Swami (50%)</td>
+                                        <td><span class="label label-success col-md-12">On Time</span></td>
+                                        <td><a href="#reqTaskDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-edit"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Database Design</td>
+                                        <td>01-Apr-14</td>
+                                        <td>15-Jun-14</td>
+                                        <td>0 %</td>
+                                        <td>To be Started</td>
+                                        <td class="visible-lg">Tarun Gupta, Sumedha Patkar</td>
+                                        <td><span class="label label-warning col-md-12">Due</span></td>
+                                        <td><a href="#reqTaskDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-edit"></i></a></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="reqTaskDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task </h4>
+		</div>
+		<div class="modal-body">
+            <ul class="nav nav-tabs" id="Ul1">
+                <li class="active"><a data-toggle="tab" href="#SDetail">Details</a></li>
+                <li><a data-toggle="tab" href="#SSuppDoc">Resources</a></li>
+                <li><a data-toggle="tab" href="#SDocs">Supporting Information</a></li>
+            </ul>
+            <div class="tab-content" id="Div3">
+                <br />
+                <div id="SDetail" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-2">Task</label>
+                                <div class="form-control col-md-10">Requirements Gathering</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-12">Description</label>
+                                <textarea rows="3" class="form-control col-md-12" >Requirements gathering from end users for understanding existing payroll processing functionality</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-4">Group</label>
+                                    <div class="form-control col-md-8">Salary Processing Module</div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-4">Status</label>
+                                    <div class="form-control col-md-8">In Progress</div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-4">Plan Name</label>
+                                    <div class="col-md-8">Plan 1</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Start</th>
+                                    <th>Finish</th>
+                                    <th>Duration</th>
+                                    <th>Unit</th>
+                                    <th>% Complete</th>
+                                    <th>Is Complete? </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Planned</th>
+                                    <td>01/02/2014</td>
+                                    <td>28/02/2014</td>                 
+                                    <td>25</td>
+                                    <td>Days</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Actual</th>
+                                    <td>01/02/2014</td>
+                                    <td></td>                 
+                                    <td>20</td>
+                                    <td>Days</td>
+                                    <td>70%</td>
+                                    <td>No</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="SSuppDoc" class="tab-pane">
+                    <br />
+                    <div class="row">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Resource</th>
+                                                <th>Allocation %</th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-count="1">
+                                            <tr>
+                                                <td>Jayesh Sinha</td>
+                                                <td>100 %</td>
+                                                <td>01-Feb-14</td>
+                                                <td>28-Feb-14</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kirti Rajool</td>
+                                                <td>100 %</td>
+                                                <td>15-Feb-14</td>
+                                                <td>28-Feb-14</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Chetan Dwivedi</td>
+                                                <td>50 %</td>
+                                                <td>25-Feb-14</td>
+                                                <td>28-Feb-14</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                </div>
+                <div id="SDocs" class="tab-pane">
+                    <br />
+                    <div class="row">
+                        <table  class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Remarks</th>
+                                    <th>Mandatory</th>
+                                    <th class="hidden-sm">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody data-count="1">
+                                <tr id="S1">
+                                    <td>Requirements Gathering Guidelines</td>
+                                    <td>Guidelines to be followed</td>
+                                    <td>Reference</td>
+                                    <td class="hidden-sm">Not Applicable</td>
+                                </tr>
+                                <tr id="Tr1">
+                                    <td>SRS Template</td>
+                                    <td>SRS Template to be filled</td>
+                                    <td>Mandatory</td>
+                                    <td class="hidden-sm">Not Filled</td>
+                                </tr>                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>       
+		</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<script type="text/javascript">
+	    var newTaskParams = true;
+
+		var config = {
+		  '.chzn-select-no-single' : {disable_search_threshold:10},
+		}
+		for (var selector in config) {
+		  $(selector).chosen(config[selector]);
+		}
+        
+        $("body").delegate("#Audit_ID", "change", function() {
+            if ($("#Audit_ID").val().trim() == "") $("#obs_sheet").hide();
+            else $("#obs_sheet").show("slow");
+        });
+
+		$("body").delegate(".report", "click", function () {
+		    $("#Audit_ID").val($(this).data("id"));
+            $("#obs_sheet").show();
+		    $("#QA_Obsv").click();
+		});
+
+		$("body").delegate(".addObs", "click", function () {
+		    // add additional columns for edit
+		    var count = parseInt($(this).parent().parent().parent().data("count"));
+
+		    count = count + 1;
+		    var newColumns = '<td class="getEditor EditObs nav" data-field="Observation" data-navkey="EditObs" data-class="EditObs"contenteditable="true"></td>' +
+                             '<td  class="getEditor EditObs nav" data-field="Impact" data-navkey="EditObs" data-class="EditObs" contenteditable="true"></td>' +
+                             '<td class="EditObs"  data-field="Res" data-navkey="EditObs" data-class="EditObs"></td>' +
+                             '<td>Open</td>' +
+                             '<td class="EditObs" data-field="Date" data-navkey="EditObs" data-class="EditObs"></td>';
+		    $(this).parent().after(newColumns);
+		    $(this).parent().parent().parent().data("count", count);
+
+		    // Add the option to add more rows
+		    $(this).parent().parent().parent().append('<tr id="R' + count + '" class="EditRow"><td><a href="#" class="addObs nav" data-id="R' + (count + 1) + '" ><i class="icon-">&#xf055</i></a></td></tr>');
+		    $(this).removeClass("addObs");
+		    $(this).addClass("removeObs");
+		    $(this).children().first().html("&#xf00d");
+		    $(this).parent().next().click();
+		    // Go to the new rule
+		    $('html, body').animate({
+		        scrollTop: $(this).parent().next().offset().top
+		    }, 2000);
+		});
+
+
+		//CKEDITOR.inline(".getEditor");
+
+		
+		$("#showfilter").click();
+
+		$(document).on("click", "#NewTask", function () {
+		    $("#reqPlanDetails").modal("show");
+		});
+
+		$('#reqPlanDetails').on('shown.bs.modal', function () {
+		    if (newTaskParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newTaskParams = false;
+		    }
+		})
+
+		$("body").delegate(".group", "click", function () {
+		    $("#" + $(this).data("childid")).toggle();
+		    $(this).toggleClass("closed");
+		});
+
+		$("body").delegate(".EditObs", "click", function () {
+		    var field = $(this).data("field");
+		    var originalValue = $(this).text();
+
+		    switch (field) {
+		        case "Observation", "Impact":
+		            break;
+		        case "Res":
+		            keypressCode = -1;
+		            keypressShift = false;
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue col-md-12' data-class='EditObs' data-navkey='EditObs'><option value='Sandeep Honawar'>Sandeep Honawar</option><option value='Kapil Khanna'>Kapil Khanna</option><option value='Supriya Phatak'>Supriya Phatak</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "Date":
+		            keypressCode = -1;
+		            keypressShift = false;
+                    
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<input type='text' size='12' id='mask_date2' class='inputValue' data-class='EditObs' data-navkey='EditObs'/>");
+		            $("#mask_date2").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		            if (originalValue != "") $(this).children().val(originalValue);
+		            $(this).children().first().focus();
+		            $(this).children().first().select();
+		            break;
+		        default:
+		            break;
+		    }
+		});
+
+		$("body").delegate(".removeObs", "click", function () {
+		    if (confirm("Do you want to delete this observation ? ")) {
+		        $("#" + $(this).data("id")).remove();
+		    }
+		});
+
+		var calculateValues = function () { };
+    </script> 
+   
+
+}

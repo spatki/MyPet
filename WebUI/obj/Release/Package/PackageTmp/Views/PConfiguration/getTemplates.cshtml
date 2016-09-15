@@ -1,0 +1,21 @@
+﻿@model tbl_process_repository
+@{
+    Layout = null;
+}
+
+<li id="Template@(Model.ID)">
+    <a href="javascript:" class="tree-toggle repositoryDetails" data-basenode="@(Model.ID)" role="branch" data-toggle="branch">
+        <span class="label label-warning">Templates</span>&nbsp;<span id="Template@(Model.ID)Count" class="badge badge-warning">@Model.tbl_process_rep_template.Count()</span>
+    </a>
+    <ul class="branch in">
+        <li><a href="javascript:" data-toggle="modal" class="openDialog" data-id="Template@(Model.ID)" data-source="@(Url.Action("manageTemplates", new  { repoID = Model.ID }))">Click to configure Templates</a></li>
+    @{  if (Model.tbl_process_rep_template.Any())
+        {
+            foreach (var g in Model.tbl_process_rep_template)
+        {
+            <li><a href="javascript:" class="label-configured openDialog" data-id="" data-source="@Url.Action("showPreview", "PTemplate", new { id = g.tbl_Process_TemplateID })">@g.tbl_process_template.Name</a></li>
+        }
+    }
+    }
+    </ul>
+</li>

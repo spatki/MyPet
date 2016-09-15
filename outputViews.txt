@@ -1,0 +1,13 @@
+     100 files     200 files     300 files     394 text files.
+classified 394 filesDuplicate file check 394 files (378 known unique)Unique:      100 files                                          Unique:      200 files                                          Unique:      300 files                                               391 unique files.                              
+Counting:  100Counting:  200Counting:  300      57 files ignored.
+
+http://cloc.sourceforge.net v 1.64  T=2.21 s (176.7 files/s, 22070.7 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Razor                          390           2293            314          46164
+ASP.Net                          1              7              0             55
+-------------------------------------------------------------------------------
+SUM:                           391           2300            314          46219
+-------------------------------------------------------------------------------

@@ -1,0 +1,82 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using ProcessAccelerator.WebUI
+@using System.Web.Script.Serialization
+@model tbl_docmgr_documentInput
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#uploadForm").ajaxForm({
+            success: function (data) {
+                $.pnotify({
+                    title: 'New Record Created',
+                    type: 'info'
+                });
+                $('#processTable').dataTable().fnDestroy();
+                $("#@(Model.ID)").replaceWith(data);
+                $("#openDialogBox").modal("hide");
+                jsTable("processTable");
+            },
+            error: function (data) {
+                $("#openDialogBox").html(data.responseText);
+            }
+        });
+    });
+</script>    
+
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Create Version for - @Model.Name</h4>
+	</div>
+    <form method="post" action="@Url.Action("CreateVersion")" id="uploadForm" enctype="multipart/form-data">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <div class="form-group">    
+                            <label for="file"><strong>Version : </strong>@Model.tbl_docmgr_version.LastOrDefault().version</label>
+                            <input type="hidden" name="tbl_docmgr_version.Index" value="@Model.tbl_docmgr_version.LastOrDefault().ID" />
+                            <input type="hidden" name="tbl_docmgr_version[@Model.tbl_docmgr_version.LastOrDefault().ID].ID" value="@Model.tbl_docmgr_version.LastOrDefault().ID" />
+                            <input type="hidden" name="tbl_docmgr_version[@Model.tbl_docmgr_version.LastOrDefault().ID].ClientID" value="@Model.tbl_docmgr_version.LastOrDefault().ClientID" />
+                            <input type="hidden" name="tbl_docmgr_version[@Model.tbl_docmgr_version.LastOrDefault().ID].CreateUser" value="@Model.tbl_docmgr_version.LastOrDefault().CreateUser" />
+                            <input type="hidden" name="tbl_docmgr_version[@Model.tbl_docmgr_version.LastOrDefault().ID].CreateDate" value="@Model.tbl_docmgr_version.LastOrDefault().CreateDate.GetValueOrDefault().ToString(Globals.DateFormatString)" />
+                            <input type="hidden" name="tbl_docmgr_version[@Model.tbl_docmgr_version.LastOrDefault().ID].version" value="@Model.tbl_docmgr_version.LastOrDefault().version" />
+                        </div>
+                        <div class="form-group">    
+                            <label for="file">Document Title</label>
+                            @Html.TextBoxFor(o => o.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Name)
+                        </div>
+                        <div class="form-group">    
+                            <label class="control-label" for="file">Select File</label>
+                            <input type="file" name="fileName" id="fileName" />
+                            @Html.ValidationMessageFor(o => o.fileName)
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Classification</label>
+                            @Html.TextBoxFor(o => o.Classification, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Classification)
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Version Comments</label>
+                            <Textarea class="form-control col-md-12" rows="3" name="tbl_docmgr_version[@Model.tbl_docmgr_version.LastOrDefault().ID].Comments">@Model.tbl_docmgr_version.LastOrDefault().Comments</Textarea> 
+                            @Html.ValidationMessageFor(o => o.tbl_docmgr_version.LastOrDefault().Comments)
+                        </div>
+                        @Html.HiddenFor(o => o.UploadedBy,WebSecurity.CurrentUserId)
+                        @Html.HiddenFor(o => o.UploadDate,System.DateTime.Now.Date.ToString(Globals.DateFormatString))
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="submit" class="btn blue-bg " data-mode="edit" data-id="listing" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+

@@ -1,0 +1,74 @@
+﻿@using ProcessAccelerator.WebUI
+@{
+    Layout = null;
+    IQueryable<tbl_workflow> workflow;
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else {
+        workflow = null;
+    }
+}
+
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">            
+                <div class="col-md-12">
+					<div class="panel colored">
+                    <div class="panel-body">
+                       <div class="row">
+                            <div class="form-group col-md-5">
+                                <label class="col-md-3">Select Project</label>
+                                <input type="hidden" name="selectedDoc" id="selectedDoc" value="0" />
+                                <div class="controls col-md-9" id="projectParams" data-source="@Url.Action("GetDocuments","Project")">
+                                    @Html.Action("getListItems","Project",new { selectedItem = "0", controlName = "Project", excludeIds = "", selectIds = ViewBag.SelectedIDs, reload = "loadProjList"})
+                                </div>
+                            </div>
+                           <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="checkbox" id="uplDocs" value="1" checked="checked" />&nbsp;Uploaded | 
+                                    <input type="checkbox" id="prsDocs" value="2" checked="checked" />&nbsp;Process | 
+                                    <input type="checkbox" id="trnDocs" value="3" checked="checked" />&nbsp;Records
+                                </div>
+                           </div>
+                            <div class="col-md-3">
+                                <div class="form-group pull-right">
+                                    <a href="javascript:;" class="btn btn-med blue-bg reLoadChange" data-control="Project">Search</a>
+                                    <a href="javascript:;" class="addProjDetail btn btn-med blue-bg" data-id="@ViewBag.ProjectID" data-source="@Url.Action("AddNewProjDoc", "Project")">Add New Document</a>
+                                </div>
+                            </div>
+                       </div>
+                        <hr />
+                            <div class="panel">
+                            <div class="row">
+                                <table class="table table-striped table-bordered" id="processTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="docTableResult">Action</th>
+                                            <th class="docTableResult">Source</th>
+                                            <th class="docTableResult">Doc Type</th>
+                                            <th>Name</th>
+                                            <th>Remarks</th>
+                                            <th>Version</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listing">
+                                        @Html.Action("GetDocuments", "Project", new { id = 0 })
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+                </div>                                
+
+<script>
+    $('.datepicker').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+
+    jsTable('processTable');
+    if ($("#Project").find("option:selected").eq(0).val() > 0) $("#Project").change();
+
+</script>

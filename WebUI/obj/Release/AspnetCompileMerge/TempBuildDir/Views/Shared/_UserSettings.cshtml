@@ -1,0 +1,31 @@
+﻿@using ProcessAccelerator.WebUI.Controllers;
+@if (Request.IsAuthenticated) {
+    var user = (PAIdentity)User.Identity;
+    var roleName = "";
+    if (user.IsAdmin()) { roleName = "Administrator"; }
+    else
+    {
+        if (user.IsGuest()) { roleName = "Guest"; }
+        else
+        {
+            roleName = user.roleName;
+        }
+    }
+      <div class="pull-right">
+            <div class="pull-left">
+			    <h5>@user.friendlyName</h5>
+                    @if (user.multipleRoles) 
+                    {
+                        <p id="currentRole"><a href="javascript:;" class="openDialog" data-source="@Url.Action("ChangeRole","Account")" title="Click to change role">@roleName</a></p>
+                    }
+                    else {
+                        <p>@roleName</p>
+                    }
+            </div>
+		    <div class="pull-right">
+                <a href="@Url.Action("Manage", "Account")">
+                    <img id="usrProfilePic" src="@Url.Content("~/Content/images/" + User.Identity.Name + "_pic.jpg")"  title="User Pic" width="50" height="50" alt="User Pic"/>
+                </a>
+		    </div>
+		</div>
+}

@@ -1,0 +1,20 @@
+﻿@model tbl_process_rep_generaltasks
+@{
+    Layout = null;
+}
+
+<li id="GT@(Model.ID)">
+    <a href="javascript:" class="tree-toggle repositoryDetails" data-basenode="@(Model.ID)" role="branch" data-toggle="branch">
+        <span class="label label-warning">General Tasks</span>&nbsp;<span id="GT@(Model.ID)Count" class="badge badge-warning">@Model.tbl_process_general_task.Count()</span>
+    </a>
+    <ul class="branch in">
+        <li><a href="javascript:" data-toggle="modal" class="openDialog" data-id="GT@(Model.ID)" data-source="@(Url.Action("manageGeneralTasks", new  { repoID = Model.ID }))">Click to configure General Tasks</a></li>
+    @{  if (Model.tbl_process_general_task.Any()) {
+        foreach (var g in Model.tbl_process_general_task)
+        {
+            <li>@g.Name</li>
+        }
+    }
+    }
+    </ul>
+</li>

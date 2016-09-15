@@ -1,0 +1,27 @@
+﻿@model seededProjGroup
+@{
+    Layout = null;
+    var groupID = Model.GroupID;
+    var subGroups = Model.tbl_org_proj_group.Where(o => o.Parent_GroupID == groupID);
+}
+
+<li id="L@(Model.GroupID)"><a href="javascript:" data-toggle="modal" class="openDialog" data-id="L@(Model.GroupID)" 
+    data-source="@(Url.Action("EditProjGroup", "Project", new { projID = Model.ProjectID, groupID = Model.GroupID }))"><i class="icon-edit"></i></a>
+    <a class="tree-toggle" data-toggle="branch" role="branch" data-id="@Model.GroupID" id="@Model.GroupID" href="javascript:">@Model.GroupName</a> &nbsp;
+        <ul id="C@(Model.GroupID)" class="branch in">
+            <li id="L@(Model.GroupID)newNode"><a href="javascript:" data-toggle="modal" class="openDialog" 
+                data-id="" data-source="@Url.Action("AddProjGroup","Project", new { projID = Model.ProjectID, level = Model.Level + 1, parent=Model.GroupID })">Add Group</a>
+            </li>
+            @if (subGroups.Any())
+            {
+                foreach (var n in subGroups)
+                {
+                    Model.ProjectID = n.tbl_Org_ProjectID;
+                    Model.GroupID = n.ID;
+                    Model.GroupName = n.Name;
+                    Model.Level = n.Level;
+                    @Html.Partial("GetGroup", Model)
+                }
+            }
+        </ul>
+</li>

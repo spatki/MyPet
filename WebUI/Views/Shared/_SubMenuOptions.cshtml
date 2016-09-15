@@ -1,0 +1,31 @@
+﻿@model subMenuOptions
+@{
+    var subOptions = Model.vw_org_role_access.Where(k => k.ParentFunctionID == Model.parentFunctionID).OrderBy(s => s.DisplaySequence);
+    if (subOptions.Any())
+    {
+        <ul>
+            @foreach (var op in subOptions)
+            {
+                var children = Model.vw_org_role_access.Where(c => c.ParentFunctionID == op.FunctionID);
+                if (children.Any())
+                {
+                    Model.parentFunctionID = op.FunctionID;
+                    <li><a href="javascript:;" >@op.FriendlyName <span>@children.Count()</span></a>
+                        @Html.Partial("_SubMenuOptions",Model)
+                    </li>
+                }
+                else 
+                {
+                    if (op.Controller == "Workflow")
+                    {
+                        <li><a href="/@(op.Controller)/@(op.Action)">@op.FriendlyName </a></li>
+                    }
+                    else
+                    {
+                        <li><a href="javascript:;" class="@(op.Action == "UnderConstruction" ? "openDialog" : "subMenu")" data-source="/@(op.Controller)/@(op.Action)">@op.FriendlyName </a></li>
+                    }
+                }
+            }
+        </ul>
+    }
+}

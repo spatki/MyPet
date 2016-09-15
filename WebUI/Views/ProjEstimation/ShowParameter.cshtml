@@ -1,0 +1,42 @@
+﻿@model proj_estm_size_parameter
+@{
+    Layout = null;
+}
+
+<tr id="P@(Model.ID)" class="checksize EditRow" data-id="@Model.ParameterID">
+    <td><a href="Javascript:;" class="confirmAction" data-id="P@(Model.ID)" data-messagetitle="Confirm Action" data-message="Do you want to remove this parameter ?"
+        data-class="removeLineItem" data-classparams="data-id='P@(Model.ID)'" data-source="">
+        <i class="icon-remove"></i></a>
+        <input type="hidden" id="tbl_org_proj_estm_size.Index" name="tbl_org_proj_estm_size.Index" value="@Model.ID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.ID)].ID" name="tbl_org_proj_estm_size[@(Model.ID)].ID" value="@Model.ID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.ID)].ClientID" name="tbl_org_proj_estm_size[@(Model.ID)].ClientID" value="@Model.ClientID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.ID)].tbl_Org_ProjectID" name="tbl_org_proj_estm_size[@(Model.ID)].tbl_Org_ProjectID" value="@Model.ProjectID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.ID)].tbl_Proj_EstimationID" name="tbl_org_proj_estm_size[@(Model.ID)].tbl_Proj_EstimationID" value="@Model.Proj_EstimationID" />
+        <input type="hidden" id="tbl_org_proj_estm_size[@(Model.ID)].ParameterID" name="tbl_org_proj_estm_size[@(Model.ID)].ParameterID" value="@Model.ParameterID" />
+        <input type="hidden" id="ProjGroupID@(Model.ID)" name="tbl_org_proj_estm_size[@(Model.ID)].ProjGroupID" class="group" value="@Model.GroupID" />
+        <input type="hidden" id="@(Model.ID)SWInput" name="tbl_org_proj_estm_size[@(Model.ID)].SimpleW" value="@Model.Simple" />
+        <input type="hidden" id="@(Model.ID)MWInput" name="tbl_org_proj_estm_size[@(Model.ID)].MediumW" value="@Model.Medium" />
+        <input type="hidden" id="@(Model.ID)CWInput" name="tbl_org_proj_estm_size[@(Model.ID)].ComplexW" value="@Model.Complex" />
+        <input type="hidden" id="@(Model.ID)SInput" name="tbl_org_proj_estm_size[@(Model.ID)].SimpleC" value="0" />
+        <input type="hidden" id="@(Model.ID)MInput" name="tbl_org_proj_estm_size[@(Model.ID)].MediumC" value="0" />
+        <input type="hidden" id="@(Model.ID)CInput" name="tbl_org_proj_estm_size[@(Model.ID)].ComplexC" value="0" />
+        <input type="hidden" id="@(Model.ID)SWPInput" name="tbl_org_proj_estm_size[@(Model.ID)].SimpleWP" value="0" />
+        <input type="hidden" id="@(Model.ID)MWPInput" name="tbl_org_proj_estm_size[@(Model.ID)].MediumWP" value="0" />
+        <input type="hidden" id="@(Model.ID)CWPInput" name="tbl_org_proj_estm_size[@(Model.ID)].ComplexWP" value="0" />
+    </td>
+    <td>@Model.Name</td>
+    <td id="@(Model.ID)S" class="EditNumber FP" data-id="@(Model.ID)SInput" data-type="simple" data-navkey="EditNumber">0</td>
+    <td id="@(Model.ID)M" class="EditNumber FP" data-id="@(Model.ID)MInput" data-type="medium" data-navkey="EditNumber">0</td>
+    <td id="@(Model.ID)C" class="EditNumber FP" data-id="@(Model.ID)CInput" data-type="complex" data-navkey="EditNumber">0</td>
+    <td id="@(Model.ID)SW" class="EditNumber" data-id="@(Model.ID)SWInput" data-type="size" data-navkey="EditNumber">@Model.Simple</td>
+    <td id="@(Model.ID)MW" class="EditNumber" data-id="@(Model.ID)MWInput" data-type="size" data-navkey="EditNumber">@Model.Medium</td>
+    <td id="@(Model.ID)CW" class="EditNumber" data-id="@(Model.ID)CWInput" data-type="size" data-navkey="EditNumber">@Model.Complex</td>
+    <td id="@(Model.ID)SWP" class="simpleW TableDisabledLabel">0</td>
+    <td id="@(Model.ID)MWP" class="mediumW TableDisabledLabel">0</td>
+    <td id="@(Model.ID)CWP" class="complexW TableDisabledLabel">0</td>
+</tr>
+<tr id="NewParameter">
+    <td>
+        <a href="Javascript:;" class="addLineItem" data-source="@Url.Action("AddParameter", "ProjEstimation", new { ProjectID = Model.ProjectID, EstmID = Model.Proj_EstimationID })" data-id="G@(Model.GroupID)New" data-params="sizeEstmParams" data-duplicate="checksize" data-type="parameter"><i class="icon-plus"></i></a>
+    </td>
+</tr>

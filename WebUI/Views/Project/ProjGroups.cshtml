@@ -1,0 +1,53 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_proj_groupInput
+@{
+    Layout = null;
+    IQueryable<tbl_workflow> workflow;
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else {
+        workflow = null;
+    }
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">            
+                <div class="col-md-12">
+					<div class="panel colored">
+                    <div class="panel-body">
+                       <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-2">Select Project</label>
+                                <input type="hidden" name="selectedDoc" id="selectedDoc" value="0" />
+                                <div class="controls col-md-10" id="ProjectParams" data-source="@Url.Action("GetGroups","Project")">
+                                    @Html.Action("getListItems","Project",new { selectedItem = "0", controlName = "Project", excludeIds = "", selectIds = ViewBag.SelectedIDs, reload = "loadProjDetails"})
+                                </div>
+                            </div>
+                       </div>
+                        <hr />
+                            <div class="panel">
+                                <div class="panel-body">
+                                   <div class="row" id="listing">
+                                        <ul class="col-md-8 tree" id="PStructure">
+                                            <li id="L0">
+                                                Select a project to add groups
+                                            </li>
+                      	                </ul>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+                </div>                                
+
+<script>
+    $('.datepicker').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+
+    jsTable('processTable');
+    if ($("#Project").find("option:selected").eq(0).val() > 0) $("#Project").change();
+
+</script>

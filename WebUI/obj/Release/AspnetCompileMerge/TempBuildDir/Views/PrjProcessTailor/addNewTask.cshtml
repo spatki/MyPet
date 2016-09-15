@@ -1,0 +1,81 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_process_rep_task_ref_docsInput
+@{
+    Layout = null;
+    ActivityType activityType = new ActivityType();
+    DocReferenceType docRef = new DocReferenceType();
+}
+<div class="modal-dialog" style="width:900px;">
+	<div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task / Activity Details</h4>
+		</div>
+		    <div class="modal-body">
+                    <div class="row">
+                        @Html.ValidationSummary(true)
+                    </div>
+                    <form method="post" action="@Url.Action("addNewTask", "PrjProcessTailor")" id="submitLevel">
+                        <div class="panel">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="hidden" value="@Model.ClientID" name="ClientID" id="ClientID" />
+                                            <input type="hidden" value="TailorName" name="TailorName" id="TailorName" />
+                                            <input type="hidden" name="tbl_Process_Repository_ID" id="tbl_Process_Repository_ID" value="@Model.tbl_Process_Repository_ID" />
+                                            <input type="hidden" value="@Model.mstr_Org_Proj_PhaseID" id="mstr_Org_Proj_PhaseID" name="mstr_Org_Proj_PhaseID" />  
+                                            <input type="hidden" value="@Model.tbl_Org_ProjectID" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" />  
+                                            <div class="control-label">Activity Name</div>
+                                            <div><input value="@Model.Name" name="Name" id="Name" class="form-control"/></div>
+                                            @Html.ValidationMessageFor(o => o.Name)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="control-label">Activity Type</div>
+                                            <div>
+                                                @Html.DropDownList("Type", (new ActivityType()).getList(0), "Select ...", new { @class = "form-control col-md-12" })
+                                                @Html.ValidationMessageFor(o => o.Type)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="control-label">Description</div>
+                                            <div>
+                                                <textarea rows="4" class="form-control">@Model.Description</textarea>
+                                                @Html.ValidationMessageFor(o => o.Description)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+		    </div>
+		    <div class="modal-footer">
+    			<div class="form-group">
+		            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		            <button type="button" class="btn blue-bg save" data-mode="addTailorTask" data-id="Task@(Model.tbl_Process_Repository_ID)" data-form="submitLevel">Save</button>
+                </div>
+		    </div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<!-- Modal -->
+<div class="modal fade" id="deleteDialogBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+</div><!-- /.modal -->
+
+<script>
+    $(".datepicker").datepicker("destroy");   // Remove previous functions, if any
+    $('.datepicker').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    $(".mask_percent").inputmask({ "mask": "9", "repeat": 3, "greedy": false }, { placeholder: " ", clearMaskOnLostFocus: true }); //default
+    $(".mask_number").inputmask("[9]9[.99]", { clearMaskOnLostFocus: true }); //default
+    $("#PlannedDuration").inputmask('decimal', { rightAlignNumerics: true });
+    getAllResourceDetails();
+</script>

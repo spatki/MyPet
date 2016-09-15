@@ -1,0 +1,38 @@
+﻿@model IEnumerable<tbl_org_plan_documentInput>
+@{
+    Layout = null;
+    var doc = new DocType();
+    var docRef = new DocReferenceType();
+}
+@if (Model != null && Model.Any())
+{
+    foreach (var o in Model)
+    {
+        <tr id="SD@(o.ID)" class="mappedDocs">
+            <td >
+            <input type="hidden" name="tbl_org_plan_document.Index" value="@o.ID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].ID" value="@o.ID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_Org_PlanID" value="@o.tbl_Org_PlanID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].DocType" id="ID@(o.ID)DocType" value="@o.DocType" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].Name" value="@o.Name" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_DocMgr_DocumentID" @(o.DocType == 1 ? " class=mappedID id=ID" + o.ID : "") value="@o.tbl_DocMgr_DocumentID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_Process_ProcedureID" @(o.DocType == 2 ? " class=mappedID id=ID" + o.ID : "") value="@o.tbl_Process_ProcedureID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_Process_ChecklistID" @(o.DocType == 4 ? " class=mappedID id=ID" + o.ID : "") value="@o.tbl_Process_ChecklistID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].tbl_Process_TemplateID" @(o.DocType == 3 ? " class=mappedID id=ID" + o.ID : "") value="@o.tbl_Process_TemplateID" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].Source" value="@o.Source" />
+            <input type="hidden" name="tbl_org_plan_document[@o.ID].Include" value="@(o.Include == true ? "true" : "false")" />
+            <a href="javascript:;" class="openDeleteDialog2" data-delete="client" data-pageid="" data-id="SD@(o.ID)" data-source=""><i class="icon-remove"></i></a>
+            </td>
+            <td>@doc.getTypeName(o.DocType)</td>
+            <td>@o.Name</td>
+            <td><input type="text" name="tbl_org_plan_document[@o.ID].Remarks" id="tbl_org_plan_document[@o.ID].Remarks" value="@o.Remarks" class="form-control"/></td>
+            <td>@Html.DropDownList("tbl_org_plan_document[" + o.ID + "].ReferenceType",docRef.getList((short)o.ReferenceType.GetValueOrDefault()),"Select ...",new { @class = "col-md-12 form-control" })</td>
+            <td class="hidden-sm"></td>
+        </tr>
+    }
+}
+<tr id="addNewDoc">
+    <td>
+        <a href="javascript:;" class="relativeAddNew2" data-dialog="extraDialogBox" data-id="@ViewBag.PlanID" data-sourceid="tbl_Mapped_Proj_ProcessID" data-source="@Url.Action("addSupportingDocument","ProjPlan")"><i class="icon-plus"></i></a>
+    </td>
+</tr>

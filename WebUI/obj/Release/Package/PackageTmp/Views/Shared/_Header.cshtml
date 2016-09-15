@@ -1,0 +1,24 @@
+﻿<div class="page-header">
+	<h1>@ViewBag.headerText <small>@ViewBag.headerHelp</small></h1>
+</div>
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index","Home")">Home</a></li>
+    @for (var i = 0; i < ViewBag.breadcrumb.Length; i++ )
+    {
+        if (ViewBag.breadcrumbURLs[i] == "") 
+        {
+            <li class="active">@ViewBag.breadcrumb[i]</li>
+         }
+         else {
+            if (i > 0)
+            {
+                <li><a href="javascript:" class="subMenu" data-source="@ViewBag.breadcrumbURLs[i]">@ViewBag.breadcrumb[i]</a></li>
+            }   
+            else 
+            {             
+                <li><a href="@ViewBag.breadcrumbURLs[i]">@ViewBag.breadcrumb[i]</a></li>
+            }
+        }
+    }
+</ol>
+

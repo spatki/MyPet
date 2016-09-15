@@ -1,0 +1,4 @@
+--> Test "Enter Comments" in projects
+--> Replace all instances of throw PAException with an appropriate error page as below
+                   ViewBag.ErrorMessage = "This project is not found in the system.";
+                return View("ListItems/showError");

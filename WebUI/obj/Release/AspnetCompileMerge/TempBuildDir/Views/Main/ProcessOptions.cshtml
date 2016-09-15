@@ -1,0 +1,79 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+	<div class="row">
+            <div class="panel col-md-12">
+            <div class="panel-heading">
+                <h3 class="panel-title">Process Configuration</h3>
+                <ul class="pull-right toolbar">
+                    <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                    <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <p>Here you can configure the general processes which apply to an organisation. These processes are a superset which can be further customised and fine tuned at an organisation level.
+                    You should have the appropriate authority and rights to configure the processes in this tool. This will be a one time effort. Begin your configuration by choosing the options below.</p>
+                <p>These options are also available on the left hand side menu on this page</p>
+            </div>
+        </div>
+    </div>
+            <div class="row responsive-tab">
+                <ul class="stats clearfix">
+                    <li class="col-md-4 popovers" data-original-title="Levels" data-content="Levels indicate process classifications. Configure levels based how you want to structure your processes." data-trigger="hover" data-placement="top">
+                    	<div class="blue-bg subMenu" data-source="@Url.Action("Index","ProcessLevel")">
+                    	<i class="icon-">&#xf097;</i>
+                        <h5>Levels</h5>
+                        <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","ProcessLevel")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                        </div>
+                    </li>
+                    <li class="col-md-4 popovers" data-original-title="Roles" data-content="Here you define roles from the process perspective. They may or may not be similar to typical roles found in an organisation. They may or may not be mapped to organisational roles." data-trigger="hover" data-placement="top">
+                    	<div class="mehroon-bg subMenu" data-source="@Url.Action("Index","ProcessRole")">
+                    	<i class="icon-">&#xf0f0;</i>
+                        <h5>Roles</h5>
+                        <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","ProcessRole")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                        </div>
+                    </li>
+                    <li class="col-md-4 popovers" data-original-title="Structure" data-content="Define the inter-relationship between the roles defined in process definition. It also allows you to configure the access permissions of the roles and the process levels." data-trigger="hover" data-placement="top">
+                    	<div class="green-bg subMenu" data-source="@Url.Action("Index","ProcessStructure")">
+                    	<i class="icon-">&#xf0e8;</i>
+                        <h5>Structure</h5>
+                        <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","ProcessStructure")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="row responsive-tab">
+                <ul class="stats clearfix">
+                    <li class="col-md-4 popovers" data-original-title="Masters" data-content="Define various masters required for process configuration." data-trigger="hover" data-placement="top">
+                    	<div class="yellow-bg subMenu" data-source="@Url.Action("PMaster","Main")">
+                    	<i class="icon-">&#xf00a;</i>
+                        <h5>Masters</h5>
+                        <a href="javascript:" class="subMenu" data-source="@Url.Action("PMaster","Main")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                        </div>
+                    </li>
+                    <li class="col-md-4 popovers" data-original-title="Configuration" data-content="Once you have defined the levels, roles, structure and masters required for process definition, you can start the actual configuration using this option." data-trigger="hover" data-placement="top">
+                    	<div class="orange-bg subMenu" data-source="@Url.Action("Index","PConfiguration")">
+                    	<i class="icon-">&#xf0ad;</i>
+                        <h5>Configuration</h5>
+                        <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","PConfiguration")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                        </div>
+                    </li>
+                </ul>   
+            </div>
+
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+}

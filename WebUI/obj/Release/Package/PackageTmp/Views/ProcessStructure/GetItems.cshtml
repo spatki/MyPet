@@ -1,0 +1,14 @@
+﻿@model IEnumerable<tbl_process_structure>
+@{
+    Layout = null;
+}
+@foreach (var o in Model)
+{
+<li id="L@(o.ID)"><a href="javascript:" data-toggle="modal" class="openDialog" data-id="L@(o.ID)" data-source="@(Url.Action("Edit"))?id=@(o.ID)"><i class="icon-edit"></i></a>
+    <a class="tree-toggle" data-toggle="branch" role="branch" data-id="@o.ID" id="@o.ID" href="javascript:">@o.mstr_process_role.LongName</a>&nbsp;
+        <ul id="C@(o.ID)" class="branch in">
+            <li id="L@(o.ID)newNode"><a href="javascript:" data-toggle="modal" class="openDialog" data-id="" data-source="@Url.Action("Create", new {level=o.Level + 1, parent=o.ID })">Add Role</a></li>
+        </ul>
+</li>
+}
+

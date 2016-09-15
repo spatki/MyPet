@@ -1,0 +1,35 @@
+﻿@using ProcessAccelerator.WebUI
+@{
+    Layout = null;
+    var ID = 0;
+    ID = ViewBag.Key;
+    int ScheduleID = ViewBag.ScheduleID;
+    int ClientID = ViewBag.ClientID;
+    byte Type = ViewBag.Type;
+    ActionItemStatus ActionStatus = new ActionItemStatus();
+    var IDName = (Type == 1 ? "S" : "W") + ID;
+}
+
+<tr class="@(Type == 1 ? "Strn" : "Wkns")@(ID)">
+    <td>
+        <a href="Javascript:;" class="deleteRow" data-clientdelete="N" data-dialogname="openDialogBox" data-id="Strn@(ID)" data-source="@Url.Action("DeleteAddln","OrgAuditFinding",new { id = ID, scheduleID = ScheduleID, type = Type })" title="Click to remove this record"><i class="icon-remove"></i></a>
+        <input type="hidden" name="tbl_org_audit_addln_obs.Index" id="tbl_org_audit_addln_obs.Index" value="@IDName" />
+        <input type="hidden" name="tbl_org_audit_addln_obs[@IDName].ID" id="tbl_org_audit_addln_obst[@ID].ID" value="0" />
+        <input type="hidden" name="tbl_org_audit_addln_obs[@IDName].ClientID" id="tbl_org_audit_addln_obs[@ID].ClientID" value="@ClientID" />
+        <input type="hidden" name="tbl_org_audit_addln_obs[@IDName].tbl_Org_Audit_ScheduleID" id="tbl_audit_checklist[@ID].tbl_Org_Audit_ScheduleID" value="@ScheduleID" />
+        <input type="hidden" name="tbl_org_audit_addln_obs[@IDName].Observation" id="@(Type == 1 ? "Strn" : "Wkns")Observation@(ID)Input" value="" />
+        <input type="hidden" name="tbl_org_audit_addln_obs[@IDName].Type" id="Type@(ID)" value="@Type" />
+    </td>
+    <td><div id="@(Type == 1 ? "Strn" : "Wkns")Observation@(ID)" contenteditable="true" class="EditDetail takeHtmlInput"></td>
+</tr>
+
+<tr id="new@(Type == 1 ? "newStrength" : "newWeakness")">
+    <td><a href="Javascript:;" class="addOption" data-source="@Url.Action("AddAddln","OrgAuditFinding",new { id = ID, key = (ID + 1), type = Type })" data-id="new@(Type == 1 ? "newStrength" : "newWeakness")"><i class="icon-plus"></i></a></td>
+</tr>
+
+<script>
+    $('#StatusDate@(ID)').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    configureInlineCkEditor("#@(Type == 1 ? "Strn" : "Wkns")Observation@(ID)");
+</script>

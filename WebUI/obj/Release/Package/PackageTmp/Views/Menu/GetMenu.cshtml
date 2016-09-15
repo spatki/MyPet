@@ -1,0 +1,40 @@
+﻿@model IOrderedEnumerable<vw_org_role_access>
+@{
+    Layout = null;
+}
+<nav id="main_topnav">
+    <div class="container-fluid">
+        @using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
+            @Html.AntiForgeryToken()
+        }
+        <a href="javascript:;" class="pull-left toggle-aside visible-xs"><i class="icon-">&#xf0a9;</i></a>
+        <a href="javascript:;" class="pull-right toggle-topmenu visible-xs"><i class="icon-">&#xf0c9;</i></a>
+        <ul>
+        @{
+            var mainOptions = Model.Where(o => o.IsMain == true);
+            foreach (var o in mainOptions)
+        {
+            <li><a href="@Url.Action(o.Action, o.Controller)" title="@o.ToolTip"><i class="@o.IconName"></i> @o.FriendlyName</a></li>
+        }
+        }
+            <li><a href="javascript:document.getElementById('logoutForm').submit()" title="Log Off"><i class="icon-signout"></i> Log off</a></li>
+        </ul>
+    </div>
+</nav>
+<!--TOP NAV ENDS-->
+@if (ViewBag.Menu != null && ViewBag.Menu != "")
+{
+<!-- aside menu Start -->
+<aside id="left_panel">
+	<nav id="aside_nav">
+        @{
+         var subOptions = new subMenuOptions();
+
+        subOptions.vw_org_role_access = Model;
+        subOptions.parentFunctionID = ViewBag.Menu;
+        @Html.Partial("_SubMenuOptions", subOptions)
+         }
+	</nav>
+</aside>
+<!--ASIDE LEFT PANNEL ENDS-->        
+}

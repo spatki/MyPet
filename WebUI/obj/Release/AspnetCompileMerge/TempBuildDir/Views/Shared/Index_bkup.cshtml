@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "Process Accelerator - Dashboard";
+    Layout = "~/Views/Shared/_Dashboard_Layout.cshtml";
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }
+    }
+    <input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+
+        <br />			
+	    <div class="page-header">
+		    <h1>Dashboard 
+                <div class="col-md-3 pull-right">
+                    <select class="chzn-nopadd chzn-select-no-single col-md-12 changeDashboard">
+                        <option value="1" selected="selected">Senior Management</option>
+                        <option value="2" >Middle Management</option>
+                        <option value="3" >Project Management</option>
+                        <option value="4" >Individual</option>
+                    </select>
+                </div>
+            </h1>
+	    </div>
+	    <ol class="breadcrumb">
+		    <li><a href="#">Home</a></li>
+		    <li><a href="#">Dashboard</a></li>
+		    <li class="active">Senior Management</li>
+	    </ol>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="col-md-12">
+                 	    <div class="panel">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Projects</h3>
+                                <ul class="pull-right toolbar">
+                                    <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                    <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div class="container-fluid">
+                                    <div>
+                                        <div class="col-md-12">
+                                            <select class="chzn-nopadd chzn-select-no-single col-md-6 changeProjectGraph" ng-model="VarianceType" ng-change="ReloadVariance()" id="GraphType">
+                                                <option value="1" selected="selected">Effort Variance</option>
+                                                <option value="2" >Schedule Variance</option>
+                                                <option value="3" >Effort & Schedule</option>
+                                            </select>
+                                            <small class="col-md-6 help-block"><i class="icon-info-sign"></i> Choose the information you want to view</small>
+                                        </div>
+                                        <canvas id="line" class="chart chart-line" chart-data="data"
+                                          chart-labels="labels" chart-legend="true" chart-series="series"
+                                          chart-click="onClick" >
+                                        </canvas>
+                                    </div>
+                                </div>
+                                <!--div id="linechart" style="width: 100%; height: 300px;"></!--div-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                 	    <div class="panel">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Employees</h3>
+                                <ul class="pull-right toolbar">
+                                    <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                    <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <select class="chzn-nopadd chzn-select-no-single col-md-6 changeGraph">
+                                        <option value="1" selected="selected">% Project Allocation</option>
+                                        <option value="2" >Billable to Client</option>
+                                        <option value="3" >Org Level</option>
+                                    </select>
+                                    <small class="col-md-6 help-block"><i class="icon-info-sign"></i> Choose the information you want to view</small>
+                                </div>
+                                <div id="PieChart" style="width: 100%; height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel col-md-12">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Organisation Level - Variance Metrics</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+            		    </div>
+                        <div class="panel-body no-padding">
+		                    <div ng-controller="GuageIndicator">
+                                <div class="col-md-6">
+				                    <ridge-speedometer id="OverallEff" x-val="effval" x-conf="{ min : LCL, max: UCL, largeTickIncrement: 0.5, wobble: false, backgroundColor: 'white', smallTickColor: 'black', largeTickColor: 'black', markerColor: 'black', needleBaseColor1: 'black', normalColor: 'transparent', warningColor: 'transparent'}"/>
+                                </div>
+                                <div class="col-md-6">
+				                    <ridge-speedometer id="OverallSch" x-val="schval" x-conf="{ min : LCL, max: UCL, largeTickIncrement: 0.5, wobble: false, backgroundColor: 'white', smallTickColor: 'black', largeTickColor: 'black', markerColor: 'black', needleBaseColor1: 'black', normalColor: 'transparent', warningColor: 'transparent'}"/>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                    <div class="col-md-12">
+                        <br />
+                 	    <div class="panel">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Compliance</h3>
+                                <ul class="pull-right toolbar">
+                                    <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                    <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div id="simplestbarchart" style="width: 100%; height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+            </div>
+    @section scripts
+    {
+        <script src="~/Scripts/pa/AngularJSCharts/lineGraph.js"></script>
+        <script src="~/Scripts/pa/AngularJSCharts/gaugeIndicator.js"></script>
+    }
+}

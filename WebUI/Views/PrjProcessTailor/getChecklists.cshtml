@@ -1,0 +1,27 @@
+﻿@model IEnumerable<tbl_tailored_rep_chklst>
+@{
+    Layout = null;
+}
+<ul class="branch in" id="Checklist@(ViewBag.key)">
+    <li><a href="javascript:;" class="openDialog" data-source="@Url.Action("manageProjChecklists", "PrjProcessTailor", new { projectID = ViewBag.projectID, repoID = ViewBag.repoID, projPhase = ViewBag.phaseID })" data-id="">Click to add/remove Checklists</a></li>
+@if (Model.Any())
+{
+    foreach (var p in Model)
+    {
+        <li id = "LChecklist@(p.ID)"><a href="javascript:;" class="process" data-mode="edit" data-id="LChecklist@(p.ID)" data-source="@Url.Action((p.Exclude == true ? "IncludeChklst" : "ExcludeChklst"), "PrjProcessTailor", new { id = p.ID })"
+             data-param="@(p.ID)" data-message="Changes Saved" title="Click to include this checklist"><i class="icon-@(p.Exclude == true ? "ok" : "remove")"></i></a>&nbsp;&nbsp;
+            <span class="label label-@((p.Exclude ? "strikeThrough" : "configured"))">
+                <a href="javascript:" class="label-configured openDialog" data-id="" data-source="@Url.Action("showPreview", "PChecklist", new { id = p.tbl_Process_ChecklistID })">@p.tbl_process_checklist.Name</a>
+            </span>
+            @if (p.Exclude)
+            {
+             <span class='label label-danger'>Excluded</span>   
+            }
+        </li>
+    }
+}
+else
+{
+    <li id="NilChecklist@(ViewBag.key)" >No Checklists found</li>
+}
+</ul>

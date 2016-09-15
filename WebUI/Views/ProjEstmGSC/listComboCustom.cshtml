@@ -1,0 +1,9 @@
+﻿@model IEnumerable<SelectListItem>
+<select name="@ViewBag.itemName" id="@ViewBag.itemName" class="specialCombo form-control col-md-12 @((ViewBag.reload != null) ? ViewBag.reload : "" )">
+    <option value="" selected>@((ViewBag.defaultItem != null) ? ViewBag.defaultItem : "Select...")</option>
+@foreach (var item in Model)
+{
+    <option value="@item.Value" @((ViewBag.selectedItem == int.Parse(item.Value)) ? "selected" : "" ) id="GSCOption@(item.Value)">@item.Text</option>
+}
+
+</select>

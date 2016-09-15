@@ -1,0 +1,289 @@
+﻿@using ProcessAccelerator.WebUI
+@using Omu.AwesomeMvc
+@using System.Linq;
+@model tbl_process_procedureInput
+@{
+    Layout = null;
+    var sectionID = 0;
+    var groupID = 0;
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+<div class="row">
+    <div class="panel colored col-lg-12">
+        <div class="panel-heading orange-bg">
+            <h3 class="panel-title">Edit Procedure</h3>
+        </div>
+					
+		<form role="form" class="left-label form-wysiwyg" id="newProcedure" action="@Url.Action("Edit")">
+            <div class="panel-body" id="procDef">						
+                @Html.ValidationSummary(true)
+                <div class="row col-lg-12">
+                    <div class="col-lg-12">
+                        <div class="form-group col-md-7">
+                            @Html.HiddenFor(o => o.ClientID)
+                            <input type="hidden" value="@Model.CreateDate.ToString(Globals.DateFormatString)" name="CreateDate" id="CreateDate" />
+                            @Html.HiddenFor(o => o.CreatedBy)
+                            <input type="hidden" value="@(Model.UpdateDate == null ? "" : Model.UpdateDate.GetValueOrDefault().ToString(Globals.DateFormatString))" name="UpdateDate" id="UpdateDate" />
+                            @Html.HiddenFor(o => o.UpdatedBy)
+                            @Html.HiddenFor(o => o.ReviewedBy)
+                            <input type="hidden" value="@(Model.ReviewDate == null ? "" : Model.ReviewDate.GetValueOrDefault().ToString(Globals.DateFormatString))" name="ReviewDate" id="ReviewDate" />
+                            <input type="hidden" value="@(Model.PublishDate == null ? "" : Model.PublishDate.GetValueOrDefault().ToString(Globals.DateFormatString))" name="PublishDate" id="PublishDate" />
+                            @Html.HiddenFor(o => o.Tailored)
+                            @Html.HiddenFor(o => o.TailorComments)
+                            @Html.HiddenFor(o => o.AvailableToAll)
+                            @Html.HiddenFor(o => o.mstr_Process_LC_StatusID)
+                            @Html.Hidden("type", "proc")
+                            <label>Procedure Name</label>
+                            <div class="controls">
+                                @Html.TextBoxFor(o => o.Name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(o => o.Name)
+                            </div>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label>Process Type</label>
+                            <div class="controls">
+                                @Html.Action("getListItems","ProcessType",new { selectedItem = (Model.mstr_Process_TypeID == null ? 0 : Model.mstr_Process_TypeID), controlName = "mstr_Process_TypeID", excludeIds = "", includeIds = "", reload = ""})
+                                @Html.ValidationMessageFor(o => o.mstr_Process_TypeID)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label id="MissionTitle">Mission / Policy</label>
+                            <div class="controls">
+                                <input type="hidden" name="tbl_process_proc_revision.Index" value="1" />
+                                <input type="hidden" name="tbl_process_proc_revision[1].RevisionUser" value="@Model.UpdatedBy" />
+                                <input type="hidden" name="tbl_process_proc_revision[1].mstr_Process_LC_StatusID" value="@Model.tbl_process_proc_revision.LastOrDefault().mstr_Process_LC_StatusID" />
+                                <input type="hidden" name="tbl_process_proc_revision[1].RevisionDate" value="@DateTime.Now.Date.ToString(Globals.DateFormatString)" />
+                                <input type="hidden" name="tbl_process_proc_revision[1].Comments" id="formReviewComments" value="@Model.tbl_process_proc_revision.LastOrDefault().Comments" />
+                                <textarea class="col-lg-12" id="mission" rows="5" name="Mission">@Model.Mission</textarea>
+                                @Html.ValidationMessageFor(o => o.Mission)
+                            </div>
+                        </div>
+                    </div>
+                </div>                            
+
+                @{seededSections sections = new seededSections { seed = null, isParent = true, tbl_process_proc_section = Model.tbl_process_proc_section, tbl_process_proc_group = Model.tbl_process_proc_group };
+                    if (Model.tbl_process_proc_section.Any())
+                    {
+                        sectionID = Model.tbl_process_proc_section.OrderBy(o => o.ID).Last().ID + 1;
+                    }
+                    else
+                    {
+                        sectionID = 1;
+                    }
+                    
+                    if (Model.tbl_process_proc_group.Any())
+                    {
+                        groupID = Model.tbl_process_proc_group.OrderBy(o => o.ID).Last().ID + 1;
+                    }
+                    else
+                    {
+                        groupID = 2;
+                    }
+                  }
+                <div class="col-lg-12 column left" id="sections" data-nextsectionid="@sectionID" data-nextgroupid="@groupID">     <!-- Load updated values for nextid and nextsequence in viewbag -->
+                    <ul id="DefaultDocNode" data-groupid="null" class="sortable-list tree">
+                        @{  var sectionsInDoc = Model.tbl_process_proc_section.Where(o => o.tbl_Process_Proc_GroupID == null).OrderBy(o => o.SequenceNo).GetEnumerator(); ; // Begin with root
+                            var groupsInDoc = Model.tbl_process_proc_group.Where(o => o.Level == 1).OrderBy(o => o.SequenceNo).GetEnumerator(); ;
+                            var sectionSequence = 0; // First sequence in the section
+                            var groupSequence = 0;   // First sequence in the group
+                            var keepProcessing = true;
+                            var sectionsFound = true;
+                            var groupsFound = true;
+
+                            if (sectionsInDoc.MoveNext()) { sectionSequence = sectionsInDoc.Current.SequenceNo; } else { sectionsFound = false; }
+                            if (groupsInDoc.MoveNext()) { groupSequence = groupsInDoc.Current.SequenceNo; } else { groupsFound = false; }
+                            if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+
+                            if (keepProcessing)
+                            {
+                                while (keepProcessing)    // Handling sequence of groups and sections under this group. As the sequence can be intermixed
+                                {
+                                    // If the section comes first in sequence, print the section first
+                                    if (sectionsFound && (!groupsFound || sectionSequence < groupSequence))
+                                    {
+                                        <li class="sortable-item MainSection" id="Section@(sectionsInDoc.Current.ID)">
+                                            <div class="row">
+                                                <div class="col-lg-12 panel colored">
+                                                    <div class="panel-heading  blue-bg">
+                                                        <input type="hidden" name="tbl_process_proc_section.Index" value="@(sectionsInDoc.Current.ID)" />
+                                                        <input type="hidden" name="tbl_process_proc_section[@(sectionsInDoc.Current.ID)].ID" value="@(sectionsInDoc.Current.ID)" />
+                                                        <input type="hidden" name="tbl_process_proc_section[@(sectionsInDoc.Current.ID)].SequenceNo" class="sequence" value="@(sectionsInDoc.Current.SequenceNo)" />
+                                                        <input type="hidden" name="tbl_process_proc_section[@(sectionsInDoc.Current.ID)].tbl_Process_ProcedureID" value="@(sectionsInDoc.Current.tbl_Process_ProcedureID)" />
+                                                        <input type="hidden" name="tbl_process_proc_section[@(sectionsInDoc.Current.ID)].tbl_Process_Proc_GroupID" class="Parent" data-lnode="Section@(sectionsInDoc.Current.ID)" value="@(sectionsInDoc.Current.tbl_Process_Proc_GroupID)" />
+                                                            <h1 class="panel-title"><span id="sectionTitle@(sectionsInDoc.Current.ID)Div">@(sectionsInDoc.Current.Title == null || sectionsInDoc.Current.Title == "" ? "Provide Title" : sectionsInDoc.Current.Title)</span></h1>
+                                                            <ul class="pull-right toolbar">
+                                                                <li><a href="#" class="icon-button minimise"><i class="icon-">&#xf0aa;</i></a></li>
+                                                                <li><a href="#" class="icon-button confirmAction" data-messagetitle="Confirm Deletion" data-message="Do you want to delete this section ?" data-class="deleteSection" data-classparams="data-id='@(sectionsInDoc.Current.ID)'"><i class="icon-">&#xf057;</i></a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="form-group col-lg-12">
+                                                                <label>Title</label>
+                                                                <div class="controls">
+                                                                    <input type="text" class="form-control sectionTitle" id="sectionTitle@(sectionsInDoc.Current.ID)" name="tbl_process_proc_section[@(sectionsInDoc.Current.ID)].Title" value="@(sectionsInDoc.Current.Title)"/>
+                                                                    @Html.ValidationMessage("tbl_process_proc_section[" + sectionsInDoc.Current.ID + "].Title")
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" id="DetailRow@(sectionsInDoc.Current.ID)">
+                                                                <textarea class="col-lg-12 sectionDetail" rows="5" id="Detail@(sectionsInDoc.Current.ID)" name="tbl_process_proc_section[@(sectionsInDoc.Current.ID)].Detail">@(sectionsInDoc.Current.Detail)</textarea>
+                                                                @Html.ValidationMessage("tbl_process_proc_section[" + sectionsInDoc.Current.ID + "].Detail")
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        if (sectionsInDoc.MoveNext()) { sectionSequence = sectionsInDoc.Current.SequenceNo; } else { sectionsFound = false; }  // Get the next section
+                                    }
+
+                                    if (groupsFound && (!sectionsFound || groupSequence < sectionSequence))
+                                    {
+                                        sections.seed = groupsInDoc.Current.ID;
+                                        sections.isParent = false;
+                                        sections.sequencePrefix = "";
+                                        @Html.Partial("_showSections", sections)
+                                        if (groupsInDoc.MoveNext()) { groupSequence = groupsInDoc.Current.SequenceNo; } else { groupsFound = false; }
+                                    }
+                                    if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing                  
+                                }
+                            }                                                        
+                        }
+                      <li><a href="Javascript:;" class="newSection btn btn-med blue-bg" data-parent="0" data-proc="@(Model.ID)"  data-type="proc">Add Section</a></li>
+                      <li id="LnewNode">
+                          <a class="tree-toggle addGroup" href="javascript:;" data-toggle="modal" data-parent="0" id="newNode" data-proc="0" data-type="proc">Add Group</a> <!-- option to add more groups -->
+                      </li>
+                    </ul>
+                </div>
+                <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    <div class="row pull-right panel-footer">
+                        <div class="col-lg-12 col-lg-offset-1">
+                        <button type="button" class="btn blue-bg preview"  data-url="@Url.Action("Preview")" data-form="newProcedure">Preview</button>
+                        <button type="button" class="btn blue-bg saveDefaultWithoutReview" data-form="newProcedure" data-id="containerDetails" data-message="Procedure Saved">Save</button>
+                        <a href="javascript:;" class="btn blue-bg captureRevisionComments" data-toggle="modal">Save Version</a>
+                        <a href="javascript:" class="btn blue-bg subMenu" data-source="@Url.Action("Index","PProcedure")">Back</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Revision Comments to be shown just before the data is submitted for save -->
+                <div class="modal fade" id="saveRevisionComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+	                    <div class="modal-content">
+	                        <div class="modal-header">
+		                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                        <h4 class="modal-title" id="dialogTitle">Revision History</h4>
+	                        </div>
+                            <div class="modal-body"> 
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="control-label"><b>User:</b></label>
+                                        <label class="control-label">@Model.UpdatedByName</label>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="control-label"><b>Create Date: </b></label>
+                                        <label class="control-label">@Model.UpdateDate.GetValueOrDefault().ToString(Globals.DateFormatString)</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label"><b>Event: </b></label>
+                                        <label class="control-label">Updated</label>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label class="col-lg-12"><b>Review Comments</b></label>
+                                            <textarea class="col-lg-12" rows="5" id="reviewComments" name="reviewComments">@Model.tbl_process_proc_revision.LastOrDefault().Comments</textarea>                    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+		                      <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		                      <button type="button" class="btn blue-bg saveDefaultWithReview" data-form="newProcedure" data-id="containerDetails" data-message="Procedure Saved">Save</button>
+		                    </div>
+	                  </div><!-- /.modal-content -->
+	                </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+		</form>			
+    </div>  
+</div>          
+
+<!-- Add new group Modal -->
+<div class="modal fade" id="addGroupDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Enter New Group Name</h4>
+	</div>
+	<div class="modal-body">
+  		<div class="row">
+		<div class="col-lg-12">
+		<h4>Group Name </h4>
+        <input type="text" class="col-lg-12 form-control" id="newGrpName"/>
+        <input type="hidden" name="NewNodeID" id="NewNodeID" value="Preset" />
+        <input type="hidden" name="ParentNodeID" id="ParentNodeID" value="null" />
+        <input type="hidden" name="Nodelevel" id="Nodelevel" value="1" />
+        <input type="hidden" name="NodeProc" id="NodeProc" value="0" />
+		</div>
+		</div>
+    </div>
+	<div class="modal-footer">
+		<button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		<button type="button" class="btn blue-bg addNewGroup" data-mode="root">Save changes</button>
+	</div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="editGroupDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Edit Group</h4>
+	</div>
+	<div class="modal-body">
+  		<div class="row">
+		<div class="col-lg-12">
+		    <h4>Group Name </h4>
+            <input type="text" class="col-lg-12 form-control" id="editGrpName"/>
+            <input type="hidden" name="editNodeID" id="editNodeID" value="Preset" />
+            <input type="hidden" name="editParentNodeID" id="editParentNodeID" value="null" />
+            <input type="hidden" name="editlevel" id="editlevel" value="1" />
+            <input type="hidden" name="editNodeProc" id="editNodeProc" value="0" />
+            <p>Select editing options below</p>
+		</div>
+		</div>
+    </div>
+	<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		  <button type="button" class="btn blue-bg deleteGroup">Delete this Group</button>
+		  <button type="button" class="btn blue-bg saveGroup" data-dismiss="modal">Save</button>
+		  <button type="button" class="btn blue-bg addSubGroup" data-mode="sub" data-dismiss="modal" data-parent="">Add as Sub-Group</button>
+	</div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+    $('#procDef .sortable-list').sortable({
+        connectWith: '#procDef .sortable-list'
+    });
+    var currentDate = new Date();
+    $("#createDate").html(formatDate(currentDate));
+    @if (sectionID > 1)
+    {
+    <text>
+    configureCkEditor(".sectionDetail");
+    </text>
+    }
+    configureCkEditor("#mission");
+</script>

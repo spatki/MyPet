@@ -1,0 +1,26 @@
+﻿@model IEnumerable<tbl_org_project_documents>
+@{
+    Layout = null;
+    var counter = 0;
+}
+@foreach (var o in Model)
+{
+    counter += counter;
+    <tr id="T@(o.Type)D@(o.ID)">
+        <td>
+            <a href="javascript:;" data-id="T@(o.Type)D@(o.ID)" class="openDeleteDialog" data-source="@Url.Action("DeleteProjDocument", "Project", new { id = o.tbl_Org_ProjectID, docID = o.ID })" title="Delete uploaded document"><i class="icon-remove"></i></a>
+            |
+            <a href="javascript:;" class="uploadVersion" data-id="T@(o.Type)D@(o.ID)" data-source="@Url.Action("uploadRevisedDoc", "Project", new { id = o.ID })" title="Upload revised document">Revise</a>
+        </td>
+        <td><span class="label label-info">Uploaded</span></td>
+        <td>@o.mstr_process_doc_type.Name</td>
+        <td><a href="javascript:" class="openDocument" data-source="@Url.Action("ViewDocument","DocMgr",new { id = o.tbl_docmgr_document.ID })" title="Click to view">@o.tbl_docmgr_document.Name</a></td>
+        <td>@o.Comments</td>
+        <td>@o.tbl_docmgr_document.Version
+            @if (o.tbl_docmgr_document.Version > 1) 
+            {
+                <button class="btn btn-xs orange-bg openDialog" title="View Versions" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("ViewVersions","DocMgr", new { id = o.tbl_docmgr_document.ID })"><i class="icon-copy"></i></button>
+            }
+        </td>
+    </tr>
+}

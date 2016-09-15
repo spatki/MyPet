@@ -1,0 +1,52 @@
+﻿@model IOrderedEnumerable<vw_org_role_access>
+
+@{
+    if (ViewBag.Menu == "" || ViewBag.Menu == null)
+    {
+        Layout = null;
+    }
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+
+    if (Model != null && Model.Any())
+    {
+        <div class="row responsive-tab">
+            <ul class="stats clearfix">
+                @foreach (var menu in Model)
+                {
+                    if (menu.IconName != null && menu.IconColour != null && menu.FriendlyName != null && menu.Action != null && menu.Controller != null)
+                    {
+                        <li class="col-md-4 popovers" data-original-title="@menu.FriendlyName" data-content="@menu.HelpText" data-trigger="hover" data-placement="top">
+                            <div class="@(menu.IconColour) subMenu" @((menu.Controller == "Workflow" ? "data-pageload=page" : ""))  data-source="@Url.Action(menu.Action, menu.Controller)">
+                                <i class="@menu.IconName"></i>
+                                <h5>@menu.ToolTip</h5>
+                                @if (menu.Controller == "Workflow")
+                                {
+                                    // Have custom implementation for workflow
+                                    <a href="@Url.Action(menu.Action,menu.Controller)">Proceed <i class="icon-">&#xf0a9;</i></a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:" class="subMenu" data-source="@Url.Action(menu.Action,menu.Controller)">Proceed <i class="icon-">&#xf0a9;</i></a>
+                                }
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+}
+
+

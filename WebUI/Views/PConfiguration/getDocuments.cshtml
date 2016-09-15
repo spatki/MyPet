@@ -1,0 +1,20 @@
+﻿@model tbl_process_repository
+@{
+    Layout = null;
+}
+
+<li id="Document@(Model.ID)">
+    <a href="javascript:" class="tree-toggle repositoryDetails" data-basenode="@(Model.ID)" role="branch" data-toggle="branch">
+        <span class="label label-warning">Documents</span>&nbsp;<span class="badge badge-warning">@Model.tbl_process_rep_document.Count()</span>
+    </a>
+    <ul class="branch in">
+        <li><a href="javascript:" data-toggle="modal" class="openDialog" data-id="Document@(Model.ID)" data-source="@(Url.Action("manageDocuments", new  { repoID = Model.ID }))">Click to configure Documents</a></li>
+    @{  if (Model.tbl_process_rep_document.Any()) {
+            foreach (var g in Model.tbl_process_rep_document)
+        {
+            <li><a href="javascript:" class="label-configured openDocument" data-id="" data-source="@Url.Action("ViewDocument", "DocMgr", new { id = g.tbl_process_document.tbl_docmgr_document.ID },Request.Url.Scheme)">@g.tbl_process_document.tbl_docmgr_document.Name</a></li>
+        }
+    }
+    }
+    </ul>
+</li>

@@ -1,0 +1,183 @@
+﻿@using ProcessAccelerator.WebUI
+@model timesheetEntry
+@{
+    Layout = null;
+    int Type = 0;
+    string GroupName = "";
+    string SubGroupName = "";
+    short processDay = 0;
+    int T_ID;
+    decimal periodDuration = 0;
+    decimal? actualDuration = 0;
+    TSTaskType TaskType = new TSTaskType();
+    IQueryable<tbl_workflow> workflow;
+    ViewBag.DialogOption = "openWorkflow";
+    ViewBag.SaveOption = "saveWorkflow";
+    ViewBag.UpdateID = "WeeklyTSDetails";
+    ViewBag.Key = Model.tbl_Org_EmployeeID;
+    //   ViewBag.UpdateID = "containerDetails"; --> This will be set in weekly/daily or monthly views ******
+    //   ViewBag.Key = ""; --> This will be set in weekly/daily or monthly views ******
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else
+    {
+        workflow = null;
+    }
+}
+
+@Html.HiddenFor(o => o.tbl_Org_EmployeeID)
+<input type="hidden" value="@Model.TS_StartDate.ToString(Globals.DateFormatString)" name="TS_StartDate" id="TS_StartDate" />
+<input type="hidden" value="@(Model.TS_EndDate == null ? "" : Model.TS_EndDate.GetValueOrDefault().ToString(Globals.DateFormatString))" name="TS_EndDate" id="TS_EndDate" />
+@Html.HiddenFor(o => o.StatusID)
+@Html.HiddenFor(o => o.ViewType)
+<input type="hidden" value="false" id="followWF" name="followWF" />
+<input type="hidden" value="0" id="statusWF" name="statusWF" />  
+<input type="hidden" value="null" id="workflow" name="workflow" />
+
+@if (!Html.ViewData.ModelState.IsValid)
+{
+    <tr>
+        <th colspan="11" >@Html.ValidationSummary(false)</th>
+    </tr>
+}
+@if (Model.tbl_org_timesheet != null && Model.tbl_org_timesheet.Any()) 
+{
+    var timesheet = Model.tbl_org_timesheet.OrderBy(o => o.Type).ThenBy(k => k.GroupName).ThenBy(l => l.SubGroupName).ThenBy(p => p.tbl_Org_Proj_PlanID).ThenBy(d => d.TSDate).GetEnumerator();
+    var keepProcessing = false; 
+    if (timesheet.MoveNext()) { keepProcessing = true; }
+    while  (keepProcessing)    // Assigned
+    {
+        var t = timesheet.Current;
+        periodDuration = 0;
+        actualDuration = t.ActualDuration;
+        processDay = 1;
+        T_ID = (t.Type == 3 ? t.tbl_General_TaskID.GetValueOrDefault() : t.tbl_Org_Proj_PlanID.GetValueOrDefault());
+        if (t.Type != Type)
+        {
+            Type = t.Type;
+            <tr>
+                <th colspan="11" class="TableDisabledLabel"><a href="javascript:;" class="group tree-toggle" data-childid="T@(t.Type)">@TaskType.getTypeName((short)t.Type)</a></th>
+            </tr>
+        }
+        if (GroupName != (t.GroupName == null ? "" : t.GroupName))
+        {
+            GroupName = (t.GroupName == null ? "" : t.GroupName);
+            if (GroupName != "")
+            {
+                <tr>
+                    <th colspan="11" class="TSSubGroup T@(t.Type)">Project : @t.GroupName</th>
+                </tr>
+            }
+        }
+        if (SubGroupName != (t.SubGroupName == null ? "" : t.SubGroupName))
+        {
+            SubGroupName = (t.SubGroupName == null ? "" : t.SubGroupName);
+            if (SubGroupName != "")
+            {
+                <tr>
+                    <th colspan="11" class="TSSubGroup T@(t.Type)">Group : @t.SubGroupName</th>
+                </tr>
+            }
+        }
+        <tr class="T@(t.Type) EditRow" id="Row@(t.Type)I@(t.tbl_Org_Plan_ResourceID)">
+            <td ><a href="#viewTaskDetails" data-toggle="modal" class="nav">@t.TaskName.Trim()</a></td>
+            <td ><div class="pull-right">
+                @if (t.Type != 3)       // General Task
+                {
+                    if (t.ActualEnd == null)
+                    {
+                    <a href="javascript:;" class="confirmAction" title="Click to complete this task" data-messagetitle="Confirm Task Completion"
+                        data-message="Do you want to mark this task as complete?" data-class="completeTask" data-classparams="data-source='@Url.Action("CompleteTask", "Timesheet", new { id = t.tbl_Org_Plan_ResourceID, viewType = Model.ViewType })' data-id='WeeklyTSDetails'"><i class="icon-ok btn btn-xs green-bg"></i></a>
+                    }
+                    else
+                    {
+                    <a href="javascript:;" class="confirmAction" data-toggle="modal" title="Click to Re-open this task" data-messagetitle="Confirm to Re-Open Task"
+                        data-message="Do you want to reopen this task?" data-class="reopenTask" data-classparams="data-source='@Url.Action("ReOpenTask", "Timesheet", new { id = t.tbl_Org_Plan_ResourceID, viewType = Model.ViewType  })' data-id='WeeklyTSDetails'"><i class="icon-undo btn btn-xs red-bg"></i></a>
+                    }
+                }
+                 </div>
+            </td>
+            @if (t.Type != 3)
+            {
+                <td >@t.PlannedDuration</td>
+                <td id="T@(t.Type)I@(T_ID)Total">@t.ActualDuration</td>
+            }
+            else
+            {
+                <td ></td>
+                <td id="T@(t.Type)I@(T_ID)Total"></td>
+            }
+            
+            @while (processDay <= 7)
+            {
+                <input type="hidden" id="tbl_org_timesheet.Index" name="tbl_org_timesheet.Index" value="@t.ID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].ID" name="tbl_org_timesheet[@(t.ID)].ID" value="@t.ID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_Org_EmployeeID" name="tbl_org_timesheet[@(t.ID)].tbl_Org_EmployeeID" value="@t.tbl_Org_EmployeeID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_Org_ProjectID" name="tbl_org_timesheet[@(t.ID)].tbl_Org_ProjectID" value="@t.tbl_Org_ProjectID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].GroupName" name="tbl_org_timesheet[@(t.ID)].GroupName" value="@t.GroupName"  />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].SubGroupName" name="tbl_org_timesheet[@(t.ID)].SubGroupName" value="@t.SubGroupName"  />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].TaskName" name="tbl_org_timesheet[@(t.ID)].TaskName" value="@t.TaskName"  />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].PlannedStart" name="tbl_org_timesheet[@(t.ID)].PlannedStart" value="@(t.PlannedStart == null ? "" : t.PlannedStart.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].PlannedEnd" name="tbl_org_timesheet[@(t.ID)].PlannedEnd" value="@(t.PlannedEnd == null ? "" : t.PlannedEnd.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].ActualStart" name="tbl_org_timesheet[@(t.ID)].ActualStart" value="@(t.ActualStart == null ? "" : t.ActualStart.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].ActualEnd" name="tbl_org_timesheet[@(t.ID)].ActualEnd" value="@(t.ActualEnd == null ? "" : t.ActualEnd.GetValueOrDefault().ToString(Globals.DateFormatString))" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].mstr_Org_FunctionID" name="tbl_org_timesheet[@(t.ID)].mstr_Org_FunctionID" value="@t.mstr_Org_FunctionID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_Org_Proj_PlanID" name="tbl_org_timesheet[@(t.ID)].tbl_Org_Proj_PlanID" value="@t.tbl_Org_Proj_PlanID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_Org_Plan_ResourceID" name="tbl_org_timesheet[@(t.ID)].tbl_Org_Plan_ResourceID" value="@t.tbl_Org_Plan_ResourceID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_Org_Proj_GroupID" name="tbl_org_timesheet[@(t.ID)].tbl_Org_Proj_GroupID" value="@t.tbl_Org_Proj_GroupID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].mstr_Org_Sub_FunctionID" name="tbl_org_timesheet[@(t.ID)].mstr_Org_Sub_FunctionID" value="@t.mstr_Org_Sub_FunctionID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].Type" name="tbl_org_timesheet[@(t.ID)].Type" value="@t.Type" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_Mapped_Proj_ProcessID" name="tbl_org_timesheet[@(t.ID)].tbl_Mapped_Proj_ProcessID" value="@t.tbl_Mapped_Proj_ProcessID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_Process_RepositoryID" name="tbl_org_timesheet[@(t.ID)].tbl_Process_RepositoryID" value="@t.tbl_Process_RepositoryID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_Process_Rep_TaskID" name="tbl_org_timesheet[@(t.ID)].tbl_Process_Rep_TaskID" value="@t.tbl_Process_Rep_TaskID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].tbl_General_TaskID" name="tbl_org_timesheet[@(t.ID)].tbl_General_TaskID" value="@t.tbl_General_TaskID" />
+                <input type="hidden" id="DurationT@(t.Type)I@(t.ID)" name="tbl_org_timesheet[@(t.ID)].Duration" value="@t.Duration" />
+                <input type="hidden" id="ActualDurationT@(t.Type)I@(t.ID)" name="tbl_org_timesheet[@(t.ID)].ActualDuration" value="@t.ActualDuration" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].TSDate" name="tbl_org_timesheet[@(t.ID)].TSDate" value="@t.TSDate.ToString(Globals.DateFormatString)" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].StartTime" name="tbl_org_timesheet[@(t.ID)].StartTime" value="@t.StartTime" /
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].EndTime" name="tbl_org_timesheet[@(t.ID)].EndTime" value="@t.EndTime" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].BillableDuration" name="tbl_org_timesheet[@(t.ID)].BillableDuration" value="@t.BillableDuration" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].OvertimeDuration" name="tbl_org_timesheet[@(t.ID)].OvertimeDuration" value="@t.OvertimeDuration" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].Billable" name="tbl_org_timesheet[@(t.ID)].Billable" value="@t.Billable" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].mstr_Process_LC_StatusID" name="tbl_org_timesheet[@(t.ID)].mstr_Process_LC_StatusID" value="@t.mstr_Process_LC_StatusID" />
+                <input type="hidden" id="tbl_org_timesheet[@(t.ID)].Comments" name="tbl_org_timesheet[@(t.ID)].Comments" value="@t.Comments" />
+
+                if (t.ActualEnd == null)
+                {
+                    <td id="T@(t.Type)I@(t.ID)Day@(processDay)" data-id="DurationT@(t.Type)I@(t.ID)" class="@(t.ActualEnd != null || t.IsReview == true || t.IsPublish == true ? "" : "EditTime") @(t.Type != 3 && t.TSDate >= t.PlannedStart && t.TSDate <= t.PlannedEnd ? "TSAssigned" : "")"
+                        data-class="EditTime" data-navkey="EditTime" data-type="T@(t.Type)" data-typeid="@(T_ID)">@(t.Duration == 0 ? "0" : t.Duration.ToString())</td>
+                }
+                else
+                {
+                    <td id="T@(t.Type)I@(t.ID)Day@(processDay)" data-id="DurationT@(t.Type)I@(t.ID)" class="@(t.Type != 3 && t.TSDate >= t.PlannedStart && t.TSDate <= t.PlannedEnd ? "TSAssigned" : "")">@(t.Duration == 0 ? "0" : t.Duration.ToString())</td>
+                }
+                periodDuration += t.Duration;
+                if (timesheet.MoveNext()) 
+                { 
+                    t = timesheet.Current;
+                    processDay += 1; 
+                } 
+                else 
+                { 
+                    keepProcessing = false;
+                    processDay = 8;
+                }
+           }
+            <input type="hidden" id="T@(Type)I@(T_ID)BaseActualDuration" name="T@(Type)I@(T_ID)BaseActualDuration" 
+                value="@((actualDuration == null || actualDuration == 0) ? "0" : (actualDuration - periodDuration).ToString())" />      
+            </tr>
+    }   
+}
+<div class="col-lg-12 navbar-fixed-bottom pull-right" id="actions">
+    <div><span class="label @(Model.StatusID == null ? "label-danger" : "label-success")">@(Model.StatusID == null ? "Timesheet Not Filled" : "Timesheet Status: ")<strong>@Model.StatusName</strong></span></div>
+    <div class="row pull-right panel-footer">
+        <div class="col-lg-12 col-lg-offset-1">
+            @if (workflow != null)
+            {
+                @Html.Partial("printWorkflow", workflow)
+            }
+        </div>
+    </div>
+</div>

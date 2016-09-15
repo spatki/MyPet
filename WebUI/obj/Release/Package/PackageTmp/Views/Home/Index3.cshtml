@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Process Accelerator - Dashboard";
+    Layout = "~/Views/Shared/_Dashboard_Layout.cshtml";
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }
+    }
+    <input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+
+    <div class="container-fluid">
+        <br />			
+	    <div class="page-header">
+		    <h1>Dashboard 
+                <div class="col-md-3 pull-right">
+                    <select class="chzn-nopadd chzn-select-no-single col-md-12 changeDashboard">
+                        <option value="1">Senior Management</option>
+                        <option value="2">Middle Management</option>
+                        <option value="3" selected="selected">Project Management</option>
+                        <option value="4">Individual</option>
+                    </select>
+                </div>
+            </h1>
+	    </div>
+	    <ol class="breadcrumb">
+		    <li><a href="#">Home</a></li>
+		    <li><a href="#">Dashboard</a></li>
+		    <li class="active">Project Management</li>
+	    </ol>
+            <div class="row">
+                Under Construction
+            </div> 
+    </div>
+}
+@section scripts
+        {
+        @Scripts.Render("~/bundles/customPA")
+    <script src="~/Scripts/pa/plugins/chartjs/knockout-2.2.1.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/globalize.min.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/dx.chartjs.js"></script>
+    
+    <script src="~/Scripts/pa/plugins/chartjs/demos/pie/pie-charts.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/zoomingData.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/demos/advanced/advanced-charts.js"></script>
+	<script src="~/Scripts/pa/plugins/chartjs/demos/line/line-charts.js"></script>
+	<script src="~/Scripts/pa/plugins/chartjs/demos/bar/bar-charts.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/demos/gauges/gauges-charts.js"></script>
+        }

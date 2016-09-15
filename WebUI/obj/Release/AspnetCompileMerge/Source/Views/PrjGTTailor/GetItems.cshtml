@@ -1,0 +1,41 @@
+﻿@model IEnumerable<tbl_proj_general_tasks>
+@{
+    Layout = null;
+    var roleNames = "";
+}
+@foreach (var o in Model)
+{
+    roleNames = "";
+    <tr id="@o.ID">
+        <td>@o.Sequence</td>
+        <td>@o.mstr_org_general_tasks.Task</td>
+        <td>@(o.Tailored == true ? Html.Raw("<span class='label label-info'>Tailored</span>") : Html.Raw(o.mstr_org_general_tasks.Description))</td>
+        <td>
+            @if (o.Global == true)
+            {
+                <span class="label label-success">All</span>
+            }
+            else
+            {
+                if (o.tbl_proj_general_task_roles != null && o.tbl_proj_general_task_roles.Any())
+                {
+                    foreach (var rl in o.tbl_proj_general_task_roles)
+                    {
+                        roleNames = roleNames + (roleNames == "" ? "" : ", ") + rl.mstr_org_role.ShortName;  
+                    }
+                    <text>
+                        @roleNames
+                    </text>
+                }
+                else
+                {
+                    <span class="label label-warning">Not Configured</span>
+                }
+            }
+        </td>
+        <td>
+            <button class="btn btn-med green-bg openDialog" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "PrjGTTailor", new { id = o.ID })"><i class="icon-">&#xf044;</i></button>
+            <button class="btn btn-med red-bg openDeleteDialog" data-id="@o.ID" data-mode="delete" data-source="@Url.Action("Delete", "PrjGTTailor", new { id = o.ID })"><i class="icon-">&#xf057;</i></button>
+        </td>
+    </tr>
+}

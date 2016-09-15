@@ -1,0 +1,72 @@
+﻿@model mstr_process_lc_statusInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Edit @((Request.QueryString["text"] == null) ? "" : Request.QueryString["text"]) </h4>
+	</div>
+    <form method="post" action="@Url.Action("Edit")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+                        <input type="hidden" id="Type" name="Type" value="@Model.Type" />
+                        <div class="form-group">
+                            <label class="control-label">Sequence</label>
+                            @Html.TextBoxFor(o => o.SequenceNo, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.SequenceNo)
+                            <!--textarea  class="form-control popovers" data-original-title="Description" data-content="Provide a detailed description of this level" data-trigger="hover" data-placement="right" id="Description" name="Description"></!--textarea-->
+                        </div>
+                        <div class="form-group">    
+                            <label>Status</label>
+                            @Html.TextBoxFor(o => o.Status, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Status)
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            @Html.TextBoxFor(o => o.Description, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Description)
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Previous Status</label>
+                            @Html.Action("getStatusFor","ProcessLCStatus",new { selectedItem = Model.Prev_Status.GetValueOrDefault(), controlName = "Prev_Status", excludeIds = "", includeIds = "", reload = "", Type = Model.Type, DefaultSelection = false })
+                            <!--textarea  class="form-control popovers" data-original-title="Description" data-content="Provide a detailed description of this level" data-trigger="hover" data-placement="right" id="Description" name="Description"></!--textarea-->
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Next Status</label>
+                            @Html.Action("getStatusFor","ProcessLCStatus",new { selectedItem = Model.Next_Status.GetValueOrDefault(), controlName = "Next_Status", excludeIds = Model.ID.ToString(), includeIds = "", reload = "", Type = Model.Type, DefaultSelection = false})
+                            <!--textarea  class="form-control popovers" data-original-title="Description" data-content="Provide a detailed description of this level" data-trigger="hover" data-placement="right" id="Description" name="Description"></!--textarea-->
+                        </div>
+			    </div>	
+		    </div>
+            <div class="row">
+                <hr />
+                <div class="col-md-12">
+                    <div class="form-group col-md-3">
+                        @Html.CheckBox("IsDefault",(Model.IsDefault == null ? false : Model.IsDefault)) <label class="control-label">Default Status</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.CheckBox("IsComplete",(Model.IsComplete == null ? false : Model.IsComplete)) <label class="control-label">Complete Status</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.CheckBox("IsPublish",(Model.IsPublish == null ? false : Model.IsPublish)) <label class="control-label">Publish Status</label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.CheckBox("IsReview",(Model.IsReview == null ? false : Model.IsReview)) <label class="control-label">Review Status</label>
+                    </div>
+                </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveDefault" data-mode="edit" data-id="@Model.ID" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+

@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+    <div class="row">
+        <div class="panel colored col-md-12">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-2">Select Project</label>
+                        <input type="hidden" name="selectedDoc" id="selectedDoc" value="0" />
+                        <div class="controls col-md-9 input-group" id="ProjectParams" data-source="@Url.Action("Edit","ProjEstimation")">
+                            @Html.Action("getListItems","Project",new { selectedItem = "0", controlName = "Project", excludeIds = "", selectIds = ViewBag.SelectedIDs, reload = "loadProjDetails"})
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-med blue-bg invokeEvent" data-source="Project" data-event="change" title="Click to reload estimation sheet"><i class="icon-refresh"></i></button>
+							</div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div  id="listing"></div>					
+            </div>
+        </div>  
+    </div>
+    <script>
+        if ($("#Project").find("option:selected").eq(0).val() > 0) $("#Project").change();
+    </script>
+}

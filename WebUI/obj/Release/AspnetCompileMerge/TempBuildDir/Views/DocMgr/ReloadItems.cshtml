@@ -1,0 +1,17 @@
+﻿@model IEnumerable<tbl_docmgr_document>
+@{
+    Layout = null;
+}
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="processTable">
+    <thead>
+        <tr>
+        <th class="hidden-xs">Document Name</th>
+        <th>Classification</th>
+        <th>Version</th>
+        <th class="docTableResult">Action</th>
+        </tr>
+    </thead>
+    <tbody id="listing">
+        @Html.Action("GetItems")
+    </tbody>
+</table>

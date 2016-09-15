@@ -1,0 +1,72 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<resourceWiseTasks>
+@{
+    Layout = null;
+    var durationUnit = new DurationUnitTypes();
+    System.DateTime reportingDate = ViewBag.reportingDate;
+}
+@if (Model != null & Model.Any())
+{
+    foreach (var t in Model)
+    {
+        <tr>
+            <td><a href="javascript:;" class="group tree-toggle closed" data-childid="T@(t.ID)"></a></td>
+            <td><a href="javascript:;" class="openDialog" data-source="@Url.Action("EmployeeTimesheet","Timesheet",new { employeeID = t.tbl_Org_EmployeeID, startDate = reportingDate.ToString(Globals.DateFormatString), endDate = reportingDate.AddDays(6).ToString(Globals.DateFormatString) })" title="Click to view timesheet">@t.EmployeeName</a></td>
+            <td>@(t.PlannedDuration == null ? 0 : t.PlannedDuration)</td>
+            <td>@(t.ActualDuration == null ? 0 : t.ActualDuration)</td>
+            <td>@t.Percent_Allocation</td>
+            <td>@t.ActualPercentAllocation</td>
+            <td></td>
+            <td>@Html.Raw(t.Percent_Allocation > 100 ? "<span class='label label-danger'>Over Allocated</span>" : (t.Percent_Allocation == 100 ? "<span class='label label-success'>Utilized</span>" : "<span class='label label-warning'>Under Utilized</span>"))</td>
+        </tr>
+        <tr class="T@(t.ID)" style="display:none;">
+            <td></td>
+            <td colspan="8">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="EditRow">
+                            <th>Task</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Assigned Hours</th>
+                            <th>Actual Hours</th>
+                            <th>Schedule Variance</th>
+                            <th>Effort Variance</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (t.tbl_org_plan_resource != null && t.tbl_org_plan_resource.Any())
+                        {
+                            foreach (var r in t.tbl_org_plan_resource)
+                            {
+                                <tr>
+                                    <td>@r.tbl_org_proj_plan.TaskName.Trim()</td>
+                                    <td>@r.PlannedStart.ToString(Globals.DateFormatString)</td>
+                                    <td>@r.PlannedEnd.GetValueOrDefault().ToString(Globals.DateFormatString)</td>
+                                    <td>@r.PlannedDuration</td>
+                                    <td>@r.ActualDuration</td>
+                                    <td>@((r.ActualEnd == null ? "" : (r.PlannedEnd.GetValueOrDefault() - r.ActualEnd.GetValueOrDefault()).TotalDays.ToString()))</td>
+                                    <td>@(((r.PlannedDuration - r.ActualDuration) * 100)/r.PlannedDuration)</td>
+                                    <td>@r.mstr_process_lc_status.Status</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8">No Tasks Assigned</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    } 
+}
+else
+{
+    <tr>
+        <td colspan="8">No Resource Allocated for this duration</td>
+    </tr>
+}

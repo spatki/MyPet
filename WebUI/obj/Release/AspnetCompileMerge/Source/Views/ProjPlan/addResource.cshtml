@@ -1,0 +1,64 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_proj_allocation>
+@{
+    Layout = null;
+    var projectID = ViewBag.projectID;
+    int index = ViewBag.resourceID;
+}
+<tr id="R@(index)">
+    <td class="col-md-1">
+        <a href="javascript:;" class="openDeleteDialog2" data-delete="client" data-pageid="@projectID" data-id="R@(index)" data-source="@Url.Action("DeleteResource", "ProjPlan", new { id = 0 })"><i class="icon-remove"></i></a>
+        <span></span>
+        <input type="hidden" name="tbl_org_plan_resource.Index" value="@index" />
+        <input type="hidden" name="tbl_org_plan_resource[@index].ID" value="@index" />
+    </td>
+    <td class="col-md-3">
+        <select name="tbl_org_plan_resource[@index].tbl_Org_EmployeeID" id="tbl_org_plan_resource[@index].tbl_Org_EmployeeID" class="getResourceDetails form-control col-md-12" >
+            <option value="" selected>Select...</option>
+            @foreach (var res in Model)
+            {
+                <option value="@res.tbl_Org_EmployeeID" data-id="@res.ID" data-start="@res.PlannedStartDate.ToString(Globals.DateFormatString)" data-end="@res.PlannedEndDate.GetValueOrDefault().ToString(Globals.DateFormatString)">
+                    @res.tbl_org_employee.GivenName @res.tbl_org_employee.FamilyName
+                </option>
+            }
+        </select>
+        <input type="hidden" name="tbl_org_plan_resource[@index].AllocationStart" value="" />
+        <input type="hidden" name="tbl_org_plan_resource[@index].AllocationEnd" value="" />
+        <input type="hidden" name="tbl_org_plan_resource[@index].OrgResource_AllocationID" value="" />
+        @Html.ValidationMessage("tbl_org_plan_resource[" + index + "].tbl_Org_EmployeeID")
+    </td>
+    <td>
+        <input type="text" class="mask_percent form-control" value="100" size="5" name="tbl_org_plan_resource[@index].AllocationPercent" id="AllocationPercent@(index)" />
+        @Html.ValidationMessage("tbl_org_plan_resource[" + index + "].AllocationPercent")
+    </td>
+    <td>
+        <input type="text" class="date form-control" value="" size="10" name="tbl_org_plan_resource[@index].PlannedStart" id="PlannedStart@(index)" />
+        @Html.ValidationMessage("tbl_org_plan_resource[" + index + "].PlannedStart")
+    </td>
+    <td>
+        <input type="text" class="date form-control" value="" size="10"name="tbl_org_plan_resource[@index].PlannedEnd" id="PlannedEnd@(index)" />
+        @Html.ValidationMessage("tbl_org_plan_resource[" + index + "].PlannedEnd")
+    </td>
+    <td>
+        <input type="text" class="mask_duration form-control" value="" size="5" name="tbl_org_plan_resource[@index].PlannedDuration" id="PlannedDuration@(index)" />
+        @Html.ValidationMessage("tbl_org_plan_resource[" + index + "].PlannedDuration")
+    </td>
+</tr>
+<tr id="R@(index + 1)">
+    <td><a href="#" data-id="R@(index + 1)" class="loadDetails" data-mode="newResourceWithAddOption" data-element="taskResources" data-source="@Url.Action("addResource","ProjPlan", new { projectID = projectID, id = (index + 1) })" data-sourceid=""><i class="icon-">&#xf055</i></a></td>
+</tr>
+
+<script>
+    $("#AllocationPercent@(index)").inputmask({ "mask": "9", "repeat": 3, "greedy": false }, { placeholder: " ", clearMaskOnLostFocus: true }); //default
+    $("#PlannedDuration@(index)").inputmask("[9][99][.99]", { placeholder: " ", clearMaskOnLostFocus: true }); //default
+    $("#PlannedStart@(index)").each(function () {
+        $(this).datetimepicker({
+            format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+        });
+    });
+    $("#PlannedEnd@(index)").each(function () {
+        $(this).datetimepicker({
+            format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+        });
+    });
+</script>

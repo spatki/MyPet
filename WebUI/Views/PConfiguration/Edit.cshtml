@@ -1,0 +1,99 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using System.Web.Script.Serialization
+@using ProcessAccelerator.WebUI.Controllers
+@model tbl_process_repositoryInput
+@{
+    Layout = null;
+    string updateId = "";
+    
+    if (Model.ParentID == null) 
+    {
+        updateId = "PConfiguration";
+    }
+    else {
+        updateId = Model.ParentID.ToString();
+    }
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Edit Repository Group</h4>
+	</div>
+    <form method="post" action="@Url.Action("Edit")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-3">    
+                        <label class="form-label">Sequence</label>
+                        @Html.TextBoxFor(o => o.Sequence, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(o => o.Sequence)
+                    </div>  
+                    <div class="form-group col-md-9">    
+                        <label class="form-label col-md-12">Level</label>
+                        @Html.Action("getListItems","ProcessLevel",new { selectedItem = Model.mstr_Process_LevelID, controlName = "mstr_Process_LevelID", excludeIds = ViewBag.excludeRoles, includeIds = "", reload = "" })
+                        @Html.ValidationMessageFor(o => o.mstr_Process_LevelID)
+                    </div>
+                </div>
+                <div>
+                    <input type="hidden" name="ID" id="ID" value="@Model.ID" />
+                    <input type="hidden" name="ClientID" id="ClientID" value="@Model.ClientID" />
+                    <input type="hidden" name="Level" id="Level" value="@Model.Level" />
+                   <input type="hidden" name="ParentID" id="ParentID" value="@Model.ParentID" />
+                    <input type="hidden" name="IsParent" id="IsParent" value="false" />
+                    <input type="hidden" name="StructPath" id="StructPath" value="@Model.StructPath" />
+                </div>
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12">
+                        <div class="row col-md-12">
+                            <label class="row col-md-6">Name</label>
+                            <div class="col-md-6">
+                                <label class="control-label pull-right">&nbsp;&nbsp;Treat as Activity&nbsp;&nbsp;<a href="Javascript:;" id="TaskHelp" data-original-title="Repository Group Treated as Timesheet Activity" data-content="Check this option if you want this to show up as a task that can be included in project plan and time can be recorded in the timesheet" data-trigger="hover" data-placement="bottom"><i class="icon-question-sign"></i></a></label>
+                                <input type="checkbox" name="TreatAsTask" id="TreatAsTask" value="true"  @(Model.TreatAsTask == true ? "checked" : "") class="pull-right"/>
+                            </div>
+                        </div>
+                        @Html.TextBoxFor(o => o.Name,new { @class = "form-control col-md-12" })
+                        @Html.ValidationMessageFor(o => o.Name)
+                    </div>
+			    </div>	
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12">
+                        <label>Comments</label>
+                        @Html.TextAreaFor(o => o.Comments,new { @class = "form-control col-md-12" })
+                        @Html.ValidationMessageFor(o => o.Comments)
+                    </div>
+			    </div>	
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12">
+                        <div class="col-md-12">@Html.CheckBox("reSequence",Model.reSequence.GetValueOrDefault())&nbsp; Reorder sequence numbers for rest</div>
+                    </div>
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group col-md-12">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveStructure" data-mode="editNode" data-id="Node@(Model.ID)" data-form="submitLevel" data-dismiss="modal">Save</button>
+		        <button type="button" class="btn blue-bg deleteDialog" data-id="L@(Model.ID)" data-dialogname="DeleteDialog" data-source="@Url.Action("Delete", new { id = @Model.ID })">Delete</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<!-- Modal -->
+<div class="modal fade" id="DeleteDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div><!-- /.modal -->
+
+
+<script type="text/javascript">
+    specialDropDown("#ProcessLevel");
+    $("#TaskHelp").popover({
+        trigger: $(this).attr('trigger'),
+        title: $(this).attr('title'),
+        position: $(this).attr('placement'),
+        content: $(this).attr('content'),
+        html: true
+    });
+</script>

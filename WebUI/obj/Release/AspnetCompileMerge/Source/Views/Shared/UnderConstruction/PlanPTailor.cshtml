@@ -1,0 +1,1023 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            
+            <div class="row">
+                 <div class="panel colored col-md-12">
+					<form role="form">					
+                 <div class="panel-body">
+                        <div class="row col-lg-12" id="ProcessRepository">
+                            <div class="row col-lg-12 proces_Config" >
+                                <div class="panel coloured col-lg-5 resizable">
+                                    <div class="panel-heading blue-bg">
+                                        <h3 class="panel-title" >Project Configuration</h3>
+                                    </div>
+                                    <div class="panel-body col-lg-12 onlyScrolls">
+                                        <ul class="tree">
+                                            <li>
+                                              <a href="#" role="branch" class="tree-toggle orgTree" data-toggle="branch" data-value="Bootstrap_Tree"><span class="label label-root">Payroll System</span></a>
+                                              <ul class="branch in">
+                                                  <li><a href="#" role="branch" class="tree-toggle orgTree" data-toggle="branch" data-value="Bootstrap_Tree" id="AD"><span class="label label-success">AGILE Development</span></a>
+                                                        <ul class="branch in">
+                                                            <li><a href="#" role="leaf" class="tree-toggle orgTree" id="PB"><span class="label label-warning">Product Backlog</span></a></li>
+                                                            <li><a href="#" role="leaf" class="tree-toggle orgTree" id="RB"><span class="label label-warning">Release Backlog</span></a></li>
+                                                            <li><a href="#" role="leaf" class="tree-toggle orgTree" id="SP"><span class="label label-warning">Sprint</span></a></li>
+                                                            <li><a href="#" role="leaf" class="tree-toggle orgTree" id="SM"><span class="label label-warning">StandUp Meeting</span></a></li>
+                                                        </ul>
+                                                   </li>
+                                              </ul>
+                                            </li>
+                                            <li>
+                                                <a href="#" role="branch" class="tree-toggle orgTree" data-toggle="branch" data-value="Bootstrap_Tree"><span class="label label-root">Code Migration</span></a>
+                                                <ul class="branch in">
+                                                    <li><a href="#" role="branch" class="tree-toggle orgTree" data-toggle="branch" data-value="Bootstrap_Tree" id="MR"><span class="label label-success">Migration</span></a>
+                                                        <ul class="branch in">
+                                                            <li><a href="#" role="leaf" class="tree-toggle orgTree" id="RE"><span class="label label-warning">Reverse Engineering</span></a></li>
+                                                            <li><a href="#" role="leaf" class="tree-toggle orgTree" id="CR"><span class="label label-warning">Code Remediation</span></a></li>
+                                                            <li><a href="#" role="leaf" class="tree-toggle orgTree" id="ST"><span class="label label-warning">System Testing</span></a></li>
+                                                            <li><a href="#" role="leaf" class="tree-toggle orgTree" id="RT"><span class="label label-warning">Regression Testing</span></a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-7">
+					                <div class="panel colored col-lg-12 repDetails"  id="configDetails" data-key="" >
+                                    <div class="panel-heading mehroon-bg">
+                                        <h3 class="panel-title" id="configTitle">Mapped Processes</h3>
+                                    </div>
+                                    <div class="pull-right col-md-12 FocusedItemTitle"  id="PRTitle">Click any project node to configure processes.</div>                                    
+                                        <div class="panel-body col-lg-12 onlyScrolls">
+                                        <div class="col-lg-12">
+                                            <ul class="tree" id="processTree">
+                                                <li id="LR1">
+                                                    <a href="#" role="branch" class="tree-toggle" data-toggle="branch" data-id="R1" id="R1"><span class="label label-info">Compliance: Cmmi</span></a>
+                                                    <ul class="branch in" id="CR1">
+                                                        <li id="LR1R1"><a href="#" role="branch" class="tree-toggle closed" data-toggle="branch"  data-id="R1R1" id="R1R1"><span class="label label-repository">Repository</span></a>
+                                                            <ul id="CR1R1" class="branch">
+                                                               <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch" data-id="R1R1"><span class="label label-item">General Tasks</span></a>
+                                                                    <ul class="branch" id="GTR1R1">
+                                                                        <li><a href="#" data-toggle="modal" class="GTConfigure" data-id="GTR1R1" data-key="R1R1">Click to add new General Tasks</a></li>
+                                                                        <li data-desc="Time spent on Project Management " data-role="" id="GTFR1R1R1"><a href="#" class="excludeItem" data-id="GTFR1R1R1" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Project Management</span>&nbsp;</li>
+                                                                        <li data-desc="Time spent on Project Management " data-role="" id="GTFR1R1R2"><a href="#" class="excludeItem" data-id="GTFR1R1R2" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> On Leave</span>&nbsp;</li>
+                                                                        <li data-desc="Time spent on Project Management " data-role="" id="GTFR1R1R3"><a href="#" class="excludeItem" data-id="GTFR1R1R3" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Project Meeting</span>&nbsp;</li>
+                                                                        <li data-desc="Time spent on Project Management " data-role="" id="GTFR1R1R4"><a href="#" class="excludeItem" data-id="GTFR1R1R4" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Conference Call</span>&nbsp;</li>
+                                                                        <li data-desc="Time spent on Project Management " data-role="" id="GTFR1R1R5"><a href="#" class="excludeItem" data-id="GTFR1R1R5" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Lunch Time</span>&nbsp;</li>
+                                                                        <li data-desc="Time spent on Project Management " data-role="" id="GTFR1R1R6"><a href="#" class="excludeItem" data-id="GTFR1R1R6" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Idle</span>&nbsp;</li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li ><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Procedures</span></a>
+                                                                    <ul class="branch" id="ProcR1R1">
+                                                                        <li><a href="#" data-toggle="modal" class="editProc" data-id="ProcR1R1" data-key="R1R1">Click to add new procedures</a></li>
+                                                                        <li id="ProcR1R1R1"><a href="#" class="excludeItem" data-id="ProcR1R1R1" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Quality Management Manual</span></li>
+                                                                        <li id="ProcR1R1R2"><a href="#" class="excludeItem" data-id="ProcR1R1R2" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Timesheet Entry Procedure</span></li>
+                                                                        <li id="ProcR1R1R3"><a href="#" class="excludeItem" data-id="ProcR1R1R3" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Recruiment Procedure</span></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Templates</span></a>
+                                                                    <ul class="branch" id="TemplateR1R1">
+                                                                        <li><a href="#" data-toggle="modal" class="editTemplate" data-id="TemplateR1R1" data-key="R1R1">Click to add new templates</a></li>
+                                                                        <li id="TemplateR1R1R1"><a href="#" class="excludeItem" data-id="TemplateR1R1R1" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> Project Management Plan Template</span></li>
+                                                                        <li id="TemplateR1R1R2"><a href="#" class="excludeItem" data-id="TemplateR1R1R2" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> SQA Plan Template</span></li>
+                                                                        <li id="TemplateR1R1R3"><a href="#" class="excludeItem" data-id="TemplateR1R1R3" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label lagbel-configured"> Testplan Template</span></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Checklists</span></a>
+                                                                    <ul class="branch" id="ChkLstR1R1">
+                                                                        <li><a href="#" data-toggle="modal" class="editTemplate" data-id="ChkLstR1R1" data-key="R1R1">Click to add new Checklist</a></li>
+                                                                        <li id="Li1"><a href="#" class="excludeItem" data-id="ChkLstR1R1R1" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Common Review Checklist</span></li>
+                                                                        <li id="Li2"><a href="#" class="excludeItem" data-id="ChkLstR1R1R2" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> PM Review Checklist</span></li>
+                                                                        <li id="Li3"><a href="#" class="excludeItem" data-id="ChkLstR1R1R3" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Peer Review Checklist</span></li>
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="ALL AD PB RB SP SM"><a href="#" role="branch" class="tree-toggle" data-toggle="branch" data-value="Bootstrap_Tree"><span class="label label-success">AGILE Development</span></a>
+                                                            <ul class="branch in" id="P2">
+                                                                <li id="LH1R1"><a href="#" role="branch" class="tree-toggle closed" data-toggle="branch"  data-id="H1R1" id="H1R1"><span class="label label-repository">Repository</span></a>
+                                                                    <ul id="CH1R1" class="branch">
+                                                                       <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch" data-id="H1R1"><span class="label label-item">General Tasks</span></a>
+	                                                                    <ul class="branch" id="GTH1R1">
+		                                                                <li><a href="#" data-toggle="modal" class="GTConfigure" data-id="GTH1R1" data-key="H1R1">Click to add new General Tasks</a></li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFH1R1R1"><a href="#" class="excludeItem" data-id="GTFH1R1R1" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Project Management</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFH1R1R2"><a href="#" class="excludeItem" data-id="GTFH1R1R2" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> On Leave</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFH1R1R3"><a href="#" class="excludeItem" data-id="GTFH1R1R3" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Project Meeting</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFH1R1R4"><a href="#" class="excludeItem" data-id="GTFH1R1R4" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Conference Call</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFH1R1R5"><a href="#" class="excludeItem" data-id="GTFH1R1R5" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> New Employee Induction Briefing</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFH1R1R6"><a href="#" class="excludeItem" data-id="GTFH1R1R6" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Idle</span>&nbsp;</li>
+	                                                                    </ul>
+	                                                                </li>
+	                                                                <li ><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Procedures</span></a>
+	                                                                    <ul class="branch" id="ProCH1R1">
+		                                                                <li><a href="#" data-toggle="modal" class="editProc" data-id="ProCH1R1" data-key="H1R1">Click to add new procedures</a></li>
+		                                                                <li id="ProcH1R1R1"><a href="#" class="excludeItem" data-id="ProCH1R1R1" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> QA Policy</span></li>
+		                                                                <li id="ProcH1R1R2"><a href="#" class="excludeItem" data-id="ProCH1R1R2" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Contract preparation</span></li>
+		                                                                <li id="ProcH1R1R3"><a href="#" class="excludeItem" data-id="ProCH1R1R3" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Project Kick-off Process</span></li>
+	                                                                    </ul>
+	                                                                </li>
+	                                                                <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Templates</span></a>
+	                                                                    <ul class="branch" id="TemplateH1R1">
+		                                                                <li><a href="#" data-toggle="modal" class="editTemplate" data-id="TemplateH1R1" data-key="H1R1">Click to add new templates</a></li>
+		                                                                <li id="TemplateH1R1R1"><a href="#" class="excludeItem" data-id="TemplateH1R1R1" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> Test Plan</span></li>
+		                                                                <li id="TemplateH1R1R2"><a href="#" class="excludeItem" data-id="TemplateH1R1R2" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> PMP Template</span></li>
+		                                                                <li id="TemplateH1R1R3"><a href="#" class="excludeItem" data-id="TemplateH1R1R3" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> Product Backlog</span></li>
+	                                                                    </ul>
+	                                                                </li>
+	                                                                <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Checklists</span></a>
+	                                                                    <ul class="branch" id="ChkLstH1R1">
+		                                                                <li><a href="#" data-toggle="modal" class="editTemplate" data-id="ChkLstH1R1" data-key="H1R1">Click to add new Checklist</a></li>
+		                                                                <li id="ChkLstH1R1R1"><a href="#" class="excludeItem" data-id="ChkLstH1R1R1" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> User Story Checklist</span></li>
+		                                                                <li id="ChkLstH1R1R2"><a href="#" class="excludeItem" data-id="ChkLstH1R1R2" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Code Review Checklist</span></li>
+		                                                                <li id="ChkLstH1R1R3"><a href="#" class="excludeItem" data-id="ChkLstH1R1R3" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> System Testing Checklist</span></li>
+	                                                                    </ul>
+	                                                                </li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li class="ALL PB"><a href="#" role="leaf" class="tree-toggle" ><span class="label label-warning">Process: Product Backlog</span></a></li>
+                                                                <li class="ALL RB"><a href="#" role="leaf" class="tree-toggle" ><span class="label label-warning">Process: Release Backlog</span></a></li>
+                                                                <li  class="ALL SP"><a href="#" role="leaf" class="tree-toggle" ><span class="label label-warning">Process: Sprint</span></a></li>
+                                                                <li class="ALL SM"><a href="#" role="leaf" class="tree-toggle" ><span class="label label-warning">Process: Standup Meeting</span></a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="ALL MR RE CR ST RT"><a href="#" role="branch" class="tree-toggle" data-toggle="branch" data-value="Bootstrap_Tree"><span class="label label-success">Migration Processes</span></a>
+                                                            <ul class="branch in" id="P3">
+                                                                <li id="LI1R1"><a href="#" role="branch" class="tree-toggle closed" data-toggle="branch"  data-id="H1R1" id="A1"><span class="label label-repository">Repository</span></a>
+                                                                    <ul id="CI1R1" class="branch">
+                                                                       <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch" data-id="H1R1"><span class="label label-item">General Tasks</span></a>
+	                                                                    <ul class="branch" id="GTI1R1">
+		                                                                <li><a href="#" data-toggle="modal" class="GTConfigure" data-id="GTI1R1" data-key="I1R1">Click to add new General Tasks</a></li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFI1R1R1"><a href="#" class="excludeItem" data-id="GTFI1R1R1" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Project Management</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFI1R1R2"><a href="#" class="excludeItem" data-id="GTFI1R1R2" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> On Leave</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFI1R1R3"><a href="#" class="excludeItem" data-id="GTFI1R1R3" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Project Meeting</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFI1R1R4"><a href="#" class="excludeItem" data-id="GTFI1R1R4" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Conference Call</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFI1R1R5"><a href="#" class="excludeItem" data-id="GTFI1R1R5" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Lunch Time</span>&nbsp;</li>
+		                                                                <li data-desc="Time spent on Project Management " data-role="" id="GTFI1R1R6"><a href="#" class="excludeItem" data-id="GTFI1R1R6" title="Click to exclude this task"><i class="icon-remove"></i></a><span class="label label-configured"> Idle</span>&nbsp;</li>
+	                                                                    </ul>
+	                                                                </li>
+	                                                                <li ><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Procedures</span></a>
+	                                                                    <ul class="branch" id="ProCI1R1">
+		                                                                <li><a href="#" data-toggle="modal" class="editProc" data-id="ProcI1R1" data-key="I1R1">Click to add new procedures</a></li>
+		                                                                <li id="ProCI1R1R1"><a href="#" class="excludeItem" data-id="ProcI1R1R1" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Regression Testing Procedure</span></li>
+		                                                                <li id="ProCI1R1R2"><a href="#" class="excludeItem" data-id="ProcI1R1R2" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Review Procedure</span></li>
+		                                                                <li id="ProCI1R1R3"><a href="#" class="excludeItem" data-id="ProcI1R1R3" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Black Box Testing</span></li>
+	                                                                    </ul>
+	                                                                </li>
+	                                                                <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Templates</span></a>
+	                                                                    <ul class="branch" id="TemplateI1R1">
+		                                                                <li><a href="#" data-toggle="modal" class="editTemplate" data-id="TemplateI1R1" data-key="I1R1">Click to add new templates</a></li>
+		                                                                <li id="TemplateI1R1R1"><a href="#" class="excludeItem" data-id="TemplateI1R1R1" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> Test Plan</span></li>
+		                                                                <li id="TemplateI1R1R2"><a href="#" class="excludeItem" data-id="TemplateI1R1R2" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> PMP Template</span></li>
+	                                                                    </ul>
+	                                                                </li>
+	                                                                <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Checklists</span></a>
+	                                                                    <ul class="branch" id="ChkLstI1R1">
+		                                                                <li><a href="#" data-toggle="modal" class="editTemplate" data-id="ChkLstI1R1" data-key="I1R1">Click to add new Checklist</a></li>
+		                                                                <li id="Li7"><a href="#" class="excludeItem" data-id="ChkLstI1R1R1" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Coding Checklist</span></li>
+		                                                                <li id="Li8"><a href="#" class="excludeItem" data-id="ChkLstI1R1R2" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Code Review Checklist</span></li>
+		                                                                <li id="Li9"><a href="#" class="excludeItem" data-id="ChkLstI1R1R3" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Usability Checklist</span></li>
+	                                                                    </ul>
+	                                                                </li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li class="ALL RE"><a href="#" role="leaf" class="tree-toggle" ><span class="label label-warning">Process: Reverse Engineering</span></a>
+
+                                                                </li>
+                                                                <li class="ALL CR" id="LP1">
+                                                                    <a href="#" class="excludeProcess" data-id="LP1" title="Click to exclude this process"><i class="icon-remove"></i></a>
+                                                                    <a href="#" role="leaf" class="tree-toggle closed"  data-toggle="branch" data-id="P1" id="P1"><span class="label label-warning">Process: Construction</span></a>
+                                                                    <ul id="CP1" class="branch">
+                                                                    <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Procedures</span></a>
+                                                                        <ul class="branch" id="ProCP1R1">
+	                                                                    <li><a href="#" data-toggle="modal" class="editProc" data-id="ProcP1R1" data-key="P1R1">Click to add new procedures</a></li>
+	                                                                    <li id="ProCP1R1R1"><a href="#" class="excludeItem" data-id="ProcP1R1R1" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Regression Testing Procedure</span></li>
+	                                                                    <li id="ProCP1R1R2"><a href="#" class="excludeItem" data-id="ProcP1R1R2" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Review Procedure</span></li>
+	                                                                    <li id="ProCP1R1R3"><a href="#" class="excludeItem" data-id="ProcP1R1R3" title="Click to exclude this procedure"><i class="icon-remove"></i></a><span class="label label-configured"> Black Box Testing</span></li>
+                                                                        </ul>
+                                                                    </li>
+                                                                    <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Templates</span></a>
+                                                                        <ul class="branch" id="TemplateP1R1">
+	                                                                    <li><a href="#" data-toggle="modal" class="editTemplate" data-id="TemplateP1R1" data-key="P1R1">Click to add new templates</a></li>
+	                                                                    <li id="TemplateP1R1R1"><a href="#" class="excludeItem" data-id="TemplateP1R1R1" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> Test Plan</span></li>
+	                                                                    <li id="TemplateP1R1R2"><a href="#" class="excludeItem" data-id="TemplateP1R1R2" title="Click to exclude this Template"><i class="icon-remove"></i></a><span class="label label-configured"> PMP Template</span></li>
+                                                                        </ul>
+                                                                    </li>
+                                                                    <li><a href="#" class="tree-toggle closed" role="branch" data-toggle="branch"><span class="label label-item">Checklists</span></a>
+                                                                        <ul class="branch" id="ChkLstP1R1">
+	                                                                    <li><a href="#" data-toggle="modal" class="editTemplate" data-id="ChkLstP1R1" data-key="P1R1">Click to add new Checklist</a></li>
+	                                                                    <li id="ChkLstP1R1R1"><a href="#" class="excludeItem" data-id="ChkLstP1R1R1" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Coding Checklist</span></li>
+	                                                                    <li id="ChkLstP1R1R2"><a href="#" class="excludeItem" data-id="ChkLstP1R1R2" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Code Review Checklist</span></li>
+	                                                                    <li id="ChkLstP1R1R3"><a href="#" class="excludeItem" data-id="ChkLstP1R1R3" title="Click to exclude this Checklist"><i class="icon-remove"></i></a><span class="label label-configured"> Usability Checklist</span></li>
+                                                                        </ul>
+                                                                    </li>
+                                                                    </ul>
+
+                                                                </li>
+                                                                <li class="ALL ST" id="LP2"><a href="#" role="leaf" class="tree-toggle"  data-toggle="branch" data-id="P2" id="P2"><span class="label label-warning">Process: Unit Testing</span></a></li>
+                                                                <li class="ALL ST" id="LP3"><a href="#" role="leaf" class="tree-toggle"  data-toggle="branch" data-id="P3" id="P3"><span class="label label-warning">Process: System Testing</span></a></li>
+                                                                <li class="ALL ST" id="LP4"><a href="#" role="leaf" class="tree-toggle"  data-toggle="branch" data-id="P4" id="P4"><span class="label label-warning">Process: Integration Testing</span></a></li>
+                                                                <li class="ALL RT" id="LP5"><a href="#" role="leaf" class="tree-toggle"  data-toggle="branch" data-id="P5" id="P5"><span class="label label-warning">Process: Regressing Testing</span></a></li>
+                                                                <li class="ALL ST RT" id="LP6"><a href="#" role="leaf" class="tree-toggle"  data-toggle="branch" data-id="P6" id="P6"><span class="label label-warning">Process: Testplan Preparation</span></a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                       
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>     
+            
+                        <div class="row hidden"  id="configureProcess">                
+                            <div class="panel colored col-lg-12">
+                                <div class="panel-heading blue-bg">
+                                    <h3 class="panel-title">Configure Processes</h3>
+            		            </div>
+					            <form role="form">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-lg-12">
+                                            <label id="postionLabel">Position :</label>
+                                        </div>                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12" id="cProcesses" data-node="" data-count="0">
+                                        </div> 
+                                    </div> 
+                                    <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	                <div class="row pull-right panel-footer">
+                                            <div class="col-lg-12 col-lg-offset-1">
+                                            <button type="submit" class="btn blue-bg" id="newProcess">Add New Process</button>
+                                            <button type="button" class="btn blue-bg" id="pSaveOptions" >Save</button>
+                                            <button type="button" class="btn blue-bg" id="backToRep" data-last="1">Back</button>
+                                            <input type="reset" class="btn gray-bg">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+					            </form>
+                            </div>  
+              
+        	            </div>
+                </div>					
+				</form>
+                </div>  
+            </div>
+
+    <div class="modal fade" id="reviewDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Review Comments</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <input type="hidden" id="statusID" /><input type="hidden" id="statusDesc" />
+                        <label class="control-label col-lg-3"><b>Reviewer:</b></label>
+                        <label class="control-label col-lg-3 pull-left">Sanjay Goel</label>
+                        <label class="control-label col-lg-3"><b>Review Date: </b></label>
+                        <label class="control-label col-lg-3 pull-left" id="createDate">01-Oct-13</label>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="col-lg-12"><b>Review Comments</b></label>
+                        <textarea name="reviewComments" class="col-lg-12" rows="5" id="reviewComments"></textarea>                    
+                    </div>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		  <button type="button" class="btn blue-bg" id="saveReview">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="empDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:800px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Allocation Details</h4>
+		</div>
+		<div class="modal-body">
+            <ul class="nav nav-tabs" id="Ul1">
+                <li class="active"><a data-toggle="tab" href="#HDetails">Allocation Details</a></li>
+                <li><a data-toggle="tab" href="#HSuppDocs">Supporting Documents</a></li>
+                <li><a data-toggle="tab" href="#HAllocHistory">Allocation History</a></li>
+            </ul>
+            <div class="tab-content" id="HTabContents">
+                <div id="HDetails" class="tab-pane fade in active">
+                    <br />
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-3">Effective From:</label>
+                            <div class="col-md-8" >
+                                <input type="text" class="form-control" value="01-Oct-13" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-3">Reporting To</label>
+                            <div class="controls col-md-8"><select class="chzn-nopadd chzn-select-no-single" disabled><option>Sandeep Honawar</option> <option selected="selected">Swaraj Singh</option> <option>Rajesh Singh</option></select></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-3">Role</label>
+                            <div class="controls col-md-8"><select class="chzn-nopadd chzn-select-no-single" disabled><option>Manager</option> <option>Asst. Manager</option> <option selected="selected">Accountant</option> <option>Helper</option> <option>Trainee</option></select></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-md-3">Allocation Type</label>
+                            <div class="controls col-md-8"><select class="chzn-nopadd chzn-select-no-single empType2" disabled> <option value="1">Permanent</option> <option value="2">Temporary</option> <option value="3">Contract</option></select></div>
+                        </div>
+                    </div>
+                    <div class="row" style="display:none" id="endDateDetails">
+                        <div class="form-group">
+                            <label class=" col-md-3">End Date&nbsp;&nbsp;</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                        <hr />
+                    <div class="row">
+                        <div class="form-group col-md-11">
+                            <label >Allocation Comments</label>
+                            <div class="controls"><textarea rows="4" class="form-control" disabled>Based on resource requisition</textarea></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="HSuppDocs" class="tab-pane">
+                    <div class="row">
+                        <div class="col-md-12 notification blue-bg">
+                 	            <strong>Supporing Documents</strong> : Upload supporting documents here, click to close this. 
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-1"></th>
+                                                <th>Doc Type</th>
+                                                <th>Name</th>
+                                                <th>Owner</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="HDocDetails" data-count="2">
+                                            <tr id="H1">
+                                                <td></td>
+                                                <td>Resource Request</td> 
+                                                <td><a href="#" data-toggle="modal" class="showDocumentData">Req_Form.xls</a></td>
+                                                <td>Sunil Garg</td>
+                                                <td>Requisition Form approved by SDM</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                </div>
+                <div id="HAllocHistory" class="tab-pane">
+                    <br />
+                    <div class="row">
+                         <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1">Effective Date</th>
+                                        <th>Allocation Type</th>
+                                        <th>Role</th>
+                                        <th>Reporting To</th>
+                                        <th>Comments</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <tr>
+                                        <td>12-Jan-13</td>
+                                        <td>Contract</td> 
+                                        <td>Executive</td>
+                                        <td>Sunil Garg</td>
+                                        <td>Requisition Form approved by SDM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>31-Dec-13</td>
+                                        <td>Permanent</td> 
+                                        <td>Executive</td>
+                                        <td>Sunil Garg</td>
+                                        <td>Confirmed Employee</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>       
+		</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+<div class="modal fade" id="showDocument" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-remote="Documents/Projects/BRD for Process Accelerator v1.1.pdf" >
+	<div class="modal-dialog"  style="width:80%; height:90%;overflow:auto;">
+  <div class="modal-content">
+	<div class="modal-header blue-bg">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="model-title emphasize">View Document</h4>
+	</div>
+	<div class="modal-body">
+        <div class="row" id="docContent">
+            Document contents will appear here...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="configureDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-remote="PGeneralTasks.html" >
+	<div class="modal-dialog"  style="width:80%; height:90%;overflow:auto;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">External Page</h4>
+    	</div>
+		<div class="modal-body">
+		<p align="center" style="padding:20px 0px;"><img src="assets/images/loader/windows8-line.gif" align="middle"></p>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		  <button type="button" class="btn blue-bg" data-dismiss="modal">Save changes</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<script type="text/javascript">
+
+	var config = {
+      '.chzn-select-no-single' : {disable_search_threshold:10},
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+
+    $("body").delegate(".showDocumentData", "click", function () {
+        //        $("#showDocument").modal("show");
+        window.open("Documents/Projects/Example.pdf", null,"height=400,width=600,status=yes,toolbar=no,menubar=no,location=no,top=200,left=300");
+    });
+
+    $("body").delegate(".addBRule", "click", function () {
+        // add additional columns for edit
+        var count = parseInt($(this).parent().parent().parent().data("count"));
+        var nodeKey = $(this).parent().parent().parent().prop("id");
+        count = count + 1;
+        var newColumns = '<td class="prcEdit" id="' + nodeKey + 'Event' + count + '" data-id="0" data-next="' + nodeKey + 'Order' + count + '" data-type="Event">Select</td>' +
+                            '<td class="prcEdit" id="' + nodeKey + 'Order' + count + '" data-id="0" data-next="' + nodeKey + 'Duration' + count + '" data-prev="' + nodeKey + 'Event' + count + '" data-type="Order">Select</td>' +
+                            '<td class="prcEdit" id="' + nodeKey + 'Duration' + count + '" data-id="   :  " data-next="' + nodeKey + 'Activity' + count + '" data-prev="' + nodeKey + 'Order' + count + '" data-type="Duration">   :  </td>' +
+                            '<td class="prcEdit" data-id="0" data-next="' + nodeKey + 'Action' + count + '" id="' + nodeKey + 'Activity' + count + '" data-prev="' + nodeKey + 'Duration' + count + '" data-type="Activity">Select</td>' +
+                            '<td class="prcEdit" data-id="0" data-next="' + nodeKey + 'ActionRole' + count + '" id="' + nodeKey + 'Action' + count + '" data-prev="' + nodeKey + 'Activity' + count + '" data-type="Action">Select</td>' +
+                            '<td class="prcEdit" id="' + nodeKey + 'ActionRole' + count + '" data-id="0" data-next="' + nodeKey + 'CStatus' + count + '" data-prev="' + nodeKey + 'Action' + count + '" data-type="ActionRole">Select</td>' +
+                            '<td class="prcEdit" id="' + nodeKey + 'CStatus' + count + '" data-id="0" data-next="' + nodeKey + 'SMail' + count + '" data-prev="' + nodeKey + 'ActionRole' + count + '" data-type="CStatus">Select</td>' +
+                            '<td class="prcEdit" id="' + nodeKey + 'SMail' + count + '" data-id="0" data-prev="' + nodeKey + 'CStatus' + count + '" data-type="SMail">No</td>' +
+                            '<td><a href="#" class="btn btn-xs blue-bg configRule" id="' + nodeKey + 'Config' + count + '"><i class="icon-">&#xf0ad;</i></a></td>';
+        $(this).parent().after(newColumns);
+        $(this).parent().parent().parent().data("count", count);
+
+        // Add the option to add more rows
+        $(this).parent().parent().parent().append('<tr id="pBR' + count + '"><td><a href="#" class="addBRule" data-id="pBR' + (count + 1) + '" data-count="' + (count + 1) + '"><i class="icon-">&#xf055</i></a></td></tr>');
+        $(this).removeClass("addBRule");
+        $(this).addClass("removeBRule");
+        $(this).children().first().html("&#xf05c");
+        $("#Event" + count).click();
+        // Go to the new rule
+        $('html, body').animate({
+            scrollTop: $("#" + "pBR" + count).offset().top
+        }, 2000);
+
+    });
+
+    $("body").delegate(".removeBRule", "click", function () {
+        if (confirm("Do you want to remove this rule ?")) {
+            var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+            $(this).parent().parent().remove();
+
+            $('html, body').animate({
+                scrollTop: scroll
+            }, 2000);
+
+            // $("html").scrollTop(scroll).offset().top();
+        }
+    });
+
+    $("body").delegate(".configRule", "click", function () {
+        $("#configureBRAction").modal();
+    });
+
+    $(document).on("focusin", ".orgTree", function () {
+       /* if (saveConfirmation) {
+            // Process Configuration was changed
+            if (confirm("Looks like you have made some changes to the process selection for this node. Do you want to save it ?")) {
+                $(".chkSelect").prop("checked", false);
+            }
+        } */
+        var repId = $(this).prop("id");
+        $(".ALL").hide('fast');
+        $("." + repId).show('slow');
+        $(".FocusedItem").removeClass("FocusedItem");
+        $(this).children("span").eq(0).addClass("FocusedItem");
+        $("#PRTitle").text($(this).text());
+        $("#processTree").show("slow");
+        saveConfirmation = false;
+    });
+
+
+    $(document).on("click", "#backToRep", function (e) {
+        $("#cProcesses").data("count", "0");
+        $("#cProcesses").html("");  // Clear all information
+        $("#ProcessRepository").removeClass("hidden"); // Hide repository
+        $('#configureProcess').addClass("hidden"); // Show process configuration
+    });
+
+    $(document).on("click", "#pSaveOptions", function (e) {
+        var refNode = "#Process" + $("#cProcesses").data("node");
+        var count = 0;
+        var PItem = "";
+
+        // remove all processes from the repository
+        $(refNode).find(".pItem").each(function () {
+            $(this).remove();
+        });
+
+        $("#cProcesses").find(".procName").each(function () {
+            if ($(this).val() != "") {
+                count = count + 1;
+                $(refNode).append('<li class="pItem">' + $(this).val() + '</li>');
+            }
+        });
+        $(refNode + "Count").text(count);
+        $("#cProcesses").data("count", "0");
+        $("#cProcesses").html("");  // Clear all information
+        $("#ProcessRepository").removeClass("hidden"); // Hide repository
+        $('#configureProcess').addClass("hidden"); // Show process configuration
+    });
+
+    $(document).on("click", ".editProcess", function (e) {
+        var nodeRef = $(this).data("key");
+        $("#configDetails").data("key", nodeRef);
+        $("#ProcessRepository").addClass("hidden"); // Hide repository
+        $('#configureProcess').removeClass("hidden"); // Show process configuration
+        // Set the data as per node clicked
+        // Set the position label
+        var positionHTML = "";
+        var node = $(this).parent("li").parent("ul");
+        var currentNode = "";
+
+        while (!node.hasClass("tree")) {
+            if (node.parent().children().eq(0).hasClass("editTreeNode")) currentNode = node.parent().children().eq(1).html();
+            else currentNode = node.parent().children().eq(0).html();
+            if (positionHTML == "") {
+                positionHTML = currentNode;
+            }
+            else {
+                positionHTML = currentNode + '&nbsp;<i class="icon-chevron-right">&nbsp;</i>' + positionHTML;
+            }
+            node = node.parent("li").parent("ul");
+        }
+        $("#postionLabel").parent().html('<label id="postionLabel">Position :</label>' + positionHTML);
+        $("#postionLabel").parent().find(".badge-warning").each(function (e) { $(this).html(""); });
+
+        // Show the div
+        $("#cProcesses").data("node", nodeRef);
+        $("#cProcesses").data("count", "0");
+        $(this).parent().parent().children("li.pItem").each(function () {
+            addNewProcess(nodeRef, $(this).text());
+        });
+        if ($("#cProcesses").data("count") == "0") addNewProcess(nodeRef, "");
+    });
+
+
+    $(document).on("click", ".GTConfigure", function () {
+        $("#configDetails").data("key", $(this).data("key"));
+        $("#configureDialog").data("remote", "PGeneralTasks.html");
+        $("#configureDialog").modal();
+
+        $("#GenTasks").data("key", $(this).data("key"));
+        //initiliazeGTDialogTasks();
+    });
+
+    $(document).on("click", ".editProc", function () {
+        $("#configDetails").data("key", $(this).data("key"));
+        $("#configureDialog").data("remote", "PProcedures.html");
+        $("#configureDialog").modal();
+        //            alert("Calling function " + $(this).data("key"));
+        //$("#GenTasks").data("key", $(this).data("key"));
+        //initiliazeGTDialogTasks();
+    });
+
+    $(document).on("click", ".editChkLst", function () {
+        $("#configDetails").data("key", $(this).data("key"));
+        $("#configureDialog").data("remote", "PChecklists.html");
+        $("#configureDialog").modal();
+        //            alert("Calling function " + $(this).data("key"));
+        //$("#GenTasks").data("key", $(this).data("key"));
+        //initiliazeGTDialogTasks();
+    });
+
+    $(document).on("click", ".editTemplate", function () {
+        $("#configDetails").data("key", $(this).data("key"));
+        $("#configureDialog").data("remote", "PTemplates.html");
+        $("#configureDialog").modal();
+        //            alert("Calling function " + $(this).data("key"));
+        //$("#GenTasks").data("key", $(this).data("key"));
+        //initiliazeGTDialogTasks();
+    });
+
+    // Added this function so that the remote dialog loads each time with a refreshed 
+    $(document).on("hidden.bs.modal", function (e) {
+        if (e.target.id == "configureDialog") {
+            $(e.target).removeData("bs.modal").find(".modal-content").empty();
+            // Remove all configured events
+            $("body").undelegate(".addCheck", "click");
+            $("body").undelegate(".removeCheck", "click");
+            $(document).off("click", "#saveConfig");
+        }
+    });
+
+    // Scripts to support process configuration
+    var addNewProcess = function (nodeRef, activityName) {
+        var procCount = parseInt($("#cProcesses").data("count"));
+        var html = "";
+
+        procCount = procCount + 1;
+        $("#cProcesses").data("node", nodeRef);
+        $("#cProcesses").data("count", procCount);
+
+        html = '<div class="panel-group" id="pAccord' + nodeRef + '">' +
+                '<div class="panel colored">' +
+                    '<div class="panel-heading  yellow-bg">' +
+                        '<h4 class="panel-title">' +
+                        '<a class="accordion-toggle" data-toggle="collapse" data-parent="#pAccord' + nodeRef + '" href="#PShow' + nodeRef + procCount + '">' +
+                            '<span class="label label-success" id="pSts' + nodeRef + procCount + 'Title">New</span>&nbsp;&nbsp;' +
+                            '<span id="pNm' + nodeRef + procCount + 'Title">' + ((activityName == "") ? 'Provide Activity Name' : activityName) + '</span>' +
+                        '</a>' +
+                        '<button type="button" class="btn btn-xs black-bg pull-right" id="submitProsses' + nodeRef + procCount + '">Submit for Review</button>' +
+                        '</h4>' +
+                        '<ul class="pull-right toolbar">' +
+                            '<li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>' +
+                        '</ul>' +
+                    '</div>' +
+                    '<div id="PShow' + nodeRef + procCount + '" class="panel-collapse collapse' + ((activityName == "") ? 'in' : '') + '">' +
+                        '<div class="panel-body">' +
+                            '<div class="row">' +
+                                '<div class="form-group col-lg-6">' +
+                                    '<label class="col-lg-2">Name</label>' +
+                                    '<div class="col-lg-10"><input type="text" class="form-control procName" value="' + activityName + '" id="pNm' + nodeRef + procCount + '"></div>' +
+                                '</div>' +
+                                '<div class="form-group col-lg-6">' +
+                                    '<label class="col-lg-2">Status</label>' +
+                                    '<select class="chzn-nopadd chzn-select-no-single col-lg-9 procStatus" id="pSts' + nodeRef + procCount + '"><option>New</option> <option>Under Review</option> <option>Approved</option> <option>Rejected</option> <option>On Hold</option> </select>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="row">' +
+                                '<div class="col-lg-6">' +
+                                    '<div class="form-group">' +
+                                        '<label>Description</label>' +
+                                        '<textarea id="pDsc' + nodeRef + procCount + '" class="form-control popovers" rows="5" data-original-title="Description" data-content="Provide a detailed description of this activity" data-trigger="hover" data-placement="right"></textarea>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="col-lg-6">' +
+                                    '<div class="col-lg-12">' +
+                                        '<label class="col-lg-5">Default Status</label>' +
+                                        '<select class="chzn-nopadd chzn-select-no-single"><option>Assigned</option> <option>Activity Complete</option> <option>Under Review</option> <option>Review Complete</option> <option>On Hold</option> </select>' +
+                                    '</div>' +
+                                    '<div class="col-lg-12">' +
+                                        '<label class="col-lg-5">Completion Status</label>' +
+                                        '<select class="chzn-nopadd chzn-select-no-single" id="pDS"><option>Assigned</option> <option>Activity Complete</option> <option>Under Review</option> <option>Review Complete</option> <option>On Hold</option> </select>' +
+                                    '</div>' +
+                                    '<div class="col-lg-12">' +
+                                        '<label class="col-lg-5">Default Hrs (hh:mm)</label>' +
+                                        '<input id="pDD' + nodeRef + procCount + '" type="text" class="mask_duration" value="   :  " size="5" id="hrs">' +
+                                    '</div>' +
+                                    '<div class="col-lg-12">' +
+                                        '<label class="col-lg-5">Completion Status</label>' +
+                                        '<select id="pCS' + nodeRef + procCount + '" class="chzn-nopadd chzn-select-no-single"><option>Assigned</option> <option>Activity Complete</option> <option>Under Review</option> <option>Review Complete</option> <option>On Hold</option> </select>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="row col-lg-12">' +
+                                '<h4>Business Rules</h4>' +
+                            '</div>' +
+                            '<div class="row col-lg-12">' +
+                                '<table class="table table-striped brules">' +
+                                    '<thead>' +
+                                    '<tr>' +
+                                        '<th>#</th>' +
+                                        '<th>Event</th>' +
+                                        '<th>Order</th>' +
+                                        '<th>Hrs|Min</th>' +
+                                        '<th>Activity</th>' +
+                                        '<th>Action</th>' +
+                                        '<th>Action Role</th>' +
+                                        '<th>Completion Status</th>' +
+                                        '<th>Send Mail</th>' +
+                                        '<th>Config</th>' +
+                                    '</tr>' +
+                                    '</thead>' +
+                                    '<tbody data-count="1" id="pC' + nodeRef + 'BR' + procCount + 'R">' +
+                                    '<tr>' +
+                                        '<td><a href="#" class="removeBRule"><i class="icon-">&#xf05c</i></a></td>' +
+                                        '<td class="prcEdit" id="pC' + nodeRef + 'BR' + procCount + 'REvent1" data-id="0" data-next="pC' + nodeRef + 'BR' + procCount + 'ROrder1" data-type="Event">Select</td>' +
+                                        '<td class="prcEdit" id="pC' + nodeRef + 'BR' + procCount + 'ROrder1" data-id="0" data-next="pC' + nodeRef + 'BR' + procCount + 'RDuration1" data-prev="pC' + nodeRef + 'BR' + procCount + 'REvent1" data-type="Order">Select</td>' +
+                                        '<td class="prcEdit" id="pC' + nodeRef + 'BR' + procCount + 'RDuration1" data-id="   :  " data-next="pC' + nodeRef + 'BR' + procCount + 'RActivity1" data-prev="pC' + nodeRef + 'BR' + procCount + 'ROrder1" data-type="Duration">   :  </td>' +
+                                        '<td class="prcEdit" data-id="0" data-next="pC' + nodeRef + 'BR' + procCount + 'RAction1" id="pC' + nodeRef + 'BR' + procCount + 'RActivity1" data-prev="pC' + nodeRef + 'BR' + procCount + 'RDuration1" data-type="Activity">Select</td>' +
+                                        '<td class="prcEdit" data-id="0" data-next="pC' + nodeRef + 'BR' + procCount + 'RActionRole1" id="pC' + nodeRef + 'BR' + procCount + 'RAction1" data-prev="pC' + nodeRef + 'BR' + procCount + 'RActivity1" data-type="Action">Select</td>' +
+                                        '<td class="prcEdit" id="pC' + nodeRef + 'BR' + procCount + 'RActionRole1" data-id="0" data-next="pC' + nodeRef + 'BR' + procCount + 'RCStatus1" data-prev="pC' + nodeRef + 'BR' + procCount + 'RAction1" data-type="ActionRole">Select</td>' +
+                                        '<td class="prcEdit" id="pC' + nodeRef + 'BR' + procCount + 'RCStatus1" data-id="0" data-next="pC' + nodeRef + 'BR' + procCount + 'RSMail1" data-prev="pC' + nodeRef + 'BR' + procCount + 'RActionRole1" data-type="CStatus">Select</td>' +
+                                        '<td class="prcEdit" id="pC' + nodeRef + 'BR' + procCount + 'RSMail1" data-id="0" data-prev="pC' + nodeRef + 'BR' + procCount + 'RCStatus1" data-type="SMail">No</td>' +
+                                        '<td><a href="#" class="btn btn-xs blue-bg configRule" id="pC' + nodeRef + 'BR' + procCount + 'RConfig1"><i class="icon-">&#xf0ad;</i></a></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<td><a href="#" class="addBRule"><i class="icon-">&#xf055</i></a></td>' +
+                                    '</tr>' +
+                                '</tbody>' +
+                            '</table>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+        $("#cProcesses").append(html);
+
+        // Clear previous events attached to min-max and close buttons
+        $('.close-box').unbind();
+
+        // Bind new events 
+
+        /*close*/
+        $('.close-box').click(function () {
+            $(this).parent().parent().parent().parent().parent().fadeTo(400, 0, function () { $(this).hide(400, function () { $(this).remove() }); });
+            return false;
+        });
+
+        if (activityName == "") {
+            $('html, body').animate({
+                scrollTop: $("#PShow" + nodeRef + procCount).offset().top
+            }, 2000);
+            $("#pNm" + nodeRef + procCount).focus();
+        }
+
+    };
+
+    $("body").delegate("#newProcess", "click", function () {
+        addNewProcess($("#configDetails").data("key"), "");
+    });
+
+    $("body").delegate(".removeBRule", "keydown", function (e) {
+        keypressCode = e.which;
+        keypressShift = e.shiftKey;
+    });
+
+    $("body").delegate(".procName", "blur", function () {
+        var nm = $(this).val();
+        var nm_id = $(this).prop("id");
+
+        if (nm.trim() == "") $("#" + nm_id + "Title").text("Provide Activity Name");
+        else $("#" + nm_id + "Title").text(nm);
+    });
+
+    $("body").delegate(".procStatus", "blur", function () {
+        var nm = $(this).val();
+        var nm_id = $(this).prop("id");
+
+        if (nm.trim() == "") $("#" + nm_id + "Title").text("Provide Activity Name");
+        else $("#" + nm_id + "Title").text(nm);
+    });
+
+    $("body").delegate(".removeBRule", "blur", function (e) {
+        if (keypressCode == 9 && !keypressShift) $(this).parent().parent().children().eq(1).click();
+    });
+
+    $("body").delegate(".configRule", "keydown", function (e) {
+        keypressCode = e.which;
+        keypressShift = e.shiftKey;
+    });
+
+    $("body").delegate(".configRule", "blur", function (e) {
+        if (keypressCode == 9 && keypressShift) $(this).parent().parent().children().eq(8).click();
+    });
+
+    $("body").delegate(".prcEdit", "click", function () {
+        var OriginalContent = $(this).text();
+        var OriginalValue = $(this).data("id");
+        var editItem = $(this).data("type");
+
+        var inputHTML = "";
+
+        // Prepare input based on type of column
+        switch (editItem) {
+            case "Event":
+                inputHTML = '<select><option value="0">Select</option><option value="1">Assigned</option> <option value="2">Activity Complete</option> <option value="3">Under Review</option> <option value="4">Review Complete</option> <option value="5">On Hold</option> </select>';
+                break;
+            case "Order":
+                inputHTML = '<select ><option value="0">Select</option><option value="1">Before</option> <option value="2">After</option></select>';
+                break;
+            case "Duration":
+                inputHTML = '<input type="text" class="form-control mask_duration" size="1px">';
+                break;
+            case "Activity":
+                inputHTML = '<select ><option value="0">Select</option><option value="1">Coding</option> <option value="2">Review</option> <option value="3">Testing</option></select>';
+                break;
+            case "Action":
+                inputHTML = '<select ><option value="0">Select</option><option value="1">Assign</option> <option value="2">Pickup</option></select>';
+                break;
+            case "ActionRole":
+                inputHTML = '<select ><option value="0">Select</option><option value="1">Context</option> <option value="2">Job</option> <option value="3">Process</option> <option value="4">Person</option></select>';
+                break;
+            case "CStatus":
+                inputHTML = '<select ><option value="0">Select</option><option value="1">Assigned</option> <option value="2">Activity Complete</option> <option value="3">Under Review</option> <option value="4">Review Complete</option> <option value="5">On Hold</option></select>';
+                break;
+            case "SMail":
+                inputHTML = '<select ><option value="0">No</option> <option value="1">Yes</option></select>';
+                break;
+        };
+
+        $(this).removeClass("prcEdit");
+        $(this).addClass("cellEditing");
+        $(this).html(inputHTML);
+        $(this).children().val(OriginalValue);
+        $(this).children().first().focus();
+        $(this).children().first().select();
+        // Add mask for duration
+        $(".mask_duration").inputmask("999:99", { placeholder: " ", clearMaskOnLostFocus: true }); //default
+        keypressCode = -1;
+        keypressShift = false;
+
+        $(this).children().first().blur(function () {
+            var nextTD = $(this).parent().data("next");
+            var prevTD = $(this).parent().data("prev");
+
+            $(this).parent().removeClass("cellEditing");
+            $(this).parent().addClass("prcEdit");
+            $(this).parent().data("id", $(this).val());
+            if ($(this).find("option:selected").length == 0) $(this).parent().text($(this).val());
+            else $(this).parent().text($(this).find("option:selected").eq(0).text());
+
+            if (keypressCode == 9 || keypressCode == 16) {
+                if (keypressShift) $("#" + prevTD).click();
+                else $("#" + nextTD).click();
+            }
+        });
+
+
+        $(this).children().first().on("keydown", (function (e) {
+            // check for tab key
+            if (e.which == 13) {
+                var nextTD = $(this).parent().data("next");
+                var prevTD = $(this).parent().data("prev");
+
+                $(this).parent().removeClass("cellEditing");
+                $(this).parent().addClass("prcEdit");
+                $(this).parent().data("id", $(this).val());
+                if ($(this).find("option:selected").length == 0) $(this).parent().text($(this).val());
+                else $(this).parent().text($(this).find("option:selected").eq(0).text());
+                // Focus on the next td
+                $("#" + nextTD).click();
+            }
+            else {
+                keypressCode = e.which;
+                keypressShift = e.shiftKey;
+            }
+        }));
+
+    });
+
+    $(document).on("click", "#saveConfig", function () {
+        if (confirm("Do you want to save these tasks.")) {
+        }
+        $('#configureBRAction').modal('hide');
+    });
+
+    $(document).on("change", "#assignOption", function () {
+        if ($(this).find("option:selected").val() == 1) $(".assignInfo").show("slow");
+        else $(".assignInfo").hide("slow");
+    });
+
+    $(document).on("change", "#aRoleOption", function () {
+        var tdParent = $("#rDetails").parent();
+        $("#rDetails").remove();
+        switch ($(this).find("option:selected").val()) {
+            case "1":
+                // Context
+                tdParent.html('<select id="rDetails"><option value="1">Reporting Manager</option> <option value="2">Reviewer</option></select>');
+                break;
+            case "2":
+                // Job
+                //$("#rDetails").append($('<option/>',{value: '22', text: 'testing'}));
+                tdParent.html('<select  id="rDetails"><option value="1">Project Leader</option> <option value="2">Project Manager</option><option value="3">Delivery Manager</option><option value="4">Tester</option></select>');
+                break;
+            case "3":
+                //Process
+                tdParent.html('<select  id="rDetails"><option value="1">MR</option> <option value="2">SQA</option><option value="3">SEPG</option><option value="4">Internal Auditor</option></select>');
+                break;
+            case "4":
+                //Person
+                tdParent.html('<select  id="rDetails"><option value="1">Sandeep Honawar</option> <option value="2">MV Murali</option><option value="3">Shweta Patki</option><option value="4">Sapna Mukherjee</option></select>');
+                break;
+            default:
+                break;
+
+        };
+    });
+
+    $(document).on("change", "#sMailChk", function () {
+        if ($(this).prop("checked")) $(".mailInfo").show("slow");
+        else $(".mailInfo").hide("slow");
+    });
+
+    var viewRepDetails = function (myBaseNode, nodeKey, viewType) {
+    };
+
+    $("body").delegate(".excludeItem","click", function() {
+        if (confirm("Do you want to exclude this mapping ?")) {
+            $(this).children("i").first().removeClass("icon-remove");
+            $(this).children("i").first().addClass("icon-ok");
+            $(this).removeClass("excludeItem");
+            $(this).addClass("includeItem");
+            $(this).prop("title", "Click to include this task");
+            $(this).parent().children("span").first().addClass("label-strikeThrough");
+            $(this).parent().children("span").first().after('<span class="label label-danger">Excluded</span>');
+        }
+    });
+
+
+    $("body").delegate(".includeItem","click", function() {
+        if (confirm("Do you want to include this mapping ?")) {
+            $(this).children("i").first().removeClass("icon-ok");
+            $(this).children("i").first().addClass("icon-remove");
+            $(this).removeClass("includeItem");
+            $(this).addClass("excludeItem");
+            $(this).prop("title","Click to exclude this task");
+            $(this).parent().children("span").first().removeClass("label-strikeThrough");
+            $(this).parent().children("span").eq(1).remove();
+        }
+    });
+
+    $("body").delegate(".excludeProcess", "click", function () {
+        if (confirm("Do you want to exclude this mapping ?")) {
+            $(this).children("i").first().removeClass("icon-remove");
+            $(this).children("i").first().addClass("icon-ok");
+            $(this).removeClass("excludeProcess");
+            $(this).addClass("includeProcess");
+            $(this).prop("title", "Click to include this mapping");
+            $(this).next().children("span").first().addClass("label-strikeThrough");
+            $(this).next().children("span").first().after('<span class="label label-danger">Excluded</span>');
+        }
+    });
+
+    $("body").delegate(".includeProcess", "click", function () {
+        if (confirm("Do you want to include this mapping ?")) {
+            $(this).children("i").first().removeClass("icon-ok");
+            $(this).children("i").first().addClass("icon-remove");
+            $(this).removeClass("includeProcess");
+            $(this).addClass("excludeProcess");
+            $(this).prop("title", "Click to exclude this task");
+            $(this).next().children("span").first().removeClass("label-strikeThrough");
+            $(this).next().children("span").eq(1).remove();
+        }
+    });
+
+   </script> 
+
+
+}

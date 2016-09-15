@@ -1,0 +1,22 @@
+﻿@model mstr_org_function
+@{
+    Layout = null;    
+    ViewBag.Title = "GetItems";
+}
+<ul class="branch in" id="Function@(Model.ID)">
+    <li><a href="javascript:" data-toggle="modal" class="openDialog" data-id="Function@(Model.ID)" data-source="@(Url.Action("linkSubFunction","OrgSubInFunction", new  { id = Model.ID }))"><span id="subTitleP1">Add Sub Function</span></a>
+    @if (Model.mstr_org_sub_in_function.Any()) 
+    {
+
+        foreach (var s in Model.mstr_org_sub_in_function)
+        {
+            <li id="F@(Model.ID)S@(s.ID)">
+                <a class="confirmAction" data-id="F@(Model.ID)S@(s.ID)" data-message="Do you want to remove this sub function ?" data-messagetitle="Confirm Delete" data-class="deleteOnServer" data-classparams="data-source='@Url.Action("Delete","OrgSubInFunction",new { id = s.ID })' data-updateid='F@(Model.ID)S@(s.ID)'"><i class="icon-remove-sign"></i></a>
+                <span >
+                    @s.mstr_org_sub_function.LongName
+                </span>
+            </li>
+        }
+    }
+    </li>
+</ul>

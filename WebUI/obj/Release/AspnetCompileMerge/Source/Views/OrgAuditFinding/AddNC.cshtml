@@ -1,0 +1,64 @@
+﻿@{
+    Layout = null;
+    var ID = 0;
+    ID = ViewBag.Key;
+    int ScheduleID = ViewBag.ScheduleID;
+    int ClientID = ViewBag.ClientID;
+    NCCategory ncCategory = new NCCategory();
+}
+
+<tr id="obs@(ID)">
+    <td>
+        <a href="Javascript:;" class="deleteRow" data-clientdelete="N" data-dialogname="openDialogBox" data-id="obs@(ID)" data-source="@Url.Action("DeleteObservation","OrgAuditFinding",new { id = ID, scheduleID = ScheduleID })" title="Click to remove this observation"><i class="icon-remove"></i></a>
+        <input type="hidden" name="tbl_org_audit_observation.Index" value="@ID" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].ID" id="tbl_org_audit_observation[@(ID)].ID" value="@ID" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].ClientID" id="tbl_org_audit_observation[@(ID)].ClientID" value="@ClientID" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].tbl_Org_Audit_ScheduleID" id="tbl_org_audit_observation[@(ID)].tbl_Org_Audit_ScheduleID" value="@ScheduleID" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].NCObservation" id="NCObservation@(ID)Input" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].EvidenceRefDocs" id="EvidenceRefDocs@(ID)Input" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].Category" id="Category@(ID)Input" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].Clause" id="Clause@(ID)Input" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].Reference" id="Reference@(ID)Input" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].ActualCloseDate" id="ActualCloseDate@(ID)Input" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].CorrectiveAction" id="CorrectiveAction@(ID)" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].RootCauseAnalysis" id="RootCauseAnalysis@(ID)" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].TargetDateCA" id="TargetDateCA@(ID)" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].PreventiveAction" id="PreventiveAction@(ID)" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].TargetDatePA" id="TargetDatePA@(ID)" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].StatusCA" id="StatusCA@(ID)" value="" />
+        <input type="hidden" name="tbl_org_audit_observation[@(ID)].StatusPA" id="StatusPA@(ID)" value="" />
+    </td>
+    <td>
+        <div id="NCObservation@(ID)" contenteditable="true" class="EditDetail takeHtmlInput"></div>
+        @Html.ValidationMessage("tbl_org_audit_observation[" + ID + "].NCObservation")
+    </td>
+    <td>
+        <div id="EvidenceRefDocs@(ID)" contenteditable="true" class="EditDetail takeHtmlInput"></div>
+        @Html.ValidationMessage("tbl_org_audit_observation[" + ID + "].EvidenceRefDocs")
+    </td>
+    <td>
+        @Html.DropDownList("tbl_org_audit_observation[" + ID + "].Category", ncCategory.getList(0), "Select ...", new { @class = "specialCombo form-control col-md-12" })
+        @Html.ValidationMessage("tbl_org_audit_observation[" + ID + "].Category")
+    </td>
+    <td><div id="Clause@(ID)" contenteditable="true" class="takeInput"></div></td>
+    <td><div id="Reference@(ID)" contenteditable="true" class="takeInput"></div></td>
+    <td>
+        <div>
+            <div class="input-group date" id="StatusDate@(ID)">
+                <input type="text" class="form-control" name="tbl_org_audit_observation[@(ID)].StatusUpdateDate" id="tbl_org_audit_observation[@(ID)].StatusUpdateDate" value="" />
+                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+            </div>
+        </div>
+        @Html.ValidationMessage("tbl_org_audit_observation[" + ID + "].StatusUpdateDate")
+    </td>
+    <td>
+        <a href="Javascript:;" class="btn btn-sm black-bg moreInfo" data-id="@ID"><i class="icon-zoom-in"></i></a>
+    </td>
+</tr>
+<tr id="newObs">
+    <td><a href="Javascript:;" class="addOption" data-source="@Url.Action("AddNC","OrgAuditFinding",new { id = ScheduleID, key = ID + 1 })" data-id="newObs"><i class="icon-plus"></i></a></td>
+</tr>
+<script>
+    configureInlineCkEditor("#NCObservation@(ID)");
+    configureInlineCkEditor("#EvidenceRefDocs@(ID)");
+</script>

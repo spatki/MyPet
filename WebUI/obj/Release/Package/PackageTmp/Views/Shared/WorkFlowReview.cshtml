@@ -1,0 +1,81 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_workflow_state_historyInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog" style="width:70%;">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Review Comments</h4>
+	</div>
+    <form method="post" action="@Url.Action("ProceedInWF")" id="ReviewForm">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+
+            <input type="hidden" value="@Model.ClientID" name="ClientID" id="ClientID" />
+            <input type="hidden" value="@Model.ID" name="ID" id="ID" />
+            <input type="hidden" value="@Model.StatusDate.ToString(Globals.DateFormatString)" name="StatusDate" id="StatusDate" />
+            <input type="hidden" value="@Model.UserID" name="UserID" id="UserID" />
+            <input type="hidden" value="@Model.UserName" name="UserName" id="UserName" />
+            <input type="hidden" value="@Model.workflow.ToString()" name="workflow" id="workflow" />
+            <input type="hidden" value="@Model.ReviewItemName" name="ReviewItemName" id="ReviewItemName" />
+            <input type="hidden" value="@Model.Message" name="Message" id="Message" />
+            <input type="hidden" value="@Model.RefID" name="RefID" id="RefID" />
+            <input type="hidden" value="@Model.Status" name="Status" id="Status" />
+            <input type="hidden" value="@Model.StatusType" name="StatusType" id="StatusType" />
+            <input type="hidden" value="@Model.CreatedBy" name="CreatedBy" id="CreatedBy" />
+            <input type="hidden" value="@Model.StatusName" name="StatusName" id="StatusName" />
+            <input type="hidden" value="@WebSecurity.CurrentUserId" name="statusWF" id="statusWF" />
+            <input type="hidden" value="@Model.UpdateID" name="UpdateID" id="UpdateID" />
+
+            <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-6">    
+                        <div class="col-md-4"><strong>Comments@(Model.ReviewItemName == "" ? "" : " for ")</strong></div>
+                        <div class="col-md-8 pull-right">@Model.ReviewItemName</div>
+                    </div>
+                    <div class="form-group col-md-6">    
+                        <div class="col-md-5"><strong>Created By</strong></div>
+                        <div class="col-md-7 pull-right">@Model.CreatedBy</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-6">    
+                        <div class="col-md-4"><strong>Status</strong></div>
+                        <div class="col-md-8 pull-right">@Model.StatusName</div>
+                    </div>
+                    <div class="form-group col-md-6">    
+                        <div class="col-md-5"><strong>Comments By</strong></div>
+                        <div class="col-md-7 pull-right">@Model.UserName</div>
+                    </div>
+                </div>
+            </div>		    
+            <div class="row">
+			    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="control-label"><strong>Comments</strong></div>
+                            @Html.TextAreaFor(o => o.ReviewComments, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.ReviewComments)
+                        </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg closeDialog">Cancel</button>
+		        <button type="button" class="btn blue-bg saveWorkflowExtra" 
+                    data-mode="workflowEdit" 
+                    data-id="@Model.UpdateID" 
+                    data-form="ReviewForm" data-message="@Model.Message">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+   // specialDropDown (".specialCombo")
+</script>

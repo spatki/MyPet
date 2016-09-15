@@ -1,0 +1,60 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+	<div class="row">
+            <div class="panel col-md-12">
+            <div class="panel-heading">
+                <h3 class="panel-title">Organisation Masters</h3>
+                <ul class="pull-right toolbar">
+                    <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                    <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <p>Master maintenance for organisation. This information will also be used for configuring organisation details and mapping the same
+                    to process configuration</p>
+                <p>These options are also available on the left hand side menu on this page</p>
+            </div>
+        </div>
+    </div>
+        <div class="row responsive-tab">
+            <ul class="stats clearfix">
+                <li class="col-md-4 popovers" data-original-title="Levels" data-content="Levels indicate organisation classifications. Configure levels based how you want to structure your organisation." data-trigger="hover" data-placement="top">
+                    <div class="blue-bg openDialog" data-source="@Url.Action("UnderConstruction","Main")">
+                    <i class="icon-user"></i>
+                    <h5>Employee</h5>
+                    <a href="javascript:;" class="openDialog" data-source="@Url.Action("UnderConstruction","Main")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+                <li class="col-md-4 popovers" data-original-title="Roles" data-content="Here you define roles specific to an organisation. They may be mapped to the roles defined in process configuration." data-trigger="hover" data-placement="top">
+                    <div class="mehroon-bg subMenu" data-source="@Url.Action("Index","OrgDesignation")">
+                    <i class="icon-user-md"></i>
+                    <h5>Designation</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","OrgDesignation")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+                <li class="col-md-4 popovers" data-original-title="Structure" data-content="Define the organisation structure using this option." data-trigger="hover" data-placement="top">
+                    <div class="green-bg subMenu" data-source="@Url.Action("Index","OrgLevelMaster")">
+                    <i class="icon-list-alt"></i>
+                    <h5>Level Master</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","OrgLevelMaster")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+}

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<vw_procedure>
+@{
+    Layout = null;
+}
+
+<div class="col-lg-12 column left" id="sections" data-count="1">
+    <ul>
+        <li class="branch-in">
+            <a href="#" role="branch in" class="tree-toggle" data-toggle="branch" data-id="docRoot" id="A1">No Grouping (Main Document Area)</a>
+            <ul class="sortable-list branch in" id="DefaultDocNode">
+                <li>Drag sections in this group</li>
+                <li class="sortable-item MainSection" id="Section1">
+                    <div class="row">
+                        <div class="col-lg-12 panel colored">
+                            <div class="panel-heading  blue-bg">
+                                <input type="hidden" name="tbl_process_procedure.tbl_process_proc_section.Index" value="1" />
+                                <input type="hidden" name="tbl_process_procedure.tbl_process_proc_section[1].SequenceNo" value="1" />
+                                <h1 class="panel-title"><span id="sectionTitle1Div">Provide Title</span></h1>
+                                <ul class="pull-right toolbar">
+                                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                                </ul>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="form-group col-lg-12">
+                                        <label>Title</label>
+                                        <div class="controls">
+                                            <input type="text" class="form-control sectionTitle" id="sectionTitle1" name="tbl_process_procedure.tbl_process_proc_section[1].Title" value=""/>
+                                            @Html.ValidationMessageFor(o => o.tbl_process_proc_section.FirstOrDefault().Title)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="DetailRow1">
+                                    <textarea class='ckeditor col-lg-12' rows="5" id="Details1" name="tbl_process_procedure.tbl_process_proc_section[1].Detail"></textarea>
+                                    @Html.ValidationMessageFor(o => o.tbl_process_proc_section.FirstOrDefault().Detail)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li id="LR1">
+            <a class="tree-toggle addTreeNode" data-toggle="modal" data-id="R1" id="R1" href="#responsive">Add Group</a>                                    
+        </li>
+    </ul>
+</div>
+<div class="col-lg-12 navbar-fixed-bottom pull-right">
+    <div class="row pull-right panel-footer">
+        <div class="col-lg-12 col-lg-offset-1">
+        <button type="submit" class="btn blue-bg">Preview</button>
+        <button type="button" class="btn blue-bg" id="AddNewSection" data-last="1">Add Section</button>
+        <a href="#saveRevisionComments" class="btn blue-bg" data-toggle="modal">Save</a>
+        <input type="reset" class="btn gray-bg">
+        </div>
+    </div>
+</div>

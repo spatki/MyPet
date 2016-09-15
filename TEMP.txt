@@ -1,0 +1,39 @@
+ProcessAccelerator.WebUI.Dto.LocalPasswordModel
+
+
+            @if (ViewBag.HasLocalPassword)
+            {
+                <div class="row">
+                    <div class="col-md-6" id="changePassword">
+                        @Html.Partial("_ChangePasswordPartial",new LocalPasswordModel())
+                    </div>
+		            }
+            else
+            { 
+                @Html.Partial("_SetPasswordPartial")
+            }
+
+
+
+
+                    <div class="col-md-6" id="uplProfilePic">
+                        @using (Html.BeginForm("uploadProfilePicture", "DocMgr", FormMethod.Post, new { id = "changeProfilePic" }))
+                        {
+                            <div class="panel colored">
+                                <div class="panel-heading blue-bg">
+                                    <h3 class="panel-title">Profile Picture</h3>
+                                </div>
+                                <div class="panel-body">
+			                        <div class="col-md-12">
+                                        <div class="panel-body">
+                                            <img id="displayProfilePic" src="@Url.Content("~/Content/images/" + User.Identity.Name + "_pic.jpg")"  title='User Picture' width='200' height='200' alt='User Pic'/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-med blue-bg openDialog" data-source="@Url.Action("uploadProfilePicture","DocMgr")">Upload Picture</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>

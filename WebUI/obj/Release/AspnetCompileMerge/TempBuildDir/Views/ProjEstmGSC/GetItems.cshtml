@@ -1,0 +1,8 @@
+﻿@model IEnumerable<tbl_org_estm_gsc_master>
+@{
+    Layout = null;
+}
+@foreach (var item in Model)
+{
+    <option value="@item.ID" selected id="GSCOption@(item.ID)">@item.Name</option>
+}

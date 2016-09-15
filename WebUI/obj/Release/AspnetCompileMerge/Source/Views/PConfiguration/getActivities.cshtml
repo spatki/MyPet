@@ -1,0 +1,22 @@
+﻿@model tbl_process_repository
+@{
+    Layout = null;
+}
+
+<li id="Activity@(Model.ID)">
+    <a href="javascript:" class="tree-toggle repositoryDetails" data-basenode="@(Model.ID)" role="branch" data-toggle="branch">
+        <span class="label label-warning">Activities</span>&nbsp;<span id="Activity@(Model.ID)Count" class="badge badge-warning">@Model.tbl_process_rep_task.Count()</span>
+    </a>
+    <ul class="branch in">
+        <li><a href="javascript:" class="openActivities" data-id="Activity@(Model.ID)" data-source="@(Url.Action("manageActivities","PConfiguration", new  { repoID = Model.ID, id = "" }))">Click to configure Activities</a></li>
+    @{  if (Model.tbl_process_rep_task.Any()) 
+        {
+            var tasks = Model.tbl_process_rep_task.OrderBy(o => o.SequenceNo);
+            foreach (var g in tasks)
+        {
+            <li><a href="javascript:;" class="label-configured openActivities" data-source="@Url.Action("manageActivities","PConfiguration", new { repoID = Model.ID, id = g.ID})">@g.Name</a></li>
+        }
+    }
+    }
+    </ul>
+</li>

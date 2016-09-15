@@ -1,0 +1,83 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+	<div class="row">
+            <div class="panel col-md-12">
+            <div class="panel-heading">
+                <h3 class="panel-title">Process Masters</h3>
+                <ul class="pull-right toolbar">
+                    <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                    <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <p>Configure the masters required as reference information in process definition. Choose from the options below.</p>
+            </div>
+        </div>
+    </div>
+        <div class="row responsive-tab">
+            <ul class="stats clearfix">
+                <li class="col-md-4 popovers" data-original-title="Process Artifact" data-content="Define process artifacts using this option. You can refer the artifacts defined here in your process repository." data-trigger="hover" data-placement="top">
+                    <div class="blue-bg subMenu" data-source="@Url.Action("Index","PProcedure")">
+                    <i class="icon-">&#xf02d;</i>
+                    <h5>Process Artifact</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","PProcedure")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+                <li class="col-md-4 popovers" data-original-title="Templates" data-content="Define templates using this option. Templates are similar to procedures, a user cannot change a procedure, but can change a template. So templates serve as guidelines for a user" data-trigger="hover" data-placement="top">
+                    <div class="orange-bg subMenu" data-source="@Url.Action("Index","PTemplate")">
+                    <i class="icon-">&#xf09d;</i>
+                    <h5>Templates</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","PTemplate")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+                <li class="col-md-4 popovers" data-original-title="Checklists" data-content="Define checklists using this option. Its a list of checks that can be used to by a reviewer to check whether processes and guidelines are being followed." data-trigger="hover" data-placement="top">
+                    <div class="green-bg subMenu" data-source="@Url.Action("Index","PChecklist")">
+                    <i class="icon-">&#xf00c;</i>
+                    <h5>Checklists</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","PChecklist")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="row responsive-tab">
+            <ul class="stats clearfix">
+                <li class="col-md-4 popovers" data-original-title="Document" data-content="Upload documents using this option. These documents can be linked to processes during process configuration." data-trigger="hover" data-placement="top">
+                    <div class="mehroon-bg subMenu" data-source="@Url.Action("Index","ProcessType")">
+                    <i class="icon-">&#xf02c;</i>
+                    <h5>Process Type</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","ProcessType")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+                <li class="col-md-4 popovers" data-original-title="Document Type" data-content="Define document types that can be uploaded to the server. The system will only only the defined types to be uploaded" data-trigger="hover" data-placement="top">
+                    <div class="yellow-bg subMenu" data-source="@Url.Action("Index","DocMgr")">
+                    <i class="icon-">&#xf0f6;</i>
+                    <h5>Document</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","DocMgr")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+                <li class="col-md-4 popovers" data-original-title="Checklists" data-content="Workflow status for an uploaded document." data-trigger="hover" data-placement="top">
+                    <div class="black-bg subMenu" data-source="@Url.Action("Index","ProcessLCStatus")">
+                    <i class="icon-">&#xf02e;</i>
+                    <h5>Status Management</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","ProcessLCStatus")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+}

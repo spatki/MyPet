@@ -1,0 +1,16 @@
+﻿@model IEnumerable<mstr_process_role>
+@{
+    Layout = null;
+    var orgRoles = new RoleTypes();
+}
+@foreach (var o in Model)
+{
+    <tr id="@o.ID">
+        <td>@o.ShortName</td>
+        <td>@o.LongName</td>
+        <td>@orgRoles.getTypeName(o.Type)</td>
+        <td><button class="btn btn-med green-bg openDialog" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "ProcessRole", new { id = o.ID })"><i class="icon-">&#xf044;</i></button>
+            <button class="btn btn-med red-bg openDeleteDialog" data-id="@o.ID" data-mode="delete" data-source="@Url.Action("Delete", "ProcessRole", new { id = o.ID })"><i class="icon-">&#xf057;</i></button>
+        </td>
+    </tr>
+}

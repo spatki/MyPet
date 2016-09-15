@@ -1,0 +1,21 @@
+﻿@model IEnumerable<tbl_org_project>
+@{
+    Layout = null;
+}
+@if (Model != null && Model.Any())
+{
+    foreach (var o in Model)
+    {
+        <tr id="@o.ID">
+            <td>@o.Name</td>
+            <td>@o.Description</td>
+            <td>@o.mstr_org_project_type.LongName</td>
+            <td>@o.UserProfile.DisplayName</td>
+            <td>@o.mstr_process_lc_status.Status</td>
+            <td>@(o.UserProfile_StatusUser == null ? "" : o.UserProfile_StatusUser.DisplayName)</td>
+            <td><button class="btn btn-med green-bg subMenu" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "Project", new { id = o.ID })"><i class="icon-">&#xf044;</i></button>
+                <button class="btn btn-med red-bg openDeleteDialog" data-id="@o.ID" data-mode="delete" data-source="@Url.Action("Delete", "Project", new { id = o.ID })"><i class="icon-">&#xf057;</i></button>
+            </td>
+        </tr>
+    }
+}

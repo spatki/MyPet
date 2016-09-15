@@ -1,0 +1,43 @@
+﻿@model seededMenu
+@{
+    Layout = null;
+}
+
+@if (Model.vw_org_role_access.Any())
+{
+    IOrderedEnumerable<vw_org_role_access> items;
+
+    if (Model.functionID == null)
+    {
+        items = Model.vw_org_role_access.Where(o => o.IsMain == true).OrderBy(k => k.DisplaySequence);
+    }
+    else
+    {
+        items = Model.vw_org_role_access.Where(o => o.ParentFunctionID == Model.functionID).OrderBy(k => k.DisplaySequence);
+    }
+    if (items.Any())
+    {
+        foreach (var mItem in items)
+        {
+            var children = Model.vw_org_role_access.Where(c => c.ParentFunctionID == mItem.FunctionID).OrderBy(l => l.DisplaySequence);
+            <li>                        
+                @if (children.Any())
+                { 
+                    <input type="checkbox" data-id="@(mItem.ID)" id="M@(mItem.ID)" class="mapAccess"/>
+                    <a href="javascript:;" role="branch" class="tree-toggle closed" data-toggle="branch"> <span class="label @(mItem.IsMain == true ? "label-root" : "label-success")">@mItem.FriendlyName</span></a>
+                    <ul class="branch" id="C@(mItem.ID)">
+                        @{Model.functionID = mItem.FunctionID;}
+                        @Html.Partial("getMenuStructure",Model)
+                    </ul>
+                }
+                else
+                {
+                    <input type="checkbox" data-id="@mItem.ID" id="M@(mItem.ID)" class="mapAccess"/>
+                    <a href="javascript:;" role="leaf">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="label @(mItem.IsMain == true ? "label-root" : "label-configured")">@mItem.FriendlyName</span></a>
+                    <a href="javascript:;" class="restrictAccess" data-id="@mItem.RefID" id="A@(mItem.ID)" ></a>
+                }
+            </li>
+        }
+    }
+                                        
+}

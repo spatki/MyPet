@@ -1,0 +1,68 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_audit_schedule
+@{
+    Layout = null;
+    var ID = 0;
+    ID = ViewBag.Key;
+    ActionItemStatus ActionStatus = new ActionItemStatus();
+}
+
+<tr id="obs@(ID)">
+    <td>
+        <a href="Javascript:;" class="deleteRow" data-clientdelete="Y" data-dialogname="openDialogBox" data-id="obs@(ID)" title="Click to remove this observation"><i class="icon-remove"></i></a>
+        <input type="hidden" name="tbl_audit_observation.Index" value="@ID" />
+        <input type="hidden" name="tbl_audit_observation[@(ID)].ID" id="tbl_audit_observation[@(ID)].ID" value="@ID" />
+        <input type="hidden" name="tbl_audit_observation[@(ID)].tbl_Audit_ScheduleID" id="tbl_audit_observation[@(ID)].tbl_Audit_ScheduleID" value="@Model.tbl_Org_ProjectID" />
+        <input type="hidden" name="tbl_audit_observation[@(ID)].CorrectiveAction" id="tbl_audit_observation[@(ID)].CorrectiveAction" value="" />
+        <input type="hidden" name="tbl_audit_observation[@(ID)].EstimatedCloseDate" id="tbl_audit_observation[@(ID)].EstimatedCloseDate" value="" />
+        <input type="hidden" name="tbl_audit_observation[@(ID)].ActualCloseDate" id="tbl_audit_observation[@(ID)].ActualCloseDate" value="" />
+        <input type="hidden" name="tbl_audit_observation[@(ID)].Comments" id="tbl_audit_observation[@(ID)].Comments" value="" />
+        <input type="hidden" name="tbl_audit_observation[@(ID)].NC_Observation" id="NC_Observation@(ID)Input" value="" />
+        <input type="hidden" name="tbl_audit_observation[@(ID)].PossibleImpact_Attr" id="PossibleImpact_Attr@(ID)Input" value="" />
+
+    </td>
+    <td>
+        <div id="NC_Observation@(ID)" contenteditable="true" class="EditDetail takeHtmlInput"></div>
+        @Html.ValidationMessage("tbl_audit_observation[" + ID + "].NC_Observation")
+    </td>
+    <td>
+        <div id="PossibleImpact_Attr@(ID)" contenteditable="true" class="EditDetail takeHtmlInput"></div>
+        @Html.ValidationMessage("tbl_audit_observation[" + ID + "].PossibleImpact_Attr")
+    </td>
+    <td>
+        <select name="tbl_audit_observation[@(ID)].Responsibility" id="tbl_audit_observation[@(ID)].Responsibility" class="specialCombo form-control col-md-12">
+            <option value="" Selected>Select...</option> 
+            @if (Model.tbl_audit_participant != null && Model.tbl_audit_participant.Any())
+            {
+                foreach (var item in Model.tbl_audit_participant.Where(o => o.Type == 2))
+                {
+                    <option value="@item.tbl_Org_EmployeeID" >@item.tbl_org_employee.GivenName @item.tbl_org_employee.FamilyName</option>
+                }
+            }
+        </select>
+    </td>
+    <td>
+        @Html.DropDownList("tbl_audit_observation[" + ID + "].Status",ActionStatus.getList(1),"Select ...", new { @class = "specialCombo form-control col-md-12" })
+    </td>
+    <td>
+        <div>
+            <div class="input-group date" id="StatusDate@(ID)">
+                <input type="text" class="form-control" name="tbl_audit_observation[@(ID)].StatusUpdateDate" id="tbl_audit_observation[@(ID)].StatusUpdateDate" value="" />
+                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+            </div>
+            @Html.ValidationMessage("tbl_audit_observation[" + ID + "].StatusUpdateDate")
+        </div>
+    </td>
+</tr>
+
+<tr id="newObs">
+    <td><a href="Javascript:;" class="addOption" data-source="@Url.Action("AddObs","AuditFinding",new { id = Model.ID, key = (ID + 1) })" data-id="newObs"><i class="icon-plus"></i></a></td>
+</tr>
+
+<script>
+    configureInlineCkEditor("#NC_Observation@(ID)");
+    configureInlineCkEditor("#PossibleImpact_Attr@(ID)");
+    $('#StatusDate@(ID)').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+</script>

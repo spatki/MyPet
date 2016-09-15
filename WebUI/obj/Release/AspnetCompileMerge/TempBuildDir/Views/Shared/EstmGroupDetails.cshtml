@@ -1,0 +1,51 @@
+﻿@model proj_estm_group
+@{
+    Layout = null;
+}
+@if (Model.OldGroupID != null)
+{
+    <a href="Javascript:;" class="editLineItem" data-source="@Url.Action("EditModuleForEstm", "ProjGroup", new { ProjectID = Model.ProjectID, EstmID = Model.Proj_EstimationID, GroupID = Model.GroupID })" 
+        id="@Model.GroupID" data-params="sizeEstmParams" data-duplicate="checkmodule" data-id="@(Model.GroupID)" ><i class="icon-edit"></i></a>
+    <a class="tree-toggle checkmodule" data-toggle="branch" role="branch" data-id="@Model.GroupID" id="G@(Model.GroupID)" href="Javascript:;">@Model.Name</a>    
+}
+else
+{
+    <li id="LG@(Model.GroupID)">
+        <a href="Javascript:;" class="editLineItem" data-source="@Url.Action("EditModuleForEstm", "ProjGroup", new { ProjectID = Model.ProjectID, EstmID = Model.Proj_EstimationID, GroupID = Model.GroupID })" 
+            id="@Model.GroupID" data-params="sizeEstmParams" data-duplicate="checkmodule" data-id="@(Model.GroupID)" ><i class="icon-edit"></i></a>
+        <a class="tree-toggle checkmodule" data-toggle="branch" role="branch" data-id="@Model.GroupID" id="G@(Model.GroupID)" href="Javascript:;">@Model.Name</a>
+        <ul class="branch in">
+            <li>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="docTableLabel-bg" rowspan="2"></th>
+                            <th class="docTableLabel-bg" rowspan="2">Parameters For Development</th>
+                            <th class="docTableLabel-bg" colspan="3">Count (Numbers)</th>
+                            <th class="docTableLabel-bg" colspan="3">Weightage</th>
+                            <th class="docTableLabel-bg" colspan="3">Weighted Points</th>
+                        </tr>
+                        <tr>
+                            <th class="docTableLabel-bg">S</th>
+                            <th class="docTableLabel-bg">M</th>
+                            <th class="docTableLabel-bg">C</th>
+                            <th class="docTableLabel-bg">S</th>
+                            <th class="docTableLabel-bg">M</th>
+                            <th class="docTableLabel-bg">C</th>
+                            <th class="docTableLabel-bg">S</th>
+                            <th class="docTableLabel-bg">M</th>
+                            <th class="docTableLabel-bg">C</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="NewParameter">
+                            <td>
+                                <a href="Javascript:;" class="addLineItem" data-source="@Url.Action("AddParameter", "ProjEstimation", new { ProjectID = Model.ProjectID, EstmID = Model.Proj_EstimationID})" data-type="parameter" data-id="G@(Model.GroupID)New" data-params="sizeEstmParams" data-duplicate="checksize"><i class="icon-plus"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </li>
+}

@@ -1,0 +1,43 @@
+﻿@model restrictAccessInput
+@{
+    Layout = null;
+}
+
+<div class="modal-dialog" style="width:40%">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Restrict Access</h4>
+	</div>
+    <form method="post" action="@Url.Action("RestrictAccess")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <input type="hidden" name="ID" id="ID" value="@Model.ID" />
+                        <input type="hidden" name="ClientID" value="@Model.ClientID" />
+                        <input type="hidden" name="accessType" value="@Model.accessType" />
+                        <div class="form-group col-md-4">
+                            @Html.CheckBox("addAccess",Model.addAccess.GetValueOrDefault())
+                            <label>Add Access</label>
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            @Html.CheckBox("updateAccess",Model.updateAccess.GetValueOrDefault())
+                            <label>Update Access</label>
+                        </div>                        
+                        <div class="form-group col-md-4">
+                            @Html.CheckBox("deleteAccess",Model.deleteAccess.GetValueOrDefault())
+                            <label>Delete Access</label>
+                        </div>                        
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg save" data-mode="edit" data-id="A@(Model.MenuID)" data-form="submitLevel" >Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

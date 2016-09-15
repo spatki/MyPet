@@ -1,0 +1,109 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Process Accelerator</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />    
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="keywords" content="Admin Template, Dashboard, Web Application, C Panel, Admin Theme">
+	<meta name="description" content="Process Accelerator - Application">
+	<meta name="author" content="Shweta Patki">
+    @Styles.Render("~/Content/cssPA")
+</head>
+<body>
+	<header>
+    	<div class="container-fluid clearfix">
+			<div class="row">
+				<div id="logo" class="col-md-5">
+					<a href="index.html" title="Process Admin" class="pull-left">
+						<img src="~/Content/images/brand_identitiy.gif" height="45" title="PA" alt="Process Accelerator">
+					</a>
+				</div>
+                <div id="globalOptions" class="col-md-3">		
+				    <div class="btn-group">
+					    <a href="index.html" title="Home" ><i class="icon-home"></i></a> | 
+					    <a href="index.html" title="Help" ><i class="icon-question-sign"></i></a> | 
+					    <a href="index.html" title="Contact Us" ><i class="icon-envelope"></i></a>
+				    </div>
+			    </div>				
+
+                @if (@User.Identity.IsAuthenticated)
+                {
+                    <div  class="col-md-4 user pull-right">
+                        @Html.Partial("_UserSettings")
+                    </div>
+                }
+			</div>
+        </div>
+    </header>
+    @if (@User.Identity.IsAuthenticated)
+    {
+            @Html.Action("GetMenu", "Menu", new { functionID = "" })
+            <section id="main_dashboard_content">
+                @RenderBody()
+            </section>
+        <!-- Modal -->
+        <div class="modal fade" id="openDialogBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        </div><!-- /.modal -->
+    }
+    else
+    {
+        @RenderBody()
+        <div class="signin">
+            <div class="signin-body">
+                <h3>Log in</h3>
+                @Html.Partial("_Login", Model)
+            </div>
+        </div>
+    }
+
+
+    @Scripts.Render("~/bundles/PADependencies")
+    @Scripts.Render("~/bundles/PAScripts")
+    <script src="~/Scripts/pa/AngularJSCharts/angular-1.5.5/angular.min.js"></script>
+    <script src="~/Scripts/pa/AngularJSCharts/angular-1.5.5/angular-sanitize.min.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/globalize.min.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/dx.chartjs.js"></script>
+    <script src="~/Scripts/pa/AngularJSCharts/loadGraphs.js"></script>
+        <script>
+            var config = {
+                '.chzn-select-no-single': { disable_search_threshold: 10 },
+            }
+            for (var selector in config) {
+                $(selector).chosen(config[selector]);
+            }
+            $(document).ready(function () {
+
+                $('.sortable-list').sortable({
+                    connectWith: '.sortable-list'
+                });
+            });
+
+            function pleaseWait(dialog, title) {
+                $("#" + dialog).html('<div class="modal-dialog">' +
+                              '<div class="modal-content">' +
+                                '<div class="modal-header">' +
+                                  '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+                                  '<h4 class="modal-title" id="dialogTitle">' + title + '</h4>' +
+                                '</div>' +
+                                '<div class="modal-body"> ' +
+                                '<p align="center" style="padding:20px 0px;"><img src="@Url.Content("~/Content/images/windows8-line.gif")" align="middle"></p>' +
+		                    '</div>' +
+		                    '<div class="modal-footer">' +
+		                    '</div>' +
+	                      '</div><!-- /.modal-content -->' +
+	                    '</div><!-- /.modal-dialog -->')
+        };
+
+        function processing(message) {
+            return '<p align="center" style="padding:20px 0px;">' + message + '<img src="@Url.Content("~/Content/images/windows8-line.gif")" align="middle"></p>'
+        };
+
+    </script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

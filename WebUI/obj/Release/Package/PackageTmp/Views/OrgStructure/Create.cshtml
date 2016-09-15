@@ -1,0 +1,61 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using System.Web.Script.Serialization
+@using ProcessAccelerator.WebUI.Controllers
+@model mstr_org_structureInput
+@{
+    Layout = null;
+    string updateId = "";
+    
+    if (Model.mstr_Org_DesignationParentID == null) 
+    {
+        updateId = "PStructure";
+    }
+    else {
+        updateId = "C" + Model.mstr_Org_DesignationParentID.ToString();
+    }
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Add New Designation</h4>
+	</div>
+    <form method="post" action="@Url.Action("Create")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12">    
+                        <label class="control-label col-md-12">Designation</label>
+                        @Html.Action("getListItems","OrgDesignation",new { selectedItem = Model.ID, controlName = "mstr_Org_DesignationID", excludeIds = ViewBag.excludeRoles, includeIds = "", reload = "" })
+                        @Html.ValidationMessageFor(o => o.mstr_Org_DesignationID)
+                    </div>
+                    <div class="form-group col-md-12">    
+                        <label class="control-label col-md-12">Role Mapping</label>
+                        @Html.Action("getListItems","OrgRole",new { selectedItem = (Model.mstr_Org_RoleID == null) ? 0 : Model.mstr_Org_RoleID, controlName = "mstr_Org_RoleID", excludeIds = ViewBag.excludeRoles, includeIds = "", reload = "" })
+                        @Html.ValidationMessageFor(o => o.mstr_Org_RoleID)
+                    </div>
+                    <input type="hidden" name="Level" id="Level" value="@Model.Level" />
+                   <input type="hidden" name="mstr_Org_DesignationParentID" id="mstr_Org_DesignationParentID" value="@Model.mstr_Org_DesignationParentID" />
+                    <input type="hidden" name="StructPath" id="StructPath" value="@Model.StructPath" />
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Comments</label>
+                        @Html.TextAreaFor(o => o.Comments,new { @class = "form-control col-md-12" })
+                        @Html.ValidationMessageFor(o => o.Comments)
+                    </div>
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveStructure" data-mode="add" data-id="@updateId" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    // specialDropDown(".specialCombo");
+</script>

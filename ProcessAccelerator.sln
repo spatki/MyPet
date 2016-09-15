@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessAccelerator.Tests", "ProcessAccelerator.Tests\ProcessAccelerator.Tests.csproj", "{68F0EFF2-E5A1-40ED-AA1D-0D8D525E64B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{B3A93653-1F40-40CC-8C9F-AB781F2C6FDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{B83928E7-46E0-431D-8796-9DD3508A6EF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{C49D4CA0-5D79-4056-87C4-D2E860B36C56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra", "Infra\Infra.csproj", "{7CC05125-B606-4245-8516-6955D05EA7DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{CA6EE66F-C8C5-439C-B415-0EE5CC503491}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{B603F35A-0F5C-4F45-9A5F-633DED479F1F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F824E4B6-2D83-40F3-9C37-D29784FE363F}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68F0EFF2-E5A1-40ED-AA1D-0D8D525E64B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68F0EFF2-E5A1-40ED-AA1D-0D8D525E64B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68F0EFF2-E5A1-40ED-AA1D-0D8D525E64B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68F0EFF2-E5A1-40ED-AA1D-0D8D525E64B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3A93653-1F40-40CC-8C9F-AB781F2C6FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3A93653-1F40-40CC-8C9F-AB781F2C6FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3A93653-1F40-40CC-8C9F-AB781F2C6FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3A93653-1F40-40CC-8C9F-AB781F2C6FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B83928E7-46E0-431D-8796-9DD3508A6EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B83928E7-46E0-431D-8796-9DD3508A6EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B83928E7-46E0-431D-8796-9DD3508A6EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B83928E7-46E0-431D-8796-9DD3508A6EF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C49D4CA0-5D79-4056-87C4-D2E860B36C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C49D4CA0-5D79-4056-87C4-D2E860B36C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C49D4CA0-5D79-4056-87C4-D2E860B36C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C49D4CA0-5D79-4056-87C4-D2E860B36C56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CC05125-B606-4245-8516-6955D05EA7DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CC05125-B606-4245-8516-6955D05EA7DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CC05125-B606-4245-8516-6955D05EA7DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CC05125-B606-4245-8516-6955D05EA7DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA6EE66F-C8C5-439C-B415-0EE5CC503491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6EE66F-C8C5-439C-B415-0EE5CC503491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6EE66F-C8C5-439C-B415-0EE5CC503491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6EE66F-C8C5-439C-B415-0EE5CC503491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B603F35A-0F5C-4F45-9A5F-633DED479F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B603F35A-0F5C-4F45-9A5F-633DED479F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B603F35A-0F5C-4F45-9A5F-633DED479F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B603F35A-0F5C-4F45-9A5F-633DED479F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal

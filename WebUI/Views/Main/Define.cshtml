@@ -1,0 +1,57 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+@{
+    ViewBag.Title = "Define";
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+	<div class="page-header">
+		<h1>Define Process <a href="#"><small>Help ! how to proceed</small></a></h1>
+	</div>
+			
+	<ol class="breadcrumb">
+		<li><a href="index.html">Home</a></li>
+		<li><a href="#">Define</a></li>
+		<li class="active">Process</li>
+	</ol>
+
+    <div class="row">
+		<div class="col-md-12">
+            <div class="col-md-12 notification blue-bg">
+                <strong>Process Configuration</strong> : Choose one of the options below to start configuration, click to close this. 
+            </div>
+		</div>
+    </div>
+ 
+	<div class="row">
+            <div class="panel col-md-12">
+            <div class="panel-heading">
+                <h3 class="panel-title">Define</h3>
+                <ul class="pull-right toolbar">
+                    <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                    <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <p>Define process and organisation settings and relevant mappings between them.</p>
+                <p>These options are also available on the left hand side menu on this page</p>
+            </div>
+        </div>
+    </div>
+    @Html.Action("GetMobileMenu","Menu", new { functionID = "DF" })
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+    
+    @section Scripts
+    {
+            @Scripts.Render("~/bundles/editor")
+    }
+}

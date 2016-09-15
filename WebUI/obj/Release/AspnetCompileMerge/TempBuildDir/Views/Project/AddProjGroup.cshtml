@@ -1,0 +1,57 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using System.Web.Script.Serialization
+@using ProcessAccelerator.WebUI.Controllers
+@model tbl_org_proj_groupInput
+@{
+    Layout = null;
+    string updateId = "";
+
+    if (Model.Parent_GroupID == null) 
+    {
+        updateId = "PStructure";
+    }
+    else {
+        updateId = "C" + Model.Parent_GroupID.ToString();
+    }
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Add New Project Group</h4>
+	</div>
+    <form method="post" action="@Url.Action("AddProjGroup")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <div class="form-group col-md-12">    
+                        <label class="control-label col-md-12">Group</label>
+                        @Html.TextBoxFor(o => o.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(o => o.Name)
+                    </div>
+                    @Html.HiddenFor(o => o.Level)
+                    @Html.HiddenFor(o => o.Parent_GroupID)
+                    @Html.HiddenFor(o => o.tbl_Org_ProjectID)
+                    @Html.HiddenFor(o => o.IsParent)
+                    <div class="form-group col-md-12">    
+                        <label class="control-label col-md-12">Description</label>
+                        @Html.TextAreaFor(o => o.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(o => o.Description)
+                    </div>
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveStructure" data-mode="add" data-id="@updateId" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    // specialDropDown(".specialCombo");
+</script>

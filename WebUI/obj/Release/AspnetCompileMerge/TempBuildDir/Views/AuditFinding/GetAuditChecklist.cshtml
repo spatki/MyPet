@@ -1,0 +1,101 @@
+﻿@model IEnumerable<vw_audit_pci_list>
+@{
+    Layout = null;
+    var processGroup = "";
+    var groupSequence = 0;
+    var chklistSequene = 0;
+    var rowID = 0;
+}
+
+<table class="table table-bordered" id="AuditChklstTable">
+    <thead>
+        <tr>
+            <th class="docTableSequence-bg AuditCL_Header">Task Id</th>
+            <th class="AuditCL_Header">Phases & Task Description</th>
+            <th class="AuditCL_Header">Y/N</th>
+            <th class="AuditCL_Header">Compliance</th>
+            <th class="AuditCL_Header">Score</th>
+            <th class="AuditCL_Header"></th>
+            <th class="AuditCL_Header">Observations / NCs / Best Practices</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th class="AuditCL_SubHeader"></th>
+            <th class="AuditCL_SubHeader">Project Tasks</th>
+            <th class="AuditCL_SubHeader">Y/N</th>
+            <th class="AuditCL_SubHeader">Project Level</th>
+            <th class="AuditCL_SubHeader">PCI Score</th>
+            <th class="AuditCL_SubHeader" id="projScore">100</th>
+            <th class="AuditCL_SubHeader"></th>
+        </tr>
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var cl in Model.OrderBy(o => o.GroupSequenceNo).ThenBy(o => o.TaskSequence))
+            {
+                chklistSequene += 1;
+                rowID += 1;
+                if (processGroup != cl.PhaseName)
+                {
+                    groupSequence += 1;
+                    chklistSequene = 1;
+                    processGroup = cl.PhaseName;
+                    <tr>
+                        <td class="tblActionIcon AuditCL_Group">@groupSequence</td>
+                        <td class="AuditCL_Group"><a href="javascript:;" class="group tree-toggle" data-childid="Ph@(cl.PhaseID)">@cl.PhaseName</a></td>
+                        <td class="AuditCL_Group">Select</td>
+                        <td class="AuditCL_Group" colspan="2">Phase PCI Score</td>
+                        <td class="AuditCL_Group phaseScore" id="PhPCI@(cl.PhaseID)">100 %</td>
+                        <td class="AuditCL_Group"></td>
+                    </tr>
+                }
+                <tr class="Ph@(cl.PhaseID) EditRow">
+                    <td class="AuditCL_Item">
+                        @(groupSequence).@(chklistSequene)
+                        <input type="hidden" name="tbl_audit_checklist.Index" id="tbl_audit_checklist.Index" value="@rowID" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].ID" id="tbl_audit_checklist[@rowID].ID" value="@rowID" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].ClientID" id="tbl_audit_checklist[@rowID].ClientID" value="@ViewBag.ClientID" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].tbl_Audit_ScheduleID" id="tbl_audit_checklist[@rowID].tbl_Audit_ScheduleID" value="@ViewBag.AuditScheduleID" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].tbl_Org_ProjectID" id="tbl_audit_checklist[@rowID].tbl_Org_ProjectID" value="@ViewBag.ProjectID" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].PhaseID" id="tbl_audit_checklist[@rowID].PhaseID" value="@cl.PhaseID" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].GroupSequenceNo" id="tbl_audit_checklist[@rowID].GroupSequenceNo" value="@cl.GroupSequenceNo" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].GroupName" id="tbl_audit_checklist[@rowID].GroupName" value="@cl.PhaseName" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].ChkLstSequenceNo" id="tbl_audit_checklist[@rowID].ChkLstSequenceNo" value="@cl.TaskSequence" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].Task" id="tbl_audit_checklist[@rowID].Task" value="@cl.TaskName" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].PCI_Score" id="Score@(rowID)_WInput" value="100" />
+                        <input type="hidden" name="tbl_audit_checklist[@rowID].Comments" id="Comments@(rowID)Input" value="" />
+                    </td>
+                    <td class="AuditCL_Item">@cl.TaskName</td>
+                    <td >
+                        <select name="tbl_audit_checklist[@rowID].Applicable" id="Score@(rowID)_Applicable">
+                            <option value="true" Selected>&nbsp;&nbsp;Yes&nbsp;&nbsp;</option>
+                            <option value="false" >&nbsp;&nbsp;No&nbsp;&nbsp;</option>
+                        </select>
+                    </td>
+                    <td >
+                        <select name="tbl_audit_checklist[@rowID].Score" id="Score@(rowID)" onchange="Javascript:calculateAuditPCI();" data-field="PCI"  class="PCIResult">
+                            <option value="FI" Selected>&nbsp;&nbsp;FI&nbsp;&nbsp;</option>
+                            <option value="LI" >&nbsp;&nbsp;LI&nbsp;&nbsp;</option>
+                            <option value="PI" >&nbsp;&nbsp;PI&nbsp;&nbsp;</option>
+                            <option value="NI" >&nbsp;&nbsp;NI&nbsp;&nbsp;</option>
+                            <option value="NY" >&nbsp;&nbsp;NY&nbsp;&nbsp;</option>
+                            <option value="NA" >&nbsp;&nbsp;NA&nbsp;&nbsp;</option>
+                        </select>
+                    </td>
+                    <td class="AuditCL_Item takeInput" id="Score@(rowID)_W">1.00</td>
+                    <td class="AuditCL_Item PhPCI@(cl.PhaseID)" id="Score@(rowID)_PC"><span style="display:none;">100</span></td>
+                    <td><div class="AuditCL_Item EditNewDetail takeHTMLInput" id="Comments@(rowID)" contenteditable="true"></div></td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">No Processes Mapped to this project. Pl. contact the QA Department for help in configuring processes</td>
+            </tr>
+        }
+</table>
+<script>
+    configureInlineCkEditor(".EditNewDetail");
+</script>

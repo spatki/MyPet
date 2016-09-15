@@ -1,0 +1,75 @@
+﻿@model proj_estm_size_parameter
+@{
+    Layout = null;
+}
+<div id="phaseresponse">
+    <table>
+        <tbody id="PhaseParams">
+            <tr class="EditRow checkPhase" data-id="@Model.ParameterID" id="Ph@(Model.ID)">
+                <td><a href="Javascript:;" class="confirmAction" data-source=""
+                        data-messagetitle="Confirm Action" data-message="Do you want to remove this Phase ?" data-id="Ph@(Model.ID)"
+                        data-class="removeEstmPhase" data-classparams="data-id='Ph@(Model.ID)'" title="Remove this Phase"><i class="icon-remove"></i></a>
+                        <input type="hidden" id="tbl_org_proj_estm_effort_Schedule.Index" name="tbl_org_proj_estm_effort_Schedule.Index" value="@Model.ID" />
+                        <input type="hidden" id="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].ID" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].ID" value="@Model.ID" />
+                        <input type="hidden" id="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].ClientID" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].ClientID" value="@Model.ClientID" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseInput" : "PPC" + Model.ID.ToString() + "Input")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].EffortPercent" value="0" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseDefectsInput" : "PPC" + Model.ID.ToString() + "DefectsInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].Defects" value="0" />
+                        <input type="hidden" id="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].IsCutPhase" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].IsCutPhase" value="@Model.IsCutPhase.ToString()" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseEffInput" : "PPC" + Model.ID.ToString() + "EffInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].PDs" value="0" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchPDInput" : "PPC" + Model.ID.ToString() + "SchPDInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].Sch_Days" value="0" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchEndDtInput" : "PPC" + Model.ID.ToString() + "SchEndDtInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].Sch_EndDate" value="" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchHolidayInput" : "PPC" + Model.ID.ToString() + "SchHolidayInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].Sch_Holidays" value="0" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchPplInput" : "PPC" + Model.ID.ToString() + "SchPplInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].Sch_People" value="0" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchStDateInput" : "PPC" + Model.ID.ToString() + "SchStDateInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].Sch_StartDate" value="" />
+                        <input type="hidden" id="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].SequenceNo" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].SequenceNo" value="0" />
+                        <input type="hidden" id="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].tbl_Org_ProjectID" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].tbl_Org_ProjectID" value="@Model.ProjectID" />
+                        <input type="hidden" id="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].tbl_Proj_EstimationID" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].tbl_Proj_EstimationID" value="@Model.Proj_EstimationID" />
+                        <input type="hidden" id="tbl_org_proj_estm_effort_schedule[@(Model.ID)].tbl_Org_PhaseID" name="tbl_org_proj_estm_effort_schedule[@(Model.ID)].tbl_Org_PhaseID" value="@Model.ParameterID" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseSBRInput" : "PPC" + Model.ID + "SBRInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].SBR" value="" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhasePMLoadInput" : "PPC" + Model.ID + "PMLoadInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].PM_Loading" value="" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhasePMEffortInput" : "PPC" + Model.ID + "PMEffortInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].PM_Effort" value="" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhasePMCostInput" : "PPC" + Model.ID + "PMCostInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].PM_Cost" value="" />
+                        <input type="hidden" id="@(Model.IsCutPhase == true ? "CUT_PhaseOtherCostInput" : "PPC" + Model.ID + "OtherCostInput")" name="tbl_org_proj_estm_effort_Schedule[@(Model.ID)].Other_Costs" value="" />
+                </td>
+                <td id="PPC@(Model.ID)Name" class="@(Model.IsCutPhase == true ? "TableDisabledLabel" : "")">@Model.Name</td>
+                <td class="@(Model.IsCutPhase == true ? "TableDisabledLabel" : "EditNumber") effSchEst updateInput" 
+                    data-navkey="@(Model.IsCutPhase == true ? "" : "EditNumber")" data-class="@(Model.IsCutPhase == true ? "" : "EditNumber")" 
+                    data-type="Model" id="@(Model.IsCutPhase == true ? "CUT_Phase" : "PPC" + Model.ID.ToString())">0</td>
+                <td class="TableDisabledLabel updateInput" id="@(Model.IsCutPhase == true ? "CUT_PhaseEff" : "PPC" + Model.ID.ToString() + "Eff")"></td>
+                <td id="Ph@(Model.ID)Role">
+                    <a href="Javascript:;" class="addLineItem" data-source="@Url.Action("LinkRolesForCost","ProjEstimation", new {  ProjectID = Model.ProjectID, EstmID = Model.Proj_EstimationID, PhaseID = Model.ID, SelectedIDs = "" } )" 
+                        data-params="LinkedSkillParams" data-duplicate="checkLinkedSkills" title="Link Roles">Add Roles</a>
+                    <input type="hidden" id="Ph@(Model.ID)RoleInput" name="tbl_org_proj_estm_effort_schedule[@(Model.ID)].Roles" value="" />
+                    <input type="hidden" id="Ph@(Model.ID)RoleIDsInput" class="checkLinkedSkills" data-id="" name="tbl_org_proj_estm_effort_schedule[@(Model.ID)].RoleIDs" value="" />                                                    
+                </td>
+                <td class="EditNumber updateInput" data-navkey="EditNumber" id="@(Model.IsCutPhase == true ? "CUT_PhaseSBR" : "PPC" + Model.ID + "SBR")">0</td>
+                <td class="EditNumber updateInput" data-navkey="EditNumber" id="@(Model.IsCutPhase == true ? "CUT_PhasePMLoad" : "PPC" + Model.ID + "PMLoad")">0</td>
+                <td class="TableDisabledLabel updateInput" id="@(Model.IsCutPhase == true ? "CUT_PhasePMEffort" : "PPC" + Model.ID + "PMEffort")">0</td>
+                <td id="@(Model.IsCutPhase == true ? "CUT_PhasePMCost" : "PPC" + Model.ID + "PMCost")" class="TableDisabledLabel updateInput">0</td>
+                <td id="@(Model.IsCutPhase == true ? "CUT_PhaseOtherCost" : "PPC" + Model.ID + "OtherCost")" class="TableDisabledLabel updateInput">0</td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody id="ScheduleParams">
+            <tr class="EditRow" id="Ph@(Model.ID)Sch">
+                <td class="docTableLabel-bg">@Model.Name</td>
+                <td class="TableDisabledLabel" data-type="updateSchedule" id="@(Model.IsCutPhase == true ? "CUT_PhaseEffForSch" : "PPC" + Model.ID.ToString() + "EffForSch")">0</td>
+                <td class="EditNumber updateInput" data-navkey="EditNumber" data-type="projSch" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchPpl" : "PPC" + Model.ID.ToString() + "SchPpl")">0</td>
+                <td class="TableDisabledLabel updateInput" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchPD" : "PPC" + Model.ID.ToString() + "SchPD")">0</td>
+                <td class="EditNumber updateInput" data-navkey="EditNumber" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchHoliday" : "PPC" + Model.ID.ToString() + "SchHoliday")">0</td>
+                <td class="EditDate updateDate"  data-navkey="@(Model.ID == 1 ? "EditNumber" : "")" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchStDate" : "PPC" + Model.ID.ToString() + "SchStDate")"></td>
+                <td class="TableDisabledLabel updateDate" id="@(Model.IsCutPhase == true ? "CUT_PhaseSchEndDt" : "PPC" + Model.ID.ToString() + "SchEndDt")"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody  id="DefectParams">
+            <tr id="Ph@(Model.ID)Defect">
+                <td class="docTableLabel-bg">@Model.Name</td>
+                <td class="TableDisabledLabel" id="@(Model.IsCutPhase == true ? "CUT_PhaseEffForDef" : "PPC" + Model.ID.ToString() + "EffForDef")">0</td>
+                <td class="TableDisabledLabel updateInput" id="@(Model.IsCutPhase == true ? "CUT_PhaseDefects" : "PPC" + Model.ID.ToString() + "Defects")">0</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

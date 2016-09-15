@@ -1,0 +1,31 @@
+﻿@model IEnumerable<mstr_org_level>
+@{
+    Layout = null;
+}
+<li><a href="#" role="branch" class="tree-toggle closed" data-toggle="branch" data-value="Bootstrap_Tree"><span class="label label-root">Organisation Levels</span></a>
+    <ul class="branch">
+        @if (Model.Any())
+        {
+            foreach (var val in Model)
+            {
+                <li><a href="#" role="branch" class="tree-toggle closed" data-toggle="branch" data-value="Bootstrap_Tree"><span class="label label-success">@val.LongName</span></a>
+                    <ul class="branch">
+                        @if (val.mstr_org_level_master.Any())
+                        {
+                            foreach (var l in val.mstr_org_level_master)
+                            {
+                                <li><input type="checkbox" id="M@(val.ID)M@(l.ID)" data-levelid="@val.ID" data-masterid="@l.ID" class="mapData"/>
+                                    <a href="#" role="leaf"><span class="label label-configured">@l.LongName</span></a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li> No entries found </li>
+                        }
+                    </ul>
+                </li>
+            }
+        }                  
+    </ul>
+</li>

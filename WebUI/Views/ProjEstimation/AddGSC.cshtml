@@ -1,0 +1,45 @@
+﻿@model proj_estm_GSC
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Select General Systems Characteristic</h4>
+	</div>
+    <form method="post" action="@Url.Action("AddGSC")" id="addGSCForm">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <div class="form-group" >    
+                            <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+                            <input type="hidden" id="Proj_EstimationID" name="Proj_EstimationID" value="@Model.Proj_EstimationID" />
+                            <input type="hidden" id="ProjectID" name="ProjectID" value="@Model.ProjectID" />
+                            <input type="hidden" id="ClientID" name="ClientID" value="@Model.ClientID" />
+                            <input type="hidden" id="ExcludeIDs" name="ExcludeIDs" value="@Model.ExcludeIDs" />
+                            <label>GSC</label>
+                            <div class="input-group">
+                                @Html.Action("getListItemsCustom", "ProjEstmGSC", new { selectedItem = Model.GSCID, controlName = "GSCID", excludeIds = Model.ExcludeIDs, selectIds = "", reload = "" })
+								<div class="input-group-btn">
+                                    <button type="button" class="btn btn-med green-bg editDropDown" data-dialog="extraDialogBox" data-sourceid="GSCID" data-source="@Url.Action("EditGSC", "ProjEstmGSC")" data-id="GSCID" id="GoButton" title="Click to add plans"><i class="icon-pencil"></i></button>
+								</div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg save" data-mode="addLineItem" data-id="TDIParams" data-form="addGSCForm">Select</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<!-- Modal -->
+<div class="modal fade" id="extraDialogBox" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div><!-- /.modal -->

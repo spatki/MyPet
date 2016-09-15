@@ -1,0 +1,52 @@
+﻿@model tbl_org_proj_locationInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Create New Location for @(ViewBag.ProjectName)</h4>
+	</div>
+    <form method="post" action="@Url.Action("Create")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <input type="hidden" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" value="@Model.tbl_Org_ProjectID" />
+                        <input type="hidden" id="LevelID" name="LevelID" value="@Model.LevelID" />
+                        <div class="form-group">    
+                            <label>Sequence No</label>
+                            @Html.TextBoxFor(o => o.SequenceNo, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.SequenceNo)
+                        </div>
+                        <div class="form-group">
+                            <label>Location Name</label>
+                            @Html.TextBoxFor(o => o.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Name)
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Location Type</label>
+                            @Html.DropDownListFor(o => o.Type, (new ProjectLocationTypes()).getList(Model.Type), "Select ...", new { @class = "col-md-12 form-control" })
+                            @Html.ValidationMessageFor(o => o.Type)
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label class="control-label">Org Level Mapping</label>
+                            @Html.Action("getListItemsFor","OrgLevelMaster",new { selectedItem = Model.LevelMasterID.GetValueOrDefault(), controlName = "LevelMasterID", excludeIds = "", includeIds = "", levelID = Model.LevelID })
+                            @Html.ValidationMessageFor(o => o.LevelMasterID)
+                            <span class="help-block"><i class="icon-">&#xf05a;</i> Master data for the org level being mapped</span>
+                        </div>
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveDefault" data-mode="add" data-id="listing" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+

@@ -1,0 +1,226 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_employeeInput
+@{
+    Model.StatusDate = System.DateTime.Now.Date;
+    Layout = null;
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+
+<div class="row">
+        <div class="panel colored col-md-12">
+		<form role="form" name="newEmployee" id="newEmployee" action="@Url.Action("Edit")" method="post">
+            <div class="panel-body">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active"><a data-toggle="tab" href="#Personal">Personal Details</a></li>
+                    <li><a data-toggle="tab" href="#OrgLevels" id="OrgLevelTab">Organisation Level *</a></li>
+                </ul>
+                <div class="row col-md-12">
+                    @Html.ValidationSummary(true)
+                </div>
+                        
+                <div class="tab-content" id="myTabContent">
+                    <div id="Personal" class="tab-pane fade in active">
+                        <br />
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <input type="hidden" name="ID" id="ID" value="@Model.ID" />
+                        <div class="form-group">
+                            <label>Employee Code</label>
+                            <div class="controls"><input type="text" name="EmpCode" id="EmpCode" value="@Model.EmpCode" class="form-control" />
+                                @Html.ValidationMessageFor(o => o.EmpCode)
+                            </div>
+                        </div>
+                    </div>                            
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Date Of Joining</label>
+                            <div >
+                                <div class="input-group date datepicker">
+                                    <input type="text" name="DateOfJoining" id="DateOfJoining" value="@Model.DateOfJoining.ToString(Globals.DateFormatString)" class="form-control" />
+                                    <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                </div>
+                                @Html.ValidationMessageFor(o => o.DateOfJoining)
+                                <input type="hidden" name="DesignationEffectiveFrom" id="DesignationEffectiveFrom" value="@System.DateTime.Now.ToString(Globals.DateFormatString)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                        <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>Given Name</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(o => o.GivenName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.GivenName)
+                            <span class="help-block"><i class="icon-">&#xf05a;</i> preferrably as mentioned in the passport</span></div>
+                        </div>
+                    </div>
+                            
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>Family / Last Name</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(o => o.FamilyName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.FamilyName)
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                        
+                <div class="row col-md-12">                           
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>Gender</label>
+                        <div class="controls">
+                            @Html.DropDownListFor(o => o.Gender, (new GenderType()).getList(Model.Gender), "Select ...", new { @class = "col-md-12 form-control specialCombo" })
+                            @Html.ValidationMessageFor(o => o.Gender)
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>Employment Status</label>
+                        <div class="controls">
+                            @Html.Action("getStatusFor","ProcessLCStatus",new { selectedItem = Model.mstr_Process_LC_StatusID, controlName = "mstr_Process_LC_StatusID", excludeIds = "", includeIds = "", reload = "", Type = 7, DefaultSelection = false})
+                            @Html.ValidationMessageFor(o => o.mstr_Process_LC_StatusID)
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12">                           
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <div >
+                                <div class="input-group date datepicker">
+                                    @Html.TextBoxFor(o => o.DateOfBirth,Globals.DateFormatValue, new { @class = "form-control" })
+                                    <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(o => o.DateOfBirth)
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Employment Status Date</label>
+                            <div >
+                                <div class="input-group date datepicker">
+                                    @Html.TextBoxFor(o => o.StatusDate,Globals.DateFormatValue, new { @class = "form-control" })
+                                    <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                </div>
+                                <span class="help-block"><i class="icon-">&#xf05a;</i> Date from which the employee status is effective</span>
+                            </div>
+                            @Html.ValidationMessageFor(o => o.StatusDate)
+                        </div>
+                    </div>
+                </div>
+
+                        <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>Designation</label>
+                        <div class="controls">
+                            @Html.Action("getListItems","OrgDesignation",new { selectedItem = Model.CurrentDesignation, controlName = "CurrentDesignation", excludeIds = "", includeIds = "", reload = ""})
+                            @Html.ValidationMessageFor(o => o.CurrentDesignation)
+                        </div>
+                        </div>
+                    </div>
+                            
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>Role</label>
+                        <div class="controls">
+                            @Html.Action("getMultiSelectList","OrgRole",new { selectedItems = Model.Roles, controlName = "Roles", excludeIds = "", includeIds = "", reload = "" })
+                            @Html.ValidationMessageFor(o => o.Roles)
+                        </div>
+                        </div>
+                    </div>
+                </div>  
+
+                <div class="row col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>HR Reporting</label>
+                        <div class="controls">
+                            @Html.Action("getListHRMgrs","Employee",new { selectedItem = (Model.HR_Reporting == null ? 0 : Model.HR_Reporting.GetValueOrDefault()), controlName = "HR_Reporting", excludeIds = "", includeIds = "", reload = ""})
+                            @Html.ValidationMessageFor(o => o.HR_Reporting)
+                        </div>
+                        </div>
+                    </div>
+                            
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label>Department Reporting</label>
+                        <div class="controls">
+                            @Html.Action("getListDeptMgrs","Employee",new { selectedItem = (Model.Dept_Reporting == null ? 0 : Model.Dept_Reporting.GetValueOrDefault()), controlName = "Dept_Reporting", excludeIds = "", includeIds = "", reload = "" })
+                            @Html.ValidationMessageFor(o => o.Dept_Reporting)
+                        </div>
+                        </div>
+                    </div>
+                </div>  
+
+                @Html.Hidden("Password","password")
+                @Html.Hidden("ConfirmPassword","password")
+                @Html.HiddenFor(o => o.UserName)
+                @Html.HiddenFor(o => o.EmailID)
+
+                </div>           
+                    <div id="OrgLevels" class="tab-pane">
+                        <br />
+                        <div class="col-md-12">
+                            <div class="col-md-12 notification blue-bg">
+                 	            <strong>Organisation Levels</strong> : Based on what levels have been configured for this organisation. Click to close this notification.
+                            </div>
+				        </div>
+
+                        @if (Model.employee_org_level.Any())
+                        {
+                            <div class="row">
+                            @foreach (var o in Model.employee_org_level)
+                            {
+                                <div class="col-md-6">
+                                    <hr />
+                                    <div class="form-group">
+                                        <label>@o.org_level_name</label>
+                                        <input type="hidden" name="employee_org_level.Index" id="employee_org_level.Index" value="@o.ID" />
+                                        <input type="hidden" name="employee_org_level[@(o.ID)].ID" id="employee_org_level[@(o.ID)].ID" value="@o.ID" />
+                                        <input type="hidden" name="employee_org_level[@(o.ID)].org_levelID" id="employee_org_level[@(o.ID)].org_levelID" value="@o.org_levelID" />
+                                        <input type="hidden" name="employee_org_level[@(o.ID)].org_level_name" id="employee_org_level[@(o.ID)].org_level_name" value="@o.org_level_name" />
+                                        <div class="controls">
+                                            @Html.Action("getListItemsFor","OrgLevelMaster",new { selectedItem = o.org_level_masterID.GetValueOrDefault(), controlName = "employee_org_level[" + o.ID + "].org_level_masterID", excludeIds = "", includeIds = "", levelID = o.org_levelID})
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>Organistion Levels not defined</p>
+                        }
+                    </div>
+                </div>             
+			</div>
+		    <div class="panel-footer">
+			    <div class="form-group">
+					    <a href="javascript:;" class="btn btn-med blue-bg save" data-id="containerDetails" data-form="newEmployee" data-mode="update">Save</a>
+                        <a href="javascript:;" class="btn btn-med gray-bg subMenu" data-source="@Url.Action("Index","Employee")">Back</a>
+			    </div>
+		    </div>
+		</form>
+					
+    </div>  
+</div>
+
+<script>
+    $('.datepicker').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+
+    specialDropDown(".specialCombo");
+
+
+</script>

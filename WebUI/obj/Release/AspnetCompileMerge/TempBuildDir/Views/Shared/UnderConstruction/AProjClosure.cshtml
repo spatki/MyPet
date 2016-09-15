@@ -1,0 +1,785 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+     
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2">Select Project</label>
+                    <div class="controls col-md-10"><select class="col-md-12 chzn-nopadd chzn-select-no-single"><option>Payroll System</option> <option>Code Migration</option></select></div>
+                </div>
+            </div>
+            <hr />            
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="javascript:;" id="showfilter" class="pull-left">Filter Tasks <i class="icon-">&#xf00e;</i></a>
+                </div>
+                <hr />
+                <div class="panel colored" id="filterParams">
+                    <div class="panel-body filter-bg">
+                        <div class="row col-md-12">
+                            <div class="col-md-5">
+                                    <label class="col-md-2 pull-left filterParams">From</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group date datepicker">
+                                            <input type="text" id="filter_fromDt" class="form-control col-md-9 filterParams">
+                                            <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="col-md-2 pull-left filterParams">To</label>
+                                <div class="col-md-9">
+                                    <div class="input-group date datepicker">
+                                        <input type="text" id="filter_toDt" class="form-control col-md-9 filterParams">
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-med blue-bg searchProcedure pull-right filterParams">GO</button>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="col-md-2 pull-left filterParams">Type</label>
+                                    <div class="col-md-9">
+                                        <select class="chzn-select-no-single col-md-12 filterParams">
+                                            <option value="0" selected="selected">All</option>
+                                            <option value="1">QA Observation</option>
+                                            <option value="2">Audit</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="col-md-2 pull-left filterParams">Status</label>
+                                    <div class="col-md-9">
+                                        <select class="col-md-12 filterParams chzn-select-no-single">
+                                            <option value="0" selected="selected">All</option>
+                                            <option value="1">Open</option>
+                                            <option value="2">Closed</option>
+                                            <option value="3">Escalated</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>     
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered advanced-table" >
+                    <thead>
+                        <tr>
+                            <th class="docTableHeader-bg">Ref. ID</th>
+                            <th class="docTableHeader-bg">Type</th>
+                            <th class="docTableHeader-bg">Audit Start</th>
+                            <th class="docTableHeader-bg">Audit Finish</th>
+                            <th class="docTableHeader-bg">Auditor Name</th>
+                            <th class="docTableHeader-bg">Audit Status</th>
+                            <th class="docTableHeader-bg">Tracking</th>
+                            <th class="docTableHeader-bg">Report</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>P122-O1</td>
+                            <td>QA Obs</td>
+                            <td>10-Nov-14</td>
+                            <td>10-Nov-14</td>
+                            <td>Jagdish Zaveri</td>
+                            <td>Open</td>
+                            <td><span class="label label-danger col-md-12">Delayed</span></td>
+                            <td><a href="#repDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>P012-A1</td>
+                            <td>Audit</td>
+                            <td>02-Jan-14</td>
+                            <td>03-Nov-14</td>
+                            <td>Surekha Shetty</td>
+                            <td>Open</td>
+                            <td><span class="label label-success col-md-12">Pending</span></td>
+                            <td><a href="#auditObservations" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>                        
+                        <tr>
+                            <td>P132-A2</td>
+                            <td>Audit</td>
+                            <td>24-Mar-14</td>
+                            <td>24-Mar-14</td>
+                            <td>Kapil Khanna</td>
+                            <td>Open</td>
+                            <td><span class="label label-success col-md-12">Pending</span></td>
+                            <td><a href="#auditObservations" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>                        
+                        <tr>
+                            <td>P435-O1</td>
+                            <td>QA Obs</td>
+                            <td>01-Apr-14</td>
+                            <td>01-Apr-14</td>
+                            <td>Kapil Khanna</td>
+                            <td>Closed</td>
+                            <td><span class="label label-success col-md-12">On Time</span></td>
+                            <td><a href="#repDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>P111-A11</td>
+                            <td>Audit</td>
+                            <td>12-Mar-14</td>
+                            <td>14-Mar-14</td>
+                            <td>Gauri Singh</td>
+                            <td>Escalated</td>
+                            <td><span class="label label-danger col-md-12">Delayed</span></td>
+                            <td><a href="#auditObservations" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+    
+    <div class="modal fade" id="repDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;height:70%;overflow:auto;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Audit Observations</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label">Observation Date: 01/09/2014</label>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label">Time Spent (hrs) : 18</label>
+                </div>                                
+            </div>
+            <div class="row">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">Observation</th>
+                            <th class="col-md-3">Possible Impact</th>
+                            <th>Responsibility</th>
+                            <th>Status</th>
+                            <th>Date Completed</th>
+                        </tr>
+                    </thead>
+                    <tbody data-count="1">
+                        <tr class="EditRow">
+                            <td class="col-md-3">Project Plan not documented using PMP template</td>
+                            <td class="col-md-3">Process not followed. Compliance not 100%</td>
+                            <td>Sandeep Honawar</td>
+                            <td class="EditObs"  data-field="Status" data-navkey="EditObs" data-class="EditObs"><span class="label label-danger col-md-12">Open</span></td>
+                            <td class="EditObs"  data-field="Date" data-navkey="EditObs" data-class="EditObs">11/03/2014</td>
+                        </tr>
+                        <tr class="EditRow">
+                            <td class="col-md-3">Project Plan not documented using PMP template</td>
+                            <td class="col-md-3">Process not followed. Compliance not 100%</td>
+                            <td>Sandeep Honawar</td>
+                            <td class="EditObs"  data-field="Status" data-navkey="EditObs" data-class="EditObs"><span class="label label-danger col-md-12">Open</span></td>
+                            <td class="EditObs"  data-field="Date" data-navkey="EditObs" data-class="EditObs">11/03/2014</td>
+                        </tr>
+                        <tr class="EditRow">
+                            <td class="col-md-3">Project Plan not documented using PMP template</td>
+                            <td class="col-md-3">Process not followed. Compliance not 100%</td>
+                            <td>Sandeep Honawar</td>
+                            <td class="EditObs"  data-field="Status" data-navkey="EditObs" data-class="EditObs"><span class="label label-danger col-md-12">Open</span></td>
+                            <td class="EditObs"  data-field="Date" data-navkey="EditObs" data-class="EditObs">11/03/2014</td>
+                        </tr>
+                        <tr class="EditRow">
+                            <td class="col-md-3">Project Plan not documented using PMP template</td>
+                            <td class="col-md-3">Process not followed. Compliance not 100%</td>
+                            <td>Sandeep Honawar</td>
+                            <td class="EditObs"  data-field="Status" data-navkey="EditObs" data-class="EditObs"><span class="label label-danger col-md-12">Open</span></td>
+                            <td class="EditObs"  data-field="Date" data-navkey="EditObs" data-class="EditObs">11/03/2014</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+		<div class="modal-footer">
+            <button type="button" class="btn blue-bg" id="Button4">Save</button>
+            <button type="button" class="btn blue-bg" id="closeObservation">Close Observations</button>
+            <button type="button" class="btn blue-bg" id="reOpen" disabled="disabled">Re-Open</button>
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    <div class="modal fade" id="auditObservations" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;height:70%;overflow:auto;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Audit Observations</h4>
+		</div>
+		<div class="modal-body">
+                    <div class="panel">
+                        <div class="panel-body" id="obs_sheet">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" id="formTitle">NC Form</h3>
+                                <ul class="pagination pull-right" style="margin:-1px 0;">
+                                    <li class="active"><a href="#" class="selectTabOption" id="NCForm"><i class="icon-file-alt"></i>&nbsp;&nbsp;NC Form</a></li>
+                                    <li ><a href="#" class="selectTabOption" id="AuditChkLst"><i class="icon-check"></i>&nbsp;&nbsp;Audit Checklist</a></li>
+                                </ul>
+                            </div>
+                            <br />
+                            <div class="panel-body" id="NCFormDetails">
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label class="col-md-12 control-label"><strong>Audit Date:</strong> 12/10/2014</label>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-md-12 control-label"><strong>Time Spent (hrs):</strong> 17</label>
+                                    </div>                                
+                                </div>
+                                <div class="row">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-3">NC Description</th>
+                                                <th class="col-md-1">Attribution</th>
+                                                <th class="col-md-3">Corrective Action (Proposed)</th>
+                                                <th>Estimated Closure Date</th>
+                                                <th class="col-md-1">Status</th>
+                                                <th>Status Updated On</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-count="1">
+                                            <tr>
+                                                <td class="col-md-3">Testplans not reviewed</td>
+                                                <td class="col-md-1">Test planning process</td>
+                                                <td class="col-md-3">Include review tasks in the project plan. Use relevant processes and checklists</td>
+                                                <td>25/10/2014</td>
+                                                <td data-field="NCStatus"><span class="label label-success col-md-12">Closed</span></td>
+                                                <td>27/10/2014</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-md-3">PMP not updated</td>
+                                                <td class="col-md-1">Project Planning</td>
+                                                <td class="col-md-3">Update the PMP and release revisions as and when it needs change</td>
+                                                <td>25/10/2014</td>
+                                                <td data-field="NCStatus"><span class="label label-danger col-md-12">Open</span></td>
+                                                <td></td>
+                                            </tr>                                                
+                                            <tr>
+                                                <td class="col-md-3">Unit testing not carried out</td>
+                                                <td class="col-md-1"></td>
+                                                <td class="col-md-3">No record of unit testing found. Testplans should be updated on unit testing</td>
+                                                <td>25/10/2014</td>
+                                                <td data-field="NCStatus"><span class="label label-danger col-md-12">Open</span></td>
+                                                <td>27/10/2014</td>
+                                            </tr>                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="panel-body" id="AuditChkLstDetails" style="display:none;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="docTableSequence-bg AuditCL_Header">Task Id</th>
+                                            <th class="AuditCL_Header">Phases & Task Description</th>
+                                            <th class="AuditCL_Header">Y/N</th>
+                                            <th class="AuditCL_Header">Compliance</th>
+                                            <th class="AuditCL_Header">Score</th>
+                                            <th class="AuditCL_Header" id="Th1"></th>
+                                            <th class="AuditCL_Header">Observations / NCs / Best Practices</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th class="AuditCL_SubHeader">1</th>
+                                            <th class="AuditCL_SubHeader">Project Tasks</th>
+                                            <th class="AuditCL_SubHeader">Y/N</th>
+                                            <th class="AuditCL_SubHeader">Project Level</th>
+                                            <th class="AuditCL_SubHeader">PCI Score</th>
+                                            <th class="AuditCL_SubHeader" id="projScore">90%</th>
+                                            <th class="AuditCL_SubHeader"></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="tblActionIcon AuditCL_Group">1.1</td>
+                                            <td class="AuditCL_Group"><a href="javascript:;" class="group tree-toggle" data-id="AP">Acquisition Phase</a></td>
+                                            <td class="AuditCL_Group">Select</td>
+                                            <td class="AuditCL_Group" colspan="2">Phase PCI Score</td>
+                                            <td class="AuditCL_Group phaseScore" id="1x1">93%</td>
+                                            <td class="AuditCL_Group"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.1</td>
+                                            <td class="AuditCL_Item">Study the FP service requirement</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x1"  data-field="PCI" >FI</td>
+                                            <td class="AuditCL_Item" id="1x1x1_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x1_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.2</td>
+                                            <td class="AuditCL_Item">Map with reference to the Standard Services Catalogue</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x2" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x2_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x2_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.3</td>
+                                            <td class="AuditCL_Item">Map with the Service type: Mobile/Web/MS </td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x3" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x3_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x3_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.4</td>
+                                            <td class="AuditCL_Item">Analyze the feasibility of satisfying the service requirement</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x4" data-field="PCI">LI</td>
+                                            <td class="AuditCL_Item" id="1x1x4_W">0.75</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x4_PC"><span style="display:none;">75</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.5</td>
+                                            <td class="AuditCL_Item">Define the Service Strategy</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x5" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x5_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x5_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.6</td>
+                                            <td class="AuditCL_Item">Estimate Effort, Schedule, Deliverables, budget</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x6" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x6_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x6_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.7</td>
+                                            <td class="AuditCL_Item">Prepare Proposal, review and submit</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x7" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x7_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x7_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.8</td>
+                                            <td class="AuditCL_Item">Finalize the Service Agreement/contract/PO</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x8" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x8_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x8_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.9</td>
+                                            <td class="AuditCL_Item">Review Service Agreement/contract/PO</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x9" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x9_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x9_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.10</td>
+                                            <td class="AuditCL_Item">Sign Service Agreement/contract/PO & acknowledge</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x10" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x10_W">1.00</td>
+                                            <td class="AuditCL_Item 1x1" id="1x1x10_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.11</td>
+                                            <td class="AuditCL_Item">Sign Service Agreement/contract/PO & acknowledge</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x11" data-field="PCI">NI</td>
+                                            <td class="AuditCL_Item Audit_NC" id="1x1x11_W">NC</td>
+                                            <td class="AuditCL_Item 1x1" id="1.1.11_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="AP EditRow">
+                                            <td class="AuditCL_Item">1.1.12</td>
+                                            <td class="AuditCL_Item">Perform Umbrella Activities</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x1x12" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x1x12_W">1.00</td>
+                                            <td class="AuditCL_Item 1.1" id="1x1x12_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tblActionIcon AuditCL_Group">1.2</td>
+                                            <td class="AuditCL_Group"><a href="javascript:;" class="group tree-toggle" data-id="P">Planning</a></td>
+                                            <td class="AuditCL_Group">Select</td>
+                                            <td class="AuditCL_Group" colspan="2">Phase PCI Score</td>
+                                            <td class="AuditCL_Group phaseScore" id="1x2">86%</td>
+                                            <td class="AuditCL_Group"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.1</td>
+                                            <td class="AuditCL_Item">Allocate Project Manager</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x1" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x1_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x1_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.2</td>
+                                            <td class="AuditCL_Item">Re-estimate Effort, Schedule, Deliverables, budget</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x2" data-field="PCI">PI</td>
+                                            <td class="AuditCL_Item" id="1x2x2_W">0.50</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x2_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.3</td>
+                                            <td class="AuditCL_Item">Get approval for additional budget, if necessary, from the Management</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x3" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x3_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x3_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.4</td>
+                                            <td class="AuditCL_Item">Tailor the FP Life Cycle to meet the service requirement</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x4" data-field="PCI">PI</td>
+                                            <td class="AuditCL_Item" id="1x2x4_W">0.50</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x4_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.5</td>
+                                            <td class="AuditCL_Item">Estimate the resource requirement</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x5" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x5_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x5_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.6</td>
+                                            <td class="AuditCL_Item">Identify the skilled resources available from the Resource Allocation Status database</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x6" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x6_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x6_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.7</td>
+                                            <td class="AuditCL_Item">Identify the IT Infra resources required from the IT Infra Assets allocation status database</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x7" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x7_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x7_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.8</td>
+                                            <td class="AuditCL_Item">Kick-off Project involving all stakeholders</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x8" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x8_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x8_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.9</td>
+                                            <td class="AuditCL_Item">Setup Project folders in SVN</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x9" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x9_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x9_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.10</td>
+                                            <td class="AuditCL_Item">Prepare a Plan using the Project Management Plan template</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x10" data-field="PCI">NI</td>
+                                            <td class="AuditCL_Item Audit_NC" id="1x2x10_W">NC</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x10_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.11</td>
+                                            <td class="AuditCL_Item">Review the Plan using review checklist, reconcile and base line</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x11" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x11_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x11_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.12</td>
+                                            <td class="AuditCL_Item">Raise request for skilled resources</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x12" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x12_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x12_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.13</td>
+                                            <td class="AuditCL_Item">Study the Resource allocation Status and allocate required skilled resources</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x13" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x13_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x13_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                        <tr class="P EditRow">
+                                            <td class="AuditCL_Item">1.2.14</td>
+                                            <td class="AuditCL_Item">In case non-availability of skilled resources, hire resources as required</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" data-field="PCI_Inc">Yes</td>
+                                            <td class="AuditCL_Item EditObs" data-navkey="EditObs" id="1x2x14" data-field="PCI">FI</td>
+                                            <td class="AuditCL_Item" id="1x2x14_W">1.00</td>
+                                            <td class="AuditCL_Item 1x2" id="1x2x14_PC"><span style="display:none;">100</span></td>
+                                            <td class="AuditCL_Item"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+        </div>
+		<div class="modal-footer">
+            <button type="button" class="btn blue-bg" id="Button1">Save</button>
+            <button type="button" class="btn blue-bg" id="NCCloseObservations">Close Observations</button>
+            <button type="button" class="btn blue-bg" id="NCReOpen" disabled="disabled">Re-Open</button>
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="reviewComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Review Comments</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <input type="hidden" id="screenID" />
+                        <label class="control-label col-lg-3"><b>Auditor:</b></label>
+                        <label class="control-label col-lg-3 pull-left">Surekha Shetty</label>
+                        <label class="control-label col-lg-3"><b>Closure Date: </b></label>
+                        <label class="control-label col-lg-3 pull-left" id="createDate">01-Oct-13</label>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="col-lg-12"><b>Comments / Remarks</b></label>
+                        <textarea name="reviewComment" class="col-lg-12" rows="5" id="reviewC"></textarea>                    
+                    </div>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		  <button type="button" class="btn blue-bg" data-dismiss="modal" id="saveReview">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<script type="text/javascript">
+	    var newTaskParams = true;
+
+		var config = {
+		  '.chzn-select-no-single' : {disable_search_threshold:10},
+		}
+		for (var selector in config) {
+		  $(selector).chosen(config[selector]);
+		}
+        
+        $("body").delegate("#Audit_ID", "change", function() {
+            if ($("#Audit_ID").val().trim() == "") $("#obs_sheet").hide();
+            else $("#obs_sheet").show("slow");
+        });
+
+		$("body").delegate(".report", "click", function () {
+		    $("#Audit_ID").val($(this).data("id"));
+            $("#obs_sheet").show();
+		    $("#QA_Obsv").click();
+		});
+
+		$("body").delegate(".addObs", "click", function () {
+		    // add additional columns for edit
+		    var count = parseInt($(this).parent().parent().parent().data("count"));
+
+		    count = count + 1;
+		    var newColumns = '<td class="getEditor EditObs nav" data-field="Observation" data-navkey="EditObs" data-class="EditObs"contenteditable="true"></td>' +
+                             '<td  class="getEditor EditObs nav" data-field="Impact" data-navkey="EditObs" data-class="EditObs" contenteditable="true"></td>' +
+                             '<td class="EditObs"  data-field="Res" data-navkey="EditObs" data-class="EditObs"></td>' +
+                             '<td>Open</td>' +
+                             '<td class="EditObs" data-field="Date" data-navkey="EditObs" data-class="EditObs"></td>';
+		    $(this).parent().after(newColumns);
+		    $(this).parent().parent().parent().data("count", count);
+
+		    // Add the option to add more rows
+		    $(this).parent().parent().parent().append('<tr id="R' + count + '" class="EditRow"><td><a href="#" class="addObs nav" data-id="R' + (count + 1) + '" ><i class="icon-">&#xf055</i></a></td></tr>');
+		    $(this).removeClass("addObs");
+		    $(this).addClass("removeObs");
+		    $(this).children().first().html("&#xf00d");
+		    $(this).parent().next().click();
+		    // Go to the new rule
+		    $('html, body').animate({
+		        scrollTop: $(this).parent().next().offset().top
+		    }, 2000);
+		});
+
+
+		//CKEDITOR.inline(".getEditor");
+
+		
+		$("#showfilter").click();
+
+
+		$('#repDetails').on('shown.bs.modal', function () {
+		    if (newTaskParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newTaskParams = false;
+		    }
+		})
+
+		$("body").delegate(".group", "click", function () {
+		    $("#" + $(this).data("childid")).toggle();
+		    $(this).toggleClass("closed");
+		});
+
+		$("body").delegate(".EditObs", "click", function () {
+		    var field = $(this).data("field");
+		    var originalValue = $(this).text();
+
+		    switch (field) {
+		        case "Observation", "Impact":
+		            break;
+		        case "Res":
+		            keypressCode = -1;
+		            keypressShift = false;
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue col-md-12' data-class='EditObs' data-navkey='EditObs'><option value='Sandeep Honawar'>Sandeep Honawar</option><option value='Kapil Khanna'>Kapil Khanna</option><option value='Supriya Phatak'>Supriya Phatak</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "Status":
+		            keypressCode = -1;
+		            keypressShift = false;
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue col-md-12' data-class='EditObs' data-navkey='EditObs'><option value='Open'>Open</option><option value='Close'>Close</option><option value='Escalated'>Escalated</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "Date":
+		            keypressCode = -1;
+		            keypressShift = false;
+                    
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<input type='text' size='12' id='mask_date2' class='inputValue' data-class='EditObs' data-navkey='EditObs'/>");
+		            $("#mask_date2").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		            if (originalValue != "") $(this).children().val(originalValue);
+		            $(this).children().first().focus();on
+		            $(this).children().first().select();
+		            break;
+		        default:
+		            break;
+		    }
+		});
+
+		$("body").delegate(".removeObs", "click", function () {
+		    if (confirm("Do you want to delete this observation ? ")) {
+		        $("#" + $(this).data("id")).remove();
+		    }
+		});
+
+		$(document).on("click", "#closeObservation", function () {
+		    $("#reviewComments").modal("show");
+		    $("#screenID").val("Obs");
+		});
+
+		$(document).on("click", "#NCCloseObservations", function () {
+		    $("#reviewComments").modal("show");
+		    $("#screenID").val("NC");
+		});
+
+		$(document).on("click", "#saveReview", function () {
+		    if ($("#screenID").val() == "Obs") {
+		        $("td[data-field='Status']").html("<span class='label label-success col-md-12'>Closed</span>");
+		        $("#closeObservation").prop("disabled", "disabled");
+		        $("#reOpen").removeAttr("disabled");
+		    }
+		    else {
+		        $("td[data-field='NCStatus']").html("<span class='label label-success col-md-12'>Closed</span>");
+		        $("#NCCloseObservations").prop("disabled", "disabled");
+		        $("#NCReOpen").removeAttr("disabled");
+		    }
+		});
+
+		$(document).on("click", "#reOpen", function () {
+		    $("td[data-field='Status']").html("<span class='label label-danger col-md-12'>Open</span>");
+            $("#closeObservation").removeAttr("disabled");
+            $("#reOpen").prop("disabled","disabled");
+		});
+
+		$(document).on("click", "#NCReOpen", function () {
+		    $("td[data-field='NCStatus']").html("<span class='label label-danger col-md-12'>Open</span>");
+		    $("#NCCloseObservations").removeAttr("disabled");
+		    $("#NCReOpen").prop("disabled", "disabled");
+		});
+
+		$("body").delegate(".selectTabOption", "click", function () {
+		    if ($(this).prop("id") == "NCForm") {
+		        if (!$(this).parent().hasClass("active")) {
+		            $("#AuditChkLstDetails").hide();
+		            $("#NCFormDetails").show();
+		            $("#AuditChkLst").parent().removeClass("active");
+		            $(this).parent().addClass("active");
+		            $("#formTitle").html("NC Form");
+		        }
+		    }
+		    else {
+		        if (!$(this).parent().hasClass("active")) {
+		            $("#NCFormDetails").hide();
+		            $("#AuditChkLstDetails").show();
+		            $("#NCForm").parent().removeClass("active");
+		            $(this).parent().addClass("active");
+		            $("#formTitle").html("Audit Checklist");
+		        }
+		    }
+		});
+
+		var calculateValues = function () { };
+    </script> 
+   
+
+}

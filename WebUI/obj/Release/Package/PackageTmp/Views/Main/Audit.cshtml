@@ -1,0 +1,62 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+@{
+    ViewBag.Title = "Audit";
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+	<div class="page-header">
+		<h1>Audit <a href="#"><small>Plan and conduct audits</small></a></h1>
+	</div>
+			
+	<ol class="breadcrumb">
+		<li><a href="index.html">Home</a></li>
+		<li class="active">Audit</li>
+	</ol>
+
+    <div class="row">
+		<div class="col-md-12">
+            <div class="col-md-12 notification blue-bg">
+                <strong>Audit Process</strong> : Plan, schedule and conduct audits. Choose from options below.
+            </div>
+		</div>
+    </div>
+ 
+    <div class="row responsive-tab">
+        <ul class="stats clearfix">
+            <li class="col-md-4 popovers" data-original-title="Plan Audits" data-content="Prepare Audit plans for the project" data-trigger="hover" data-placement="top">
+                <div class="blue-bg subMenu"  data-source="@Url.Action("Index","Audit")">
+                <i class="icon-calendar"></i>
+                <h5>Audit Plan</h5>
+                <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","Audit")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                </div>
+            </li>
+            <li class="col-md-4 popovers" data-original-title="Conduct Audits" data-content="Conduct Audits as per plan" data-trigger="hover" data-placement="top">
+                <div class="black-bg subMenu"  data-source="@Url.Action("Index","AuditFinding")">
+                <i class="icon-zoom-in"></i>
+                <h5>Conduct Audit</h5>
+                <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","AuditFinding")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                </div>
+            </li>
+            <li class="col-md-4 popovers" data-original-title="Audit Findings Closure" data-content="Close Audit observations and findings" data-trigger="hover" data-placement="top">
+                <div class="green-bg subMenu"  data-source="@Url.Action("AuditCloseIndex","AuditFinding")">
+                <i class="icon-legal"></i>
+                <h5>Close Audit</h5>
+                <a href="javascript:" class="subMenu" data-source="@Url.Action("AuditCloseIndex","AuditFinding")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+    @section scriptIncludes
+    {
+            @Scripts.Render("~/bundles/editor")
+    }
+}

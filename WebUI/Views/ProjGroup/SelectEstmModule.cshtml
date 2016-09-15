@@ -1,0 +1,52 @@
+﻿@model proj_estm_group
+@{
+    Layout = null;
+}
+
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Select Module</h4>
+	</div>
+    <form method="post" action="@Url.Action("AddNewModuleForEstm")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <div class="form-group" id="GroupIDParams" data-updateid="Name">    
+                            <input type="hidden" id="Proj_EstimationID" name="Proj_EstimationID" value="@Model.Proj_EstimationID" />
+                            <input type="hidden" id="ProjectID" name="ProjectID" value="@Model.ProjectID" />
+                            <input type="hidden" id="OldGroupID" name="OldGroupID" value="@Model.OldGroupID" />
+                            <input type="hidden" id="ExcludeIDs" name="ExcludeIDs" value="@Model.ExcludeIDs" />
+                            <label>Module</label>
+                            @Html.Action("getListItemsFor", "ProjGroup", new { selectedItem = Model.GroupID.GetValueOrDefault(), controlName = "GroupID", excludeIds = Model.ExcludeIDs, selectIds = "", projectID = Model.ProjectID, allowNewClient = true, reload = "populateText" })
+                            @Html.ValidationMessageFor(m => m.GroupID)
+                        </div>
+                        @if (ViewBag.allowEdit == true)
+                        {
+                            <hr />
+                            <div class="form-group">
+                                <label>Edit Module Name</label>
+                                <input type="text" id="Name" name="Name" value="@Model.Name" class="form-control"/>
+                                @Html.ValidationMessageFor(o => o.Name)
+                            </div>                            
+                        }
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <a href="Javascript:;" class="btn gray-bg" data-dismiss="modal">Cancel</a>
+                @if (Model.OldGroupID != null)
+                {
+		            <a  href="Javascript:;" class="btn blue-bg confirmAction" data-source=""
+                            data-messagetitle="Confirm Action" data-message="Do you want to remove this Module. All parameters within the module will also be deleted ?" data-id="LG@(Model.OldGroupID)"
+                            data-class="removeLineItem" data-classparams="data-id='LG@(Model.OldGroupID)'" title="Remove this Module" data-form="submitLevel">Delete</a>
+                }
+		        <a  href="Javascript:;" class="btn blue-bg save" data-mode="@(Model.OldGroupID == null ? "addEstmGroup" : "editEstmGroup")" data-id="@(Model.OldGroupID == null ? "DefaultNode" : "G" + Model.OldGroupID.ToString())" data-form="submitLevel">Select</a>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

@@ -1,0 +1,120 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_proj_plan>
+@{
+    Layout = null;
+    DurationUnitTypes DurationUnit = new DurationUnitTypes();
+}
+
+<div class="modal-dialog" style="width: 60%; height:70%;">
+	<div class="modal-content">
+	    <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h4 class="modal-title" id="dialogTitle">Tasks Planned from <strong>@ViewBag.StartDate.ToString(Globals.DateFormatString)</strong> to <strong>@ViewBag.EndDate.ToString(Globals.DateFormatString)</strong></h4>
+	    </div>
+        <div class="modal-body overflow-scroll"> 
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="show-details-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Planned Start</th>
+                        <th>Planned End</th>
+                        <th>Planned Duration</th>
+                        <th>Status</th>
+                        <th>Actual Start</th>
+                        <th>Actual End</th>
+                        <th>Actual Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var tsk in Model)
+                        {
+                            <tr id="@tsk.ID">
+                                <td><a href="Javascript:;" title="@(tsk.TaskDescription == null ? "No Description Provided" : tsk.TaskDescription)">@tsk.TaskName</a></td>
+                                <td>@tsk.PlannedStartDate.ToString(Globals.DateFormatString)</td>
+                                <td>@(tsk.PlannedEndDate == null ? "" : tsk.PlannedEndDate.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                                <td>@tsk.PlannedDuration @DurationUnit.getTypeName((short)tsk.DurationUnit)</td>
+                                <td>@(tsk.ActualStartDate == null ? "Not Started" : (tsk.ActualEndDate == null ? "In Progress" : "Complete"))</td>
+                                <td>@(tsk.ActualStartDate == null ? "" : tsk.ActualStartDate.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                                <td>@(tsk.ActualEndDate == null ? "" : tsk.ActualEndDate.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                                <td>@(tsk.ActualDuration == null ? "" : tsk.ActualDuration + " " + DurationUnit.getTypeName((short)tsk.DurationUnit))</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+	    <div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+	    </div>
+    </div>
+</div>
+
+<script>
+    /*
+ * Insert a 'details' column to the table
+ */
+    var nCloneTh = document.createElement('th');
+    var nCloneTd = document.createElement('td');
+    nCloneTd.innerHTML = "<a href='javascript:;'><i class='icon-'>&#xf067;</i></a>";
+    nCloneTd.width = "19px";
+    nCloneTd.align = "center";
+    nCloneTd.style.textAlign = "center";
+
+    $('#show-details-table thead tr').each(function () {
+        this.insertBefore(nCloneTh, this.childNodes[0]);
+    });
+
+    $('#show-details-table tbody tr').each(function () {
+        this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+    });
+
+    /*
+     * Initialse DataTables, with no sorting on the 'details' column
+     */
+    var oTable = $('#show-details-table').dataTable({
+        "sPaginationType": "bootstrap",
+        "aoColumnDefs": [
+                        { "bSortable": false, "aTargets": [0] }
+        ],
+        "aaSorting": [[1, 'asc']],
+        "aLengthMenu": [
+                        [5, 10, 15, -1],
+                        [5, 10, 15, "All"] // change per page values here
+        ],
+        // set the initial value
+        "iDisplayLength": 5
+    });
+
+    /* Add event listener for opening and closing details
+     * Note that the indicator for showing which row is open is not controlled by DataTables,
+     * rather it is done here
+     */
+    $("#show-details-table").on('click', 'tbody td a', function () {
+        var nTr = $(this).parents('tr')[0];
+        var taskID = $(nTr).prop("id");
+        if (oTable.fnIsOpen(nTr)) {
+            /* This row is already open - close it */
+            this.innerHTML = "<b><i class='icon-'>&#xf067;</i></b>";
+            oTable.fnClose(nTr);
+        }
+        else {
+            /* Open this row */
+            this.innerHTML = "<b><i class='icon-'>&#xf068;</i></b>";
+            $.ajax({
+                cache: false,
+                async: true,
+                type: "GET",
+                data: { "id" : taskID },
+                url: "@Url.Action("GetTaskTSEntry","ProjPlan")",
+                success: function (data) {
+                    oTable.fnOpen(nTr, data, 'details');
+                },
+                error: function (data) {
+                    oTable.fnOpen(nTr, data.responseText, 'details');
+                }
+            });
+        }
+    });
+</script>

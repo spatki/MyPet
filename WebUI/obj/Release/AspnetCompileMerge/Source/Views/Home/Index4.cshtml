@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "Process Accelerator - Dashboard";
+    Layout = "~/Views/Shared/_Dashboard_Layout.cshtml";
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }
+    }
+    <input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+
+    <div class="container-fluid">
+        <br />			
+	    <div class="page-header">
+		    <h1>Dashboard 
+                <div class="col-md-3 pull-right">
+                    <select class="chzn-nopadd chzn-select-no-single col-md-12 changeDashboard">
+                        <option value="1">Senior Management</option>
+                        <option value="2">Middle Management</option>
+                        <option value="3">Project Management</option>
+                        <option value="4" selected="selected">Individual</option>
+                    </select>
+                </div>
+            </h1>
+	    </div>
+	    <ol class="breadcrumb">
+		    <li><a href="#">Home</a></li>
+		    <li><a href="#">Dashboard</a></li>
+		    <li class="active">Individual</li>
+	    </ol>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel col-md-12">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Schedule</h3>
+                            <ul class="toolbar col-md-8 pull-right">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+            		    </div>
+                        <div class="panel-body">
+                            <div  id='calendar' class="col-md-12"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel col-md-12">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="icon-bell pull-right"></i> Reminders / Notifications</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+            		    </div>
+                        <div class="panel-body no-padding">
+                    	    <ul class="feeds overflow-scroll">
+                                <li><span class="blue-bg"><i class="icon-time"></i></span><a href="RecordTS.html">Timesheet Entry delayed. Due Date: 01/01/2013</a></li>
+                                <li><span class="green-bg"><i class="icon-search"></i></span><a href="#">Upcoming Audit on 01-Oct-15</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel col-md-12">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="icon-edit pull-right"></i>Current Assignements</h3>
+                            <ul class="pull-right toolbar">
+                                <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                                <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                                <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                                <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                    <th width="5%">#</th>
+                                    <th>Task</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td><a href=#>e Planner - Coding</a></td>
+                                        <td>11-Oct-15</td>
+                                        <td><span class="label label-success">Yet to Start</span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2.</td>
+                                        <td><a href="#">e Planner - Testing</a></td>
+                                        <td>1-Oct-15</td>
+                                        <td><span class="label label-warning">Delayed</span> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3.</td>
+                                        <td><a href="#">Migration - Testing</a></td>
+                                        <td>15-Sep-15</td>
+                                        <td><span class="label label-danger">Delayed</span> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+               </div>
+            </div> 
+    </div>
+@section scripts
+        {
+        @Scripts.Render("~/bundles/customPA")
+        @Scripts.Render("~/bundles/calendar")
+    <script src="~/Scripts/pa/plugins/chartjs/knockout-2.2.1.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/globalize.min.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/dx.chartjs.js"></script>
+    
+    <script src="~/Scripts/pa/plugins/chartjs/demos/pie/pie-charts.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/zoomingData.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/demos/advanced/advanced-charts.js"></script>
+	<script src="~/Scripts/pa/plugins/chartjs/demos/line/line-charts.js"></script>
+	<script src="~/Scripts/pa/plugins/chartjs/demos/bar/bar-charts.js"></script>
+    <script src="~/Scripts/pa/plugins/chartjs/demos/gauges/gauges-charts.js"></script>
+        }
+}

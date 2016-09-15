@@ -1,0 +1,226 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_process_templateInput
+@{
+    Layout = null;
+}
+<div class="panel colored">
+    <div class="panel-body"  id="filledContents">
+        <div class="panel-header">
+            <h1>@Model.Name</h1>
+        </div>
+        <div class="row">
+            <div class="panel">
+                <div class="panel-body">
+                    <table class="table ">
+                        <thead>
+                            <th class="docTableHeader-bg" colspan="4">Document Release Note</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="docTableLabel-bg">Project Name</th>
+                                <td colspan="3">Not Applicable</td>
+                            </tr>
+                            <tr>
+                                <th class="docTableLabel-bg">Document Name</th>
+                                <td colspan="3">@Model.Name</td>
+                            </tr>                                                
+                            <tr>
+                                <th class="docTableLabel-bg">Version</th>
+                                <td colspan="3">@((Model.tbl_process_tmpl_revision.LastOrDefault().version == "") ? "" : Model.tbl_process_tmpl_revision.LastOrDefault().version + ".")@(Model.tbl_process_tmpl_revision.Count() - 1)</td>
+                            </tr>                                                
+                            <tr>
+                                <th class="docTableLabel-bg">Release Date</th>
+                                <td colspan="3">@(Model.PublishDate == null ? "" : Model.PublishDate.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                            </tr>
+                            <tr>
+                                <th class="docTableLabel-bg">Prepared By</th>
+                                <td >@((Model.CreatedByName == "") ? Model.UpdatedByName : Model.CreatedByName)</td>
+                                <th class="docTableLabel-bg">Date</th>
+                                <td>@Model.CreateDate.ToString(Globals.DateFormatString)</td>
+                            </tr>             
+                            <tr>
+                                <th class="docTableLabel-bg">Reviewed By</th>
+                                <td ></td>
+                                <th class="docTableLabel-bg">Date</th>
+                                <td></td>
+                            </tr>             
+                            <tr>
+                                <th class="docTableLabel-bg">Approved By</th>
+                                <td ></td>
+                                <th class="docTableLabel-bg">Date</th>
+                                <td></td>
+                            </tr>             
+                            <tr>
+                                <th class="docTableHeader-bg" colspan="4">Revision History</th>
+                            </tr>
+                            <tr>
+                                <th class="docTableLabel-bg">SNo</th>
+                                <th class="docTableLabel-bg">Revision Date</th>
+                                <th class="docTableLabel-bg">Revision Description</th>
+                                <th class="docTableLabel-bg">Release Date</th>
+                            </tr>    
+                            @{var revCounter = 0;
+                              foreach (var revision in Model.tbl_process_tmpl_revision)
+                              {
+                                  revCounter = revCounter + 1;
+                                <tr>
+                                    <th>@revCounter</th>
+                                    <th>@revision.RevisionDate</th>
+                                    <th>@revision.Comments</th>
+                                    <th>@revision.PublishDate</th>
+                                </tr>                                                         
+                              }         
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="panel">
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <th class="docTableHeader-bg" colspan="4">Table Of Contents</th>
+                        </thead>
+                        <tbody>
+                        @{seededTemplateSections sections = new seededTemplateSections { seed = null, isParent = true, tbl_process_tmpl_section = Model.tbl_process_tmpl_section, tbl_process_tmpl_group = Model.tbl_process_tmpl_group };
+                          var sectionsInDoc = Model.tbl_process_tmpl_section.Where(o => o.tbl_Process_Tmpl_GroupID == null).OrderBy(o => o.SequenceNo).GetEnumerator(); ; // Begin with root
+                          var groupsInDoc = Model.tbl_process_tmpl_group.Where(o => o.Level == 1).OrderBy(o => o.SequenceNo).GetEnumerator(); ;
+                          var sequence = 0;   // ****** Check whether needed and then discard
+                          short sectionSequence = 0; // First sequence in the section
+                          short groupSequence = 0;   // First sequence in the group
+                          var keepProcessing = true;
+                          var sectionsFound = true;
+                          var groupsFound = true;
+
+                          if (sectionsInDoc.MoveNext()) { sectionSequence = sectionsInDoc.Current.SequenceNo; } else { sectionsFound = false; }
+                          if (groupsInDoc.MoveNext()) { groupSequence = groupsInDoc.Current.SequenceNo; } else { groupsFound = false; }
+                          if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+
+                          if (keepProcessing)
+                          {
+                              while (keepProcessing)    // Handling sequence of groups and sections under this group. As the sequence can be intermixed
+                              {
+                                  // If the section comes first in sequence, print the section first
+                                  if (sectionsFound && (!groupsFound || sectionSequence < groupSequence))
+                                  {
+                                      sequence = sequence + 1;
+                                        <tr>
+                                            <th class="docTableSequence-bg">@(sequence)</th>
+                                            <td><a href="#PSection@(sectionsInDoc.Current.ID)">@sectionsInDoc.Current.Title</a></td>
+                                        </tr>
+                                      if (sectionsInDoc.MoveNext()) { sectionSequence = sectionsInDoc.Current.SequenceNo; } else { sectionsFound = false; }  // Get the next section
+                                  }
+
+                                  if (groupsFound && (!sectionsFound || groupSequence < sectionSequence))
+                                  {
+                                      sequence = sequence + 1;
+                                      sections.seed = groupsInDoc.Current.ID;
+                                      sections.sequence = sequence;
+                                      sections.isParent = false;
+                                      sections.sequencePrefix = "";
+                                        @Html.Partial("_showTOCPreview", sections)
+                                      if (groupsInDoc.MoveNext()) { groupSequence = groupsInDoc.Current.SequenceNo; } else { groupsFound = false; }
+                                  }
+                                  if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing                  
+                              }
+                          }                                                        
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @{      sectionsInDoc = Model.tbl_process_tmpl_section.Where(o => o.tbl_Process_Tmpl_GroupID == null).OrderBy(o => o.SequenceNo).GetEnumerator(); ; // Begin with root
+                    groupsInDoc = Model.tbl_process_tmpl_group.Where(o => o.Level == 1).OrderBy(o => o.SequenceNo).GetEnumerator(); ;
+                    sequence = 0;   // ****** Check whether needed and then discard
+                    sectionSequence = 0; // First sequence in the section
+                    groupSequence = 0;   // First sequence in the group
+                    keepProcessing = true;
+                    sectionsFound = true;
+                    groupsFound = true;
+
+                    if (sectionsInDoc.MoveNext()) { sectionSequence = sectionsInDoc.Current.SequenceNo; } else { sectionsFound = false; }
+                    if (groupsInDoc.MoveNext()) { groupSequence = groupsInDoc.Current.SequenceNo; } else { groupsFound = false; }
+                    if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+
+                    if (keepProcessing)
+                    {
+                        while (keepProcessing)    // Handling sequence of groups and sections under this group. As the sequence can be intermixed
+                        {
+                            // If the section comes first in sequence, print the section first
+                            if (sectionsFound && (!groupsFound || sectionSequence < groupSequence))
+                            {
+                                sequence = sequence + 1;
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <div class="docTableSectionHeader col-md-12">@(sequence). <a id="PSection@(sectionsInDoc.Current.ID)">@sectionsInDoc.Current.Title</a></div>
+                                        <br />
+                                        <div class="panel">
+                                            <div class="panel-body">
+                                                <div id="FillDetail@(sectionsInDoc.Current.ID)"  class="col-md-12 @((ViewBag.Editable != null && ViewBag.Editable == true) ? "EditEditor" : "")" contenteditable="@((ViewBag.Editable != null && ViewBag.Editable == true) ? "true" : "false")"><br />@Html.Raw(sectionsInDoc.Current.Detail)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                if (sectionsInDoc.MoveNext()) { sectionSequence = sectionsInDoc.Current.SequenceNo; } else { sectionsFound = false; }  // Get the next section
+                            }
+
+                            if (groupsFound && (!sectionsFound || groupSequence < sectionSequence))
+                            {
+                                sequence = sequence + 1;
+                                sections.seed = groupsInDoc.Current.ID;
+                                sections.sequence = sequence;
+                                sections.isParent = false;
+                                sections.sequencePrefix = "";
+                                @Html.Partial("_showSectionsPreview", sections)
+                                if (groupsInDoc.MoveNext()) { groupSequence = groupsInDoc.Current.SequenceNo; } else { groupsFound = false; }
+                            }
+                            if (!sectionsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing                  
+                        }
+                    }                                                        
+
+                }
+        </div>
+    </div>
+    @if (ViewBag.ProjectID == null && ViewBag.ProjectID == "")
+    { 
+        <form name="saveRecording" id="saveRecording" method="post" action="@Url.Action("saveRecord", "TimesheetRecord")">
+            <input type="hidden" name="tbl_Org_PlanID" id="tbl_Org_PlanID" value="@ViewBag.PlanID" />
+            <input type="hidden" name="tbl_Org_Plan_ResourceID" id="tbl_Org_Plan_ResourceID" value="@ViewBag.ResourceID" />
+            <input type="hidden" name="tbl_Org_Plan_DocumentID" id="tbl_Org_Plan_DocumentID" value="@ViewBag.DocID" />        
+            <input type="hidden" name="Type" id="Type" value="3" />
+            <input type="hidden" name="Contents" id="Contents" value="" />
+        </form>
+        <div class="panel-footer">
+		    <div class="form-group" id="actionButtons">
+                <a href="javascript:;" class="btn btn-med blue-bg saveRecord" data-id="P@(ViewBag.PlanID)R@(ViewBag.ResourceID)" data-form="saveRecording" data-mode="update" data-message="Saved Successfully">Save</a>
+                <a href="javascript:;" class="btn btn-med gray-bg navigateBack">Back</a>
+		    </div>
+	    </div>
+    }
+    else
+    {
+        <form name="saveRecording" id="saveProjectRecording" method="post" action="@Url.Action("saveRecord", "Project")">
+            <input type="hidden" name="tbl_Org_ProjectID" id="tbl_Org_ProjectID" value="@ViewBag.ProjectID" />
+            <input type="hidden" name="Name" id="Name" value="@Model.Name" />
+            <input type="hidden" name="SourceType" id="SourceType" value="2" />        
+            <input type="hidden" name="Type" id="Type" value="3" />
+            <input type="hidden" name="ProcessDoc_RefID" id="ProcessDoc_RefID" value="@Model.ID" />
+            <input type="hidden" name="Contents" id="Contents" value="" />
+        </form>
+        <div class="panel-footer">
+		    <div class="form-group" id="actionButtons">
+                <a href="javascript:;" class="btn btn-med blue-bg saveRecord" data-id="T3D@(Model.ID)" data-form="saveProjectRecording" data-mode="update" data-message="Saved Successfully">Save</a>
+                <a href="javascript:;" class="btn btn-med gray-bg navigateBack">Back</a>
+		    </div>
+	    </div>
+        
+    }
+</div>        
+
+<script>
+    configureInlineCkEditorFullMenu(".EditEditor");
+</script>

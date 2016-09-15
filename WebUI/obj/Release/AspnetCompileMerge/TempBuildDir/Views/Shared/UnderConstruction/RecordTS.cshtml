@@ -1,0 +1,978 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+ 			<div class="row">
+            	<div class="panel col-md-12">
+                    <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	<div class="row pull-right panel-footer">
+                            <div class="col-lg-12 col-lg-offset-1">
+                                <button type="button" class="btn blue-bg" id="sbmtApproval">Submit For Approval</button>
+                                <button type="button" class="btn blue-bg" id="Button1" title="Applicable only for approved timesheets">Request to Change</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--div class="row">
+                        <div class="col-md-12 notification blue-bg">
+                 	            <strong>Record Time: </strong> : Click on the desired date to record time for that date, click to close this. 
+                        </div>
+                    </!--div-->                        
+                    <div class="row col-md-12">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><span id="viewTitle">Weekly View</span> ( <span id="vTitlePrefix"> Starting </span><span id="weekStart" class="TableDisabledLabel"></span> )
+                                <a href="#" class="nav_options" id="prevWeek"><i class="icon-double-angle-left"></i> Prev</a>
+                                <a href="#" class="nav_options" id="showToday"><i class="icon-double-angle-down"></i> current</a>
+                                <a href="#" class="nav_options" id="nextWeek">Next <i class="icon-double-angle-right"></i></a>
+
+                            </h3>
+                            <ul class="pagination pull-right" style="margin:-1px 0;">
+                                <li><a href="#" id="dailyView">Dialy</a></li>
+                                <li  class="active"><a href="#" id="weeklyView" >Weekly</a></li>
+                                <li><a href="#" id="monthlyView">Monthly</a></li>
+                            </ul>
+                        </div>
+                        <div class="panel" id="DailyTS" style="display:none;">
+                            <div class="pull-right">
+                                <div class="col-md-12">
+                                </div>
+                            </div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="TSHeader">Activity</th>
+                                        <th class="TSHeader TSHours">Action(s)</th>
+                                        <th class="TSHeader TSHours">Assigned Hrs</th>
+                                        <th class="TSHeader TSHours">Total Hrs</th>
+                                        <th class="TSHeader TSHours">Start Time</th>
+                                        <th class="TSHeader TSHours">End Time</th>
+                                        <th class="TSHeader TSHours">Hours</th>
+                                        <th class="TSHeader TSHours">Billable To Client</th>
+                                        <th class="TSHeader TSHours">Billable Hours</th>
+                                        <th class="TSHeader TSHours">Overtime Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th colspan="11" class="TableDisabledLabel"><a href="javascript:;" class="group tree-toggle" data-id="D_AT">Assigned Tasks</a></th>
+                                    </tr>
+                                    <tr class="D_AT">
+                                        <th colspan="11" class="TSSubGroup AT"><a href="javascript:;">Payroll Module</a></th>
+                                    </tr>
+                                    <tr class="D_AT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal" class="nav">Coding</a></td>
+                                        <td ><div class="pull-right"><a href="#" class="pickupReview" data-toggle="modal" title="Click to complete this task"><i class="icon-ok btn btn-xs green-bg"></i></a></div></td>
+                                        <td >40</td>
+                                        <td id="Td25">0</td>
+                                        <td id="Td26" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">00:00</td>
+                                        <td id="Td27" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">00:00</td>
+                                        <td id="Td28" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td class="EditTime nav"  data-navkey="EditTime"><input type="checkbox" class="nav" data-navkey="EditTime"></td>
+                                        <td id="Td30" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="Td31" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                    </tr>
+                                    <tr class="D_AT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal">Testing</a></td>
+                                        <td ><div class="pull-right"><a href="#" class="pickupReview" data-toggle="modal" title="Click to complete this task"><i class="icon-ok btn btn-xs green-bg"></i></a></div></td>
+                                        <td >20</td>
+                                        <td id="Td32">0</td>
+                                        <td id="Td33" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">00:00</td>
+                                        <td id="Td34" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">00:00</td>
+                                        <td id="Td35" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td class="EditTime nav"  data-navkey="EditTime"><input type="checkbox" class="nav" data-navkey="EditTime"></td>
+                                        <td id="Td37" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="Td38" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="11" class="TableDisabledLabel"><a href="javascript:;" class="group tree-toggle" data-id="D_RT">Review Tasks</a></th>
+                                    </tr>
+                                    <tr class="D_RT">
+                                        <th colspan="11" class="TSSubGroup RT"><a href="javascript:;">Payroll Module</a></th>
+                                    </tr>
+                                    <tr class="D_RT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal" class="nav">Code Review</a></td>
+                                        <td ><div class="pull-right"><a href="#" class="pickupReview" data-toggle="modal" title="Click to complete this task"><i class="icon-ok btn btn-xs green-bg"></i></a></div></td>
+                                        <td >4</td>
+                                        <td id="Td39">0</td>
+                                        <td id="Td40" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">00:00</td>
+                                        <td id="Td41" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">00:00</td>
+                                        <td id="Td42" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td class="EditTime nav"  data-navkey="EditTime"><input type="checkbox" class="nav" data-navkey="EditTime"></td>
+                                        <td id="Td44" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="Td45" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                    </tr>
+                                    <tr class="D_RT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal">SRS Review</a></td>
+                                        <td ><div class="pull-right"><a href="#" class="pickupReview" data-toggle="modal" title="Click to complete this task"><i class="icon-ok btn btn-xs green-bg"></i></a></div></td>
+                                        <td >6</td>
+                                        <td id="Td46">0</td>
+                                        <td id="Td47" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">00:00</td>
+                                        <td id="Td48" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">00:00</td>
+                                        <td id="Td49" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td class="EditTime nav"  data-navkey="EditTime"><input type="checkbox" class="nav" data-navkey="EditTime"></td>
+                                        <td id="Td51" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="Td52" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                    </tr>
+                                    <tr class="D_RT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal" class="TableHighlightLabel">Test Plan Review</a> </td>
+                                        <td ><div class="pull-right"><a href="#" class="rejectReview" data-toggle="modal" title="Reject Review"><i class="icon-remove btn btn-xs red-bg"></i></a> <a href="#" class="pickupReview" data-toggle="modal" title="Pickup Review"><i class="icon-ok btn btn-xs yellow-bg"></i></a></div></td>
+                                        <td >6</td>
+                                        <td id="Td57" >0</td>
+                                        <td id="Td58" data-id="AT2" ></td>
+                                        <td id="Td59" data-id="AT2" ></td>
+                                        <td id="Td60" data-id="AT2" ></td>
+                                        <td id="Td61" data-id="AT2" ></td>
+                                        <td id="Td62" data-id="AT2" ></td>
+                                        <td id="Td63" data-id="AT2" ></td>
+                                    </tr>
+                                    <tr id="Tr1">
+                                        <th colspan="8" class="TableDisabledLabel"><a href="javascript:;" class="group tree-toggle" data-id="D_GT">General Tasks</a></th>
+                                        <th colspan="3" class="TableDisabledLabel"><a href="#" id="addD_GeneralTask" data-count="1" class="btn btn-sm black-bg pull-right">Add New General Task</a></th>
+                                    </tr>
+                                    <tr class="D_GT EditRow" id="D_GT1">
+                                        <td class="EditTask nav">Select</td>
+                                        <td CLASS="TSActions"><a href="#" class="removeGT" data-id="D_GT1" title="Delete this Task"><i class="icon-remove btn btn-xs red-bg"></i></a></td>
+                                        <td></td>
+                                        <td id="Td65">0</td>
+                                        <td id="Td66" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="Td67" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="Td68" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td class="EditTime nav"  data-navkey="EditTime"><input type="checkbox" class="nav" data-navkey="EditTime"></td>
+                                        <td id="Td70" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="Td71" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel" id="WeeklyTS">
+                            <div class="pull-right">
+                                <div class="col-md-12">
+                                </div>
+                            </div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" class="TSHeader">Activity</th>
+                                        <th class="TSHeader TSHours" rowspan="2">Action(s)</th>
+                                        <th class="TSHeader TSHours" rowspan="2">Assigned Hrs</th>
+                                        <th class="TSHeader TSHours" rowspan="2">Total Hrs</th>
+                                        <th class="TSHeader TSHours">MON</th>
+                                        <th class="TSHeader TSHours">TUE</th>
+                                        <th class="TSHeader TSHours">WED</th>
+                                        <th class="TSHeader TSHours">THUR</th>
+                                        <th class="TSHeader TSHours">FRI</th>
+                                        <th class="TSHeader TSHours">SAT</th>
+                                        <th class="TSHeader TSHours">SUN</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="TSSubHeader TSHours" id="weekDt1">a</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt2">b</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt3">c</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt4">d</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt5">e</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt6">f</th>
+                                        <th class="TSSubHeader TSHours" id="weekDt7">g</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th colspan="11" class="TableDisabledLabel"><a href="javascript:;" class="group tree-toggle" data-id="AT">Assigned Tasks</a></th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="11" class="TSSubGroup AT"><a href="javascript:;">Payroll Module</a></th>
+                                    </tr>
+                                    <tr class="AT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal" class="nav">Coding</a></td>
+                                        <td ><div class="pull-right"><a href="#" class="pickupReview" data-toggle="modal" title="Click to complete this task"><i class="icon-ok btn btn-xs green-bg"></i></a></div></td>
+                                        <td >40</td>
+                                        <td id="AT1Total">0</td>
+                                        <td id="AT1Day1" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT1Day2" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT1Day3" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT1Day4" data-id="AT1" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT1Day5" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT1Day6" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT1Day7" data-id="AT1" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                    </tr>
+                                    <tr class="AT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal">Testing</a></td>
+                                        <td ><div class="pull-right"><a href="#" class="pickupReview" data-toggle="modal" title="Click to complete this task"><i class="icon-ok btn btn-xs green-bg"></i></a></div></td>
+                                        <td >20</td>
+                                        <td id="AT2Total">0</td>
+                                        <td id="AT2Day1" data-id="AT2" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT2Day2" data-id="AT2" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT2Day3" data-id="AT2" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT2Day4" data-id="AT2" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT2Day5" data-id="AT2" class="EditTime TSAssigned" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT2Day6" data-id="AT2" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="AT2Day7" data-id="AT2" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="11" class="TableDisabledLabel"><a href="javascript:;" class="group tree-toggle" data-id="RT">Review Tasks</a></th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="11" class="TSSubGroup RT"><a href="javascript:;">Payroll Module</a></th>
+                                    </tr>
+                                    <tr class="RT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal" class="nav">Code Review</a></td>
+                                        <td ><div class="pull-right"><a href="#" class="pickupReview" data-toggle="modal" title="Click to complete this task"><i class="icon-ok btn btn-xs green-bg"></i></a></div></td>
+                                        <td >4</td>
+                                        <td id="Td1">0</td>
+                                        <td id="Td2" data-id="AT1" class="EditTime">0</td>
+                                        <td id="Td3" data-id="AT1" class="EditTime">0</td>
+                                        <td id="Td4" data-id="AT1" class="EditTime">0</td>
+                                        <td id="Td5" data-id="AT1" class="EditTime TSAssigned">0</td>
+                                        <td id="Td6" data-id="AT1" class="EditTime">0</td>
+                                        <td id="Td7" data-id="AT1" class="EditTime">0</td>
+                                        <td id="Td8" data-id="AT1" class="EditTime">0</td>
+                                    </tr>
+                                    <tr class="RT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal">SRS Review</a></td>
+                                        <td ><div class="pull-right"><a href="#" class="pickupReview" data-toggle="modal" title="Click to complete this task"><i class="icon-ok btn btn-xs green-bg"></i></a></div></td>
+                                        <td >6</td>
+                                        <td id="Td9">0</td>
+                                        <td id="Td10" data-id="AT2" class="EditTime">0</td>
+                                        <td id="Td11" data-id="AT2" class="EditTime">0</td>
+                                        <td id="Td12" data-id="AT2" class="EditTime">0</td>
+                                        <td id="Td13" data-id="AT2" class="EditTime">0</td>
+                                        <td id="Td14" data-id="AT2" class="EditTime TSAssigned">0</td>
+                                        <td id="Td15" data-id="AT2" class="EditTime TSAssigned">0</td>
+                                        <td id="Td16" data-id="AT2" class="EditTime">0</td>
+                                    </tr>
+                                    <tr class="RT EditRow">
+                                        <td ><a href="#viewTaskDetails" data-toggle="modal" class="TableHighlightLabel">Test Plan Review</a> </td>
+                                        <td ><div class="pull-right"><a href="#" class="rejectReview" data-toggle="modal" title="Reject Review"><i class="icon-remove btn btn-xs red-bg"></i></a> <a href="#" class="pickupReview" data-toggle="modal" title="Pickup Review"><i class="icon-ok btn btn-xs yellow-bg"></i></a></div></td>
+                                        <td >6</td>
+                                        <td id="Td17" >0</td>
+                                        <td id="Td18" data-id="AT2" ></td>
+                                        <td id="Td19" data-id="AT2" ></td>
+                                        <td id="Td20" data-id="AT2" ></td>
+                                        <td id="Td21" data-id="AT2" ></td>
+                                        <td id="Td22" data-id="AT2" ></td>
+                                        <td id="Td23" data-id="AT2" ></td>
+                                        <td id="Td24" data-id="AT2" ></td>
+                                    </tr>
+                                    <tr id="GTGroup">
+                                        <th colspan="8" class="TableDisabledLabel"><a href="javascript:;" class="group tree-toggle" data-id="GT">General Tasks</a></th>
+                                        <th colspan="3" class="TableDisabledLabel"><a href="#" id="addGeneralTask" data-count="1" class="btn btn-sm black-bg pull-right">Add New General Task</a></th>
+                                    </tr>
+                                    <tr class="GT EditRow" id="GT1">
+                                        <td class="EditTask nav">Select</td>
+                                        <td CLASS="TSActions"><a href="#" class="removeGT" data-id="GT1" title="Delete this Task"><i class="icon-remove btn btn-xs red-bg"></i></a></td>
+                                        <td></td>
+                                        <td id="GT1Total">0</td>
+                                        <td id="GT1Day1" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="GT1Day2" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="GT1Day3" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="GT1Day4" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="GT1Day5" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="GT1Day6" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>
+                                        <td id="GT1Day7" data-id="GT1" class="EditTime" data-navkey="EditTime">0</td>                                            
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="MonthlyTS" class="panel" style="width:100%;height:90%;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Timesheet Calendar</h3>
+                            </div>
+                            <div class="panel-body" id='showTSCalendar'></div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    
+<div class="modal fade" id="editTS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:60%;">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <div class="row">
+	      <h4 class="model-title col-md-6">Time Entry</h4>
+          <div class="col-md-5"><h4 class="pull-right label-configured" id="dateRange"></h4></div>
+      </div>
+	</div>
+	<div class="modal-body">
+        <div class="row">
+        <div class="panel colored">
+        <div class="panel-body">                    
+			<form class="form-horizontal left-label" id="TSDays" data-days="1">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Select Project</label>
+                            <div class="col-md-8"><select class="col-md-12" id="taskProject"><option value="1">Payroll System</option> <option value="2">Code Migration</option></select></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Group</label>
+                            <div class="col-md-8"><select class="col-md-12" id="taskGroup"><option value="Design Team">Design Team</option> <option selected="selected" value="Salary Processing Module">Salary Processing Module</option> <option value="Testing Team">Testing Team</option></select></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-2">Task &nbsp;&nbsp;
+                                <a href="#viewTaskDetails" data-toggle="modal" class="assignedTaskDetails" style="display:none;"><i class="icon-file-alt" title="Click to see assigned task details"></i></a> <span class="assignedTaskDetails"  style="display:none;">|</span> <a href="#taskRecordings" data-toggle="modal" class="assignedTaskDetails"  style="display:none;"><i class="icon-list-ol" title="Click to view task recordings"></i></a>
+                            </div>
+                            <div class="col-md-10">
+                                <select class="col-md-12" id="taskName">
+                                    <option value="0">Select</option>
+                                    <optgroup label="General Tasks">
+                                        <option value="Project Management">Project Management</option>
+                                        <option value="Leave">Leave</option>
+                                        <option value="Meeting">Meeting</option>
+                                        <option value="Conf.Call">Conf. Call</option>
+                                        <option value="Lunch">Lunch</option>
+                                        <option value="Idle">Idle</option>
+                                    </optgroup>
+                                    <optgroup label="Assigned">
+                                        <option value="Coding for Payroll Module">Coding for Payroll Module</option>
+                                        <option value="Code Review">Code Review</option>
+                                    </optgroup>
+                                    <optgroup label="Review">
+                                        <option value="Code Review">Code Review for Rule Engine</option>
+                                        <option>Peer Review EF Module</option>
+                                    </optgroup>
+                                </select>
+                                <span class="help-block">Searching option (type to search)</span>
+                            </div>
+                        </div>
+                     </div>
+                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">From Time</label>
+                            <div class="col-md-8"><input type="text" class="form-control" id="fromTime" disabled></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">To Time</label>
+                            <div class="col-md-8"><input type="text" class="form-control" id="toTime" disabled></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Duration (Hrs)</label>
+                            <div class="col-md-3"><input type="text" id="taskDuration" class="mask_duration form-control" value="ST"></div>
+                            <div class="col-md-5" id="dist"><select class="col-md-12 chzn-nopadd chzn-select-no-single" id="durDistribute"><option value="1" selected="selected">Per Day</option><option value="2">Total</option></select></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Complete %</label>
+                            <div class="col-md-8"><input type="hidden" id="PComplete" class="slider col-md-12" value="0" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="55" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-handle="square" data-slider-tooltip="show"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Remarks</label>
+                            <div class="col-md-8"><textarea rows="2" class="col-md-12" id="taskRemarks"></textarea></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-1"><input type="checkbox" id="taskComplete" value="1"></div>
+                            <label class="col-md-9">Task Complete ?</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+            <button type="button" class="btn blue-bg" id="saveTime">Save</button>
+            <button type="button" class="btn blue-bg" id="deleteTime">Delete</button>
+        </div>
+        </div>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="viewTaskDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task </h4>
+		</div>
+		<div class="modal-body">
+            <ul class="nav nav-tabs" id="Ul2">
+                <li class="active"><a data-toggle="tab" href="#TDetail">Details</a></li>
+                <li><a data-toggle="tab" href="#TDocs">Supporting Information</a></li>
+            </ul>
+            <div class="tab-content" id="Div1">
+                <br />
+                <div id="TDetail" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4">Task</label>
+                                <div class="col-md-8"><div class="form-control">Test Plan Preparation</div></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4">Phase</label>
+                                <div class="col-md-8"><div class="form-control">Testing</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-12">Description</label>
+                                <textarea rows="3" class="form-control col-md-12" disabled>Create Test plan for testing the rule engine</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4">Process</label>
+                                    <div class="col-md-8"><div class="form-control">Testing</div></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Group</label>
+                                    <div class="col-md-8"><div class="form-control">Design Team</div></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Status</label>
+                                    <div class="col-md-8"><div class="form-control">In Progress</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Start</th>
+                                    <th>Finish</th>
+                                    <th>Duration</th>
+                                    <th>Unit</th>
+                                    <th>% Complete</th>
+                                    <th>Is Complete? </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Planned</th>
+                                    <td>12/03/2013</td>
+                                    <td>30/03/2013</td>                 
+                                    <td>80</td>
+                                    <td>Hrs</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Actual</th>
+                                    <td>13/03/2013</td>
+                                    <td></td>                 
+                                    <td>46</td>
+                                    <td>Hrs</td>
+                                    <td>50 %</td>
+                                    <td>No</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="TDocs" class="tab-pane">
+                    <br />
+                    <div class="row">
+                        <table  class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Document</th>
+                                    <th>Remarks</th>
+                                    <th>Mandatory</th>
+                                    <th class="hidden-sm">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody data-count="1">
+                                <tr>
+                                    <td>Template</td>
+                                    <td>Test Plan Template</td>
+                                    <td>Fill this template before completing the task</td>
+                                    <td>Yes</td>
+                                    <td class="hidden-sm">Not Filled</td>
+                                </tr>
+                                <tr>
+                                    <td>Checklist</td>
+                                    <td>Test Plan Review Checklist</td>
+                                    <td>Fill this checklist before completing the task</td>
+                                    <td>Yes</td>
+                                    <td class="hidden-sm">Not Filled</td>
+                                </tr>
+                                <tr>
+                                    <td>Procedure</td>
+                                    <td>Test Plan Preparation</td>
+                                    <td>Reference Purpose</td>
+                                    <td>No</td>
+                                    <td class="hidden-sm">Not Applicable</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>       
+		</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="taskRecordings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task Recordings</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+      	            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="advanced-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>TS Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    <td><a href="#viewRecording" data-toggle="modal" data-type="A" title="Click to view record details">Checklist</a></td> 
+                                    <td><a href="RecordChecklist.html" title="Click to view">Coding Checklist</a></td>
+                                    <td>To be Filled</td> 
+                                    <td>Not Submitted</td>
+                                </tr>
+                                <tr>
+                                    <td>Additional</td> 
+                                    <td><a href="RecordTemplateTP.html" title="Click to view">Test Plan for Code Migration</a></td>
+                                    <td>Filled</td> 
+                                    <td>Not Submitted</td>
+                                </tr>
+                        </tbody>
+                    </table>                            
+                </div>
+            </div>
+        </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<script type="text/javascript">
+	    var timeCount = 1;
+	    var timeEvent;
+        var monthName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        var weekDay = ["Sun","Mon","Tue","Wed","Thur","Fri","Sat"];
+        viewDate = new Date();
+
+
+	    $('#editTS').on('shown.bs.modal', function () {
+	        var config = {
+	            '.chzn-select': {},
+	            '.chzn-select-deselect': { allow_single_deselect: false },
+	            '.chzn-select-no-single': { disable_search_threshold: 10 },
+	            '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+	            '.chzn-select-width': { width: "95%" }
+	        }
+	        for (var selector in config) {
+	            $(selector).chosen(config[selector]);
+	        }
+	        //$(".mask_duration").inputmask("99.9", { placeholder: " ", clearMaskOnLostFocus: true });
+	        $('#taskProject').val(timeEvent.project);
+	        $('#taskGroup').val(timeEvent.group);
+	        $('#taskName').val(timeEvent.task);
+	        //$('#taskName').text(timeEvent.task);
+	        $('#taskDuration').val(timeEvent.Duration);
+	        $('#PComplete').val(timeEvent.CP);
+	        $('#taskRemarks').text(timeEvent.Remarks);
+	        //$('#taskComplete').val(timeEvent.TC);
+	    });
+
+	    var setTimeDetails = function (calEvent) {
+	        if (calEvent.id == 0) calEvent.id = timeCount;
+	        timeEvent = calEvent;
+	    };
+
+	    $(document).on("click", "#saveTime", function () {
+            // Basic Validation checks
+            if ($('#taskName').val() == "0" || parseInt($("#taskDuration").val()) == 0) {
+                alert ("Pl. select the task name and/or duration to proceed");
+                return;
+            }
+            var days = parseInt($("#TSDays").data("days"));
+            var taskColor = '#1A2575';
+            var label = $("#taskName option:selected").closest('optgroup').prop('label');
+            if (label == "General Tasks") taskColor = '#259421';
+
+	        if (days > 0) {
+	            // Timesheet entry is spanning across days(
+	            var startDate = timeEvent.start;
+                var endDate = timeEvent.start;
+                var duration = $('#taskDuration').val();
+                var addDur = 0;
+
+                if ($("#durDistribute").val() == 2)
+                {
+                    addDur = duration % (days + 1);
+                    duration = (duration - addDur) / (days + 1);
+                }
+	            for (var count = 0; count <= days; count++) {
+	                startDate = new Date(timeEvent.start.getFullYear(), timeEvent.start.getMonth(), timeEvent.start.getDate() + count, timeEvent.start.getHours(), timeEvent.start.getMinutes());
+	                endDate = new Date(timeEvent.start.getFullYear(), timeEvent.start.getMonth(), timeEvent.start.getDate() + count, timeEvent.start.getHours(), timeEvent.start.getMinutes());
+	                if (count == days) {
+                        duration = duration + addDur;
+                        timeCount = timeCount + count;
+	                }
+	                $("#showTSCalendar").fullCalendar('renderEvent', {
+	                    id: timeEvent.id + count,
+	                    title: duration + "(" + $('#taskName').val() + ")", 
+	                    start: startDate,
+	                    end: endDate,
+	                    allDay: timeEvent.allDay,
+	                    project: $('#taskProject').val(),
+	                    group: $('#taskGroup').val(),
+	                    task: $('#taskName').val(),
+	                    Duration: duration,
+	                    CP: $('#PComplete').val(),
+	                    Remarks: $('#taskRemarks').val(),
+	                    TC: $('#taskComplete').val(),
+	                    backgroundColor: taskColor
+	                }, true);
+	            }
+	            timeCount = timeCount + 1;
+	        }
+	        else {
+	            // This entry is only for one day
+	            //if (timeEvent.end == null) timeEvent.end = new Date(timeEvent.start.getFullYear(), timeEvent.start.getMonth(), timeEvent.start.getDate() + count, timeEvent.start.getHours(), timeEvent.start.getMinutes());
+	            timeEvent.project = $('#taskProject').val();
+	            timeEvent.group = $('#taskGroup').val();
+	            timeEvent.task = $('#taskName').val();  
+	            timeEvent.Duration = $('#taskDuration').val();
+	            timeEvent.CP = $('#PComplete').val();
+	            timeEvent.Remarks = $('#taskRemarks').val();
+	            timeEvent.TC = $('#taskComplete').val();
+	            timeEvent.title = $('#taskDuration').val() + "(" + $('#taskName').val() + ")";
+	            timeEvent.backgroundColor = taskColor;
+	            if (timeEvent.id == timeCount) {
+	                // Add New Event
+	                timeCount = timeCount + 1;
+	                $("#showTSCalendar").fullCalendar('renderEvent', timeEvent, true);
+	            }
+	            else {
+	                // Update existing event
+	                $("#showTSCalendar").fullCalendar('updateEvent', timeEvent);
+	            }
+            }
+	        $("#showTSCalendar").fullCalendar('unselect');
+            $("#editTS").modal("hide");
+	    });
+
+        $(document).on("click", "#deleteTime", function () {
+	        if (confirm("Do you want to delete this time entry")) {
+                $("#showTSCalendar").fullCalendar('removeEvents', timeEvent.id);
+	            $("#showTSCalendar").fullCalendar('unselect');
+                $("#editTS").modal("hide");
+            }
+	    });
+
+        $('#taskName').on('change', function () {
+            var label = $(this.options[this.selectedIndex]).closest('optgroup').prop('label');
+            if (label == "Assigned") $(".assignedTaskDetails").show();
+            else $(".assignedTaskDetails").hide();
+        });
+
+        $('#taskComplete').on('click', function () {
+            if (this.checked) {
+                var label = $('#taskName').find("option:selected").first().closest('optgroup').prop('label');
+                if (label == "Assigned") alert("Pl. complete the supporting document required for this task using 'Process Recording' option");
+            }
+        });
+
+        $(".group").on("click",function() {
+            $("." + $(this).data("id")).toggle("slow");
+            $(this).toggleClass("closed");
+        });
+
+        $("body").delegate(".EditTime", "click", function () {
+            if ($(this).children().length > 0) {
+                $(this).children().eq(1).focus();
+            }
+            else {
+                var OriginalContent = $(this).text();
+
+                keypressCode = -1;
+                keypressShift = false;
+                $(this).addClass("cellEditing");
+                $(this).removeClass("EditTime");
+                $(this).html("<input type='text' value='" + OriginalContent + "' size='3' id='mask_time' class='inputValue' data-class='EditTime'/>");
+                $("#mask_time").inputmask("[9]9[:99]", { placeholder: " ", clearMaskOnLostFocus: true, greedy: true, clearIncomplete: true });
+                $(this).children().first().focus();
+            }
+        });
+
+        $("body").delegate(".EditTask", "click", function () {
+            var OriginalContent = $(this).text();
+
+            keypressCode = -1;
+            keypressShift = false;
+            $(this).removeClass("EditTask");
+            $(this).addClass("cellEditing");
+            $(this).html("<select class='sns col-md-12 inputValue' data-class='EditTask' id='selectTask'><option value='Leave'>Leave</option><option value='Team Meeting'>Team Meeting</option><option value='Idle'>Idle<option><option value='Interviews'>Interviews<option><option value='Audit'>Audit<option><option value='Lunch'>Lunch<option><option value='Travel'>Travel<option><select/>");
+            $(this).children().first().val(OriginalContent);
+            $(".sns").chosen({ disable_search_threshold: 20 });
+            $('#selectTask').trigger("chosen:updated");
+            $("#selectTask").chosen().focus();
+            $('.chzn-single').focus();
+
+            $("#selectTask").chosen().change(function() {
+                var newContent = $("#selectTask").val();
+                var parentEle = $("#selectTask_chzn").parent();
+
+                parentEle.text(newContent);
+                //calculateValues(parentEle);
+                parentEle.removeClass("cellEditing");
+                parentEle.addClass("EditTask");
+                // Navigate to the next element
+                parentEle.nextAll(".EditTime").first().click();
+            });
+        });
+        
+
+        
+            $("body").delegate("#selectTask_chzn", "blur", function () {
+                    $('#selectTask').trigger("chosen:updated");
+/*                var newContent = $(this).children("a").first().text();
+                //var newContent = $("#selectTask").val();
+                var parentEle = $(this).parent();
+
+                parentEle.text(newContent);
+                //calculateValues(parentEle);
+                parentEle.removeClass("cellEditing");
+                parentEle.addClass("EditTask");
+                navigate(parentEle); */
+            });
+            
+
+        $("body").delegate(".removeGT","click", function() {
+            if (confirm ("Do you want to delete this general task ?")) 
+            {
+                var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+                $("#" + $(this).data("id")).remove();
+
+                $('html, body').animate({
+                    scrollTop: scroll
+                }, 2000);
+            }
+        });
+        
+        $(document).on("click","#addGeneralTask", function() {
+            var nextID = parseInt($(this).data("count")) + 1;
+            var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+            $("#GTGroup").after('<tr class="GT EditRow" id="GT' + nextID + '">' +
+                                    '<td class="EditTask nav" data-navkey="EditTime" data-class="EditTask">Select</td>' +
+                                    '<td class="nav TSActions"><a href="#" class="removeGT" data-id="GT' + nextID + '" title="Delete this Task"><i class="icon-remove btn btn-xs red-bg"></i></a></td>' +
+                                    '<td id="GT' + nextID + 'Total">0</td>' + 
+                                    '<td id="GT' + nextID + 'Day1" data-id="GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day2" data-id="GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day3" data-id="GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day4" data-id="GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day5" data-id="GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day6" data-id="GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day7" data-id="GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                '</tr>');
+           $(this).data("count",nextID);  
+            $('html, body').animate({
+                scrollTop: $("#GT" + nextID).offset().top
+            }, 2000);
+        });
+
+        $(document).on("click", "#addD_GeneralTask", function () {
+            var nextID = parseInt($(this).data("count")) + 1;
+            var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+            $("#GTGroup").after('<tr class="GT EditRow" id="D_GT' + nextID + '">' +
+                                    '<td class="EditTask nav" data-navkey="EditTime" data-class="EditTask">Select</td>' +
+                                    '<td class="nav TSActions"><a href="#" class="removeGT" data-id="D_GT' + nextID + '" title="Delete this Task"><i class="icon-remove btn btn-xs red-bg"></i></a></td>' +
+                                    '<td id="GT' + nextID + 'Total">0</td>' +
+                                    '<td id="GT' + nextID + 'Day1" data-id="D_GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day2" data-id="D_GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day3" data-id="D_GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day4" data-id="D_GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day5" data-id="D_GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day6" data-id="D_GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                    '<td id="GT' + nextID + 'Day7" data-id="D_GT' + nextID + '" class="EditTime" data-class="EditTime" data-navkey="EditTime">0</td>' +
+                                '</tr>');
+            $(this).data("count", nextID);
+            $('html, body').animate({
+                scrollTop: $("#GT" + nextID).offset().top
+            }, 2000);
+        });
+
+        $(document).on("click","#showToday",function() {
+            viewDate = new Date();
+            if ($("#viewTitle").text() == "Weekly View") populateView(viewDate, "week");
+            else populateView(viewDate, "day");
+        });
+
+        $(document).on("click","#prevWeek",function() {
+            if ($("#viewTitle").text() == "Weekly View") {
+                viewDate = dateAdd(viewDate, -7);
+                populateView(viewDate, "week");
+            }
+            else {
+                viewDate = dateAdd(viewDate, -1);
+                populateView(viewDate, "day");
+            }
+        });
+
+        $(document).on("click","#nextWeek",function() {
+            if ($("#viewTitle").text() == "Weekly View") {
+                viewDate = dateAdd(viewDate, 7);
+                populateView(viewDate, "week");
+            }
+            else {
+                viewDate = dateAdd(viewDate, 1);
+                populateView(viewDate, "day");
+            }
+        });
+
+        var populateView = function(currDate, viewName) 
+        {
+            var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+            switch (viewName) {
+                case "week":
+                    if (currDate.getDay() > 1) currDate = dateAdd(currDate, (-1) * (currDate.getDay() - 1));
+                    viewDate = currDate;
+
+                    $("#weekStart").text(currDate.getDate() + "-" + monthName[currDate.getMonth()] + "-" + currDate.getFullYear());
+                    for (var i = 1; i <= 7; i++) {
+                        $("#weekDt" + i).html("<small>" + currDate.getDate() + "-" + monthName[currDate.getMonth()] + "</small>");
+                        currDate = dateAdd(currDate, 1);
+                    }
+                    break;
+                case "day":
+                    viewDate = currDate;
+                    $("#weekStart").text(currDate.getDate() + "-" + monthName[currDate.getMonth()] + "-" + currDate.getFullYear());
+                    break;
+                default:
+                    break;
+            };
+
+            $('html, body').animate({
+                scrollTop: scroll
+            }, 2000);
+        }
+
+        var dateAdd = function(valDate,days) {
+            var currDays = valDate.getDate();
+            var monthDays = [31,28,31,30,31,30,31,31,30,31,30,31];
+            var newDays
+            var newMonth
+            var newYear
+
+            newDays = currDays + days;
+
+            if (newDays < 1)
+            {
+                // decrement days
+               newMonth = ((valDate.getMonth() - 1) < 0) ? 11 : (valDate.getMonth() - 1);
+               newYear = ((valDate.getMonth() - 1) < 0) ? (valDate.getFullYear() - 1) : valDate.getFullYear();
+               newDays = monthDays[newMonth] + newDays;
+            }
+            else
+            {
+                newMonth = valDate.getMonth();
+                newYear = valDate.getFullYear();
+  //              alert(newDays);
+                if (newDays > monthDays[newMonth])
+                {
+                    if (valDate.getMonth() == 11) { newMonth = 0; newYear = valDate.getFullYear() + 1; }
+                    else newMonth = valDate.getMonth() + 1;
+                    newDays = newDays - monthDays[valDate.getMonth()];
+                }
+//                alert("M: " + newMonth + " D: " + newDays + " Y: " + newYear);
+            }
+            return new Date(newYear,newMonth,newDays);
+        };
+
+        var calculateValues = function () { };
+
+        $(document).on("click", "#dailyView", function () {
+            $("#WeeklyTS").hide();
+            $("#MonthlyTS").hide();
+            $("#viewTitle").text("Daily View");
+            $("#vTitlePrefix").text("");
+            populateView(viewDate, "day");
+            $("#DailyTS").show();
+            $("#weeklyView").parent().removeClass("active");
+            $("#monthlyView").parent().removeClass("active");
+            $(this).parent().addClass("active");
+            $(".nav_options").show();
+        });
+
+        $(document).on("click", "#weeklyView", function () {
+            $("#DailyTS").hide();
+            $("#MonthlyTS").hide();
+            $("#viewTitle").text("Weekly View");
+            $("#vTitlePrefix").text("Starting ");
+            $("#WeeklyTS").show();
+            populateView(viewDate, "week");
+            $("#dailyView").parent().removeClass("active");
+            $("#monthlyView").parent().removeClass("active");
+            $(this).parent().addClass("active");
+            $(".nav_options").show();
+        });
+
+        $(document).on("click", "#monthlyView", function () {
+            $("#DailyTS").hide();
+            $("#WeeklyTS").hide();
+            $("#viewTitle").text("Monthly View");
+            $("#vTitlePrefix").text("");
+            $("#MonthlyTS").show();
+            populateView(viewDate, "week");
+            $("#dailyView").parent().removeClass("active");
+            $("#weeklyView").parent().removeClass("active");
+            $(this).parent().addClass("active");
+            $(".nav_options").hide();
+        });
+
+        $(document).ready(function () {
+            populateView(viewDate, "week");
+            $("#MonthlyTS").hide();
+        });
+
+        </script> 
+               
+}

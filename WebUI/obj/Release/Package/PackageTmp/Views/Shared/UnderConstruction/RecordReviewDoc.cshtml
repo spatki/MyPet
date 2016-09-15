@@ -1,0 +1,869 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+             	<div class="panel colored">
+                    <div class="panel-body">
+                        <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	    <div class="row pull-right panel-footer">
+                                <div class="col-lg-12 col-lg-offset-1">
+                                    <button type="button" class="btn blue-bg" id="NewRecord">Unplanned Review</button>
+                                </div>
+                            </div>
+                        </div>                       
+                        <div class="panel colored">
+                            <a href="javascript:;" id="filterTS">Filter <i class="icon-">&#xf00e;</i></a>
+                            <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-md-3">TS From Date</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group date datepicker">
+                                                        <input type="text" id="planned_from" class="form-control">
+                                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-md-3">TS To Date</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group date datepicker">
+                                                        <input type="text" id="Text1" class="form-control">
+                                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-md-3">Select Project</label>
+                                                <div class="col-md-9"><select class="col-md-12 chzn-nopadd chzn-select-no-single" id="Select1"><option value="Payroll System">Payroll System</option> <option value="Code Migration">Code Migration</option></select></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-md-3">Group</label>
+                                                <div class="col-md-9"><select class="col-md-12 chzn-nopadd chzn-select-no-single" id="Select2"><option value="Design Team">Design Team</option> <option selected="selected" value="Salary Processing Module">Salary Processing Module</option> <option value="Testing Team">Testing Team</option></select></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-md-3">Record Type</label>
+                                                <div class="col-md-9"><select class="col-md-12 chzn-nopadd chzn-select-no-single" id="Select3"><option value="Payroll System">Checklist</option> <option value="Code Migration">Template</option> <option value="Code Migration">Uploaded Doc</option></select></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-md-3">Type</label>
+                                                <div class="col-md-9"><select class="col-md-12 chzn-nopadd chzn-select-no-single" id="Select4"><option value="Payroll System" selected="selected">Assigned</option> <option value="Code Migration" selected="selected">Unplanned</option></select></div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn blue-bg pull-right" data-dismiss="modal">Go</button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row" id="tabDaily">
+                    	        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="advanced-table">
+                                    <thead>
+                                        <tr>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Review For</th>
+                                            <th>Type</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>TS Status</th>
+                                            <th class="visible-lg visible-md">Project</th>
+                                            <th class="visible-lg visible-md">Group</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr>
+                                                <td>13/01/2013</td> 
+                                                <td>14/01/2013</td> 
+                                                <td><a href="#viewTaskDetails" data-toggle="modal">View Task</a></td> 
+                                                <td><a href="#viewRecording" data-toggle="modal" data-type="A" title="Click to view record details">Checklist</a></td> 
+                                                <td><a href="RecordChecklistReview.html" title="Click to view">Coding Checklist</a></td>
+                                                <td>Filled</td> 
+                                                <td>Waiting For Review</td>
+                                                <td class="visible-lg visible-md">Payroll System</td>
+                                                <td class="visible-lg visible-md"></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>24/11/2013</td> 
+                                                <td>25/11/2013</td> 
+                                                <td><a href="#viewTaskDetails" data-toggle="modal">View Task</a></td> 
+                                                <td><a href="#viewRecording" data-toggle="modal" data-type="A" title="Click to view record details">Checklist</a></td> 
+                                                <td><a href="RecordChecklistReview.html" title="Click to view">Coding Checklist</a></td>
+                                                <td>Approved</td> 
+                                                <td>Review Complete</td>
+                                                <td class="visible-lg visible-md">Payroll System</td>
+                                                <td class="visible-lg visible-md">Salary Processing Module</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>24/11/2013</td> 
+                                                <td>25/11/2013</td> 
+                                                <td><a href="#viewTaskDetails" data-toggle="modal">View Task</a></td> 
+                                                <td><a href="#" data-toggle="modal" data-type="O" title="Click to view or change record details" class="showRec">Template</a></td> 
+                                                <td><a href="RecordTemplateTPReview.html" title="Click to view">System Test Plan</a></td>
+                                                <td>To be Reviewed</td> 
+                                                <td>Not Submitted</td>
+                                                <td class="visible-lg visible-md">Payroll System</td>
+                                                <td class="visible-lg visible-md"></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">Unplanned Review</td> 
+                                                <td><a href="#" data-toggle="modal" class="linkTask" data-status="E">Link to Tasks</a></td> 
+                                                <td><a href="#" data-toggle="modal" data-type="O" title="Click to view or change record details" class="showRec">Checklist</a></td> 
+                                                <td><a href="RecordChecklist.html" title="Click to view">Test Plan Review</a></td>
+                                                <td>To be Filled</td> 
+                                                <td>Not Submitted</td>
+                                                <td class="visible-lg visible-md">Payroll System</td>
+                                                <td class="visible-lg visible-md"></td>
+                                                <td><a href="#confirmModal" class="btn btn-med red-bg  rejectProj" role="button" data-toggle="modal"><i class="icon-">&#xf00d;</i></a></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">Unplanned Review</td> 
+                                                <td><a href="#" data-toggle="modal" class="linkTask" data-status="A">Link to Tasks</a></td> 
+                                                <td><a href="#viewRecording" data-toggle="modal" data-type="O" title="Click to view or change record details">Template</a></td> 
+                                                <td><a href="RecordTemplate.html" title="Click to view">PMP Plan</a></td>
+                                                <td>Filled</td> 
+                                                <td>Approved</td>
+                                                <td class="visible-lg visible-md">Payroll System</td>
+                                                <td class="visible-lg visible-md"></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">Unplanned Review</td> 
+                                                <td><a href="#" data-toggle="modal" class="linkTask" data-status="A">Link to Tasks</a></td> 
+                                                <td><a href="#viewRecording" data-toggle="modal" data-type="O" title="Click to view or change record details">Uploaded Doc</a></td> 
+                                                <td><a href="#" class="showDocumentData" title="Click to view">Quaterly Project Review</a></td>
+                                                <td>Not Applicable</td> 
+                                                <td>Not Submitted</td>
+                                                <td class="visible-lg visible-md">Payroll System</td>
+                                                <td class="visible-lg visible-md">Design Team</td>
+                                                <td><a href="#confirmModal" class="btn btn-med red-bg  rejectProj" role="button" data-toggle="modal"><i class="icon-">&#xf00d;</i></a></td>
+                                            </tr>
+                                    </tbody>
+                                </table>                            
+                            </div>
+                        </div>
+            	</div>
+
+            </div>
+
+    <div class="modal fade" id="newRecording" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Add/Edit Recording </h4>
+		</div>
+		<div class="modal-body">
+            <ul class="nav nav-tabs" id="Ul1">
+                <li class="active"><a data-toggle="tab" href="#SDetail" id="RD">Record Details</a></li>
+                <li><a data-toggle="tab" href="#SSuppDoc" id="LTT">Link to Tasks</a></li>
+            </ul>
+            <div class="tab-content" id="Div3">
+                <br />
+                <div id="SDetail" class="tab-pane fade in active">
+                    <div class="panel colored">
+                        <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3">Project</label>
+                                            <div class="col-md-9"><select class="col-md-12 chzn-nopadd" id="selProj"><option value="Payroll System">Payroll System</option> <option value="Code Migration">Code Migration</option></select></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3">Group</label>
+                                            <div class="col-md-9"><select class="col-md-12 chzn-nopadd" id="selGroup"><option value="Design Team">Design Team</option> <option selected="selected" value="Salary Processing Module">Salary Processing Module</option> <option value="Testing Team">Testing Team</option></select></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3">Record</label>
+                                            <div class="col-md-9"><select class="col-md-12 chzn-nopadd" id="recordType"><option value="Checklist" selected="selected">Checklist</option> <option value="Template">Template</option> <option value="Uploaded Doc">Uploaded Doc</option></select></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3">Details</label>
+                                            <div class="col-md-9" id="recordDetails" data-value="Coding Checklist"><select class="col-md-12 chzn-nopadd" id="recDetailValue"><option value="Coding Checklist">Coding Checklist</option> <option value="Code review checklist">Code Review checklist</option> </select></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="col-md-2">Remarks</label>
+                                            <div class="col-md-12"><textarea rows="3" class="col-md-12"></textarea></div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="SSuppDoc" class="tab-pane">
+                    <br />
+                    <div class="row">
+                        <table  class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Type</th>
+                                    <th>Task</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Duration (hrs)</th>
+                                    <th class="hidden-sm">Remarks</th>
+                                    <th class="hidden-sm">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody data-count="1">
+                                <tr>
+                                    <td></td>
+                                    <td>Assigned</td>
+                                    <td>Coding</td>
+                                    <td>12/11/2013</td>
+                                    <td>30/11/2013</td>
+                                    <td>80</td>
+                                    <td class="hidden-sm">Rule Engine</td>
+                                    <td class="hidden-sm">TS Approved</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#linkTasks" class="removeTask" data-id="S1" data-toggle="modal" data-tableid="HDocDetails" data-key="R"><i class="icon-remove"></i></a></td>
+                                    <td>Other</td>
+                                    <td>Code review</td>
+                                    <td>01/12/2013</td>
+                                    <td>02/12/2013</td>
+                                    <td>10</td>
+                                    <td class="hidden-sm">Extra review</td>
+                                    <td class="hidden-sm">Not Submitted</td>
+                                </tr>
+                                <tr id="S1">
+                                    <td><a href="#linkTasks" data-id="S1" data-toggle="modal" data-tableid="HDocDetails" data-key="R"><i class="icon-">&#xf055</i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                
+            </div>       
+		</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		    <button type="button" class="btn blue-bg" data-dismiss="modal">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    <div class="modal fade" id="viewRecording" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">View Recording </h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                    <div class="panel colored">
+                        <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3">Project</label>
+                                            <div class="col-md-9"><div class="form-control">Code Migration</div></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3">Group</label>
+                                            <div class="col-md-9"><div class="form-control">Salary Processing Module</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3">Record</label>
+                                            <div class="col-md-9"><div class="form-control">Checklist</div></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3" disabled>Details</label>
+                                            <div class="col-md-9" id="assDetails" data-value="Coding Checklist"><div class="form-control">Coding Checklist</div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="col-md-2">Remarks</label>
+                                            <div class="col-md-12"><textarea rows="3" class="col-md-12" disabled>Coding for rule engine</textarea></div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+             </div>
+		</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+<div class="modal fade" id="showDocument" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-remote="Documents/Projects/BRD for Process Accelerator v1.1.pdf" >
+	<div class="modal-dialog"  style="width:80%; height:90%;overflow:auto;">
+  <div class="modal-content">
+	<div class="modal-header blue-bg">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="model-title emphasize">View Document</h4>
+	</div>
+	<div class="modal-body">
+        <div class="row" id="docContent">
+            Document contents will appear here...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="viewTaskDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task </h4>
+		</div>
+		<div class="modal-body">
+            <ul class="nav nav-tabs" id="Ul2">
+                <li class="active"><a data-toggle="tab" href="#TDetail">Details</a></li>
+                <li><a data-toggle="tab" href="#TDocs">Supporting Information</a></li>
+            </ul>
+            <div class="tab-content" id="Div1">
+                <br />
+                <div id="TDetail" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4">Task</label>
+                                <div class="col-md-8"><div class="form-control">Test Plan Preparation</div></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4">Phase</label>
+                                <div class="col-md-8"><div class="form-control">Testing</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-12">Description</label>
+                                <textarea rows="3" class="form-control col-md-12" disabled>Create Test plan for testing the rule engine</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4">Process</label>
+                                    <div class="col-md-8"><div class="form-control">Testing</div></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Group</label>
+                                    <div class="col-md-8"><div class="form-control">Design Team</div></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Status</label>
+                                    <div class="col-md-8"><div class="form-control">In Progress</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Start</th>
+                                    <th>Finish</th>
+                                    <th>Duration</th>
+                                    <th>Unit</th>
+                                    <th>% Complete</th>
+                                    <th>Is Complete? </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Planned</th>
+                                    <td>12/03/2013</td>
+                                    <td>30/03/2013</td>                 
+                                    <td>80</td>
+                                    <td>Hrs</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Actual</th>
+                                    <td>13/03/2013</td>
+                                    <td></td>                 
+                                    <td>46</td>
+                                    <td>Hrs</td>
+                                    <td>50 %</td>
+                                    <td>No</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="TDocs" class="tab-pane">
+                    <br />
+                    <div class="row">
+                        <table  class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Document</th>
+                                    <th>Remarks</th>
+                                    <th>Mandatory</th>
+                                    <th class="hidden-sm">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody data-count="1">
+                                <tr>
+                                    <td>Template</td>
+                                    <td>Test Plan Template</td>
+                                    <td>Fill this template before completing the task</td>
+                                    <td>Yes</td>
+                                    <td class="hidden-sm">Not Filled</td>
+                                </tr>
+                                <tr>
+                                    <td>Checklist</td>
+                                    <td>Test Plan Review Checklist</td>
+                                    <td>Fill this checklist before completing the task</td>
+                                    <td>Yes</td>
+                                    <td class="hidden-sm">Not Filled</td>
+                                </tr>
+                                <tr>
+                                    <td>Procedure</td>
+                                    <td>Test Plan Preparation</td>
+                                    <td>Reference Purpose</td>
+                                    <td>No</td>
+                                    <td class="hidden-sm">Not Applicable</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>       
+		</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		    <button type="button" class="btn blue-bg" data-dismiss="modal">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+
+<div class="modal fade" id="linkTasks" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task </h4>
+		</div>
+		<div class="modal-body">
+
+            <div class="row col-md-12">
+                <div class="col-md-4">
+                    <div><label>Show</label></div>
+                    <div><input type="radio" name="taskType" id="taskType1" value="1" checked="checked" class="radioOption"/> Assigned <input type="radio" class="radioOption" name="taskType" id="taskType2" value="2"/> Other</div>
+                </div>
+                <div class="col-md-2">
+                    <div><label>From: </label></div>
+                    <div><input type="text" id="fromDate" class="form-control col-md-12"/></div>
+                </div>
+                <div class="col-md-2">
+                    <div><label>To: </label></div>
+                    <div><input type="text" id="toDate"  class="form-control col-md-12"/></div>
+                </div>
+                <div class="col-md-3">
+                    <div><label>Task: </label></div>
+                    <div>
+                        <select class="col-md-12 chzn-nopadd" id="filterTaskType">
+                            <option value="0">Select</option>
+                            <optgroup label="General Tasks">
+                                <option value="Project Management">Project Management</option>
+                                <option value="Leave">Leave</option>
+                                <option value="Meeting">Meeting</option>
+                                <option value="Conf.Call">Conf. Call</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Idle">Idle</option>
+                            </optgroup>
+                            <optgroup label="Assigned">
+                                <option value="Coding for Payroll Module">Coding for Payroll Module</option>
+                                <option value="Code Review">Code Review</option>
+                            </optgroup>
+                            <optgroup label="Review">
+                                <option value="Code Review">Code Review for Rule Engine</option>
+                                <option>Peer Review EF Module</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn blue-bg" data-dismiss="modal">Go</button>
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-md-12 dialogScroll">
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="listTSTasksOther">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Date</th>
+                        <th>Task Type</th>
+                        <th>Task</th>
+                        <th>Duration (hrs)</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr id="T1">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>
+                        <tr id="T2">
+                            <td><input type="checkbox" data-id="T2" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>
+                        <tr id="T3">
+                            <td><input type="checkbox" data-id="T3" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>                        
+                    <tr id="Tr3">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>                        
+                    <tr id="Tr4">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>                        
+                    <tr id="Tr5">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>                        
+                    <tr id="Tr6">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>                        
+                    <tr id="Tr7">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>                        
+                    <tr id="Tr8">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>Other</td>
+                            <td>Coding</td> 
+                            <td>Project Management</td> 
+                            <td>3</td>
+                            <td>Coding for Salary Processing Module</td>
+                        </tr>                
+                </tbody>
+            </table>    
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="listAssignedTasks">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Task Type</th>
+                        <th>Task</th>
+                        <th>Assigned Duration (hrs)</th>
+                        <th>Actual Duration (hrs)</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr id="Tr1">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>23/01/2014</td>
+                            <td>Assigned</td> 
+                            <td>PMP Preparation</td> 
+                            <td>10</td>
+                            <td>2</td>
+                            <td>Working on first Draft</td>
+                        </tr>
+                        <tr id="Tr2">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>24/02/2014</td> 
+                            <td>01/03/2014</td>
+                            <td>Assigned</td> 
+                            <td>System Testing</td> 
+                            <td>40</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr id="Tr9">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>11/03/2014</td> 
+                            <td>11/03/2014</td>
+                            <td>Assigned</td> 
+                            <td>Internal Audit</td> 
+                            <td>8</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr id="Tr10">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>23/01/2014</td>
+                            <td>Assigned</td> 
+                            <td>PMP Preparation</td> 
+                            <td>10</td>
+                            <td>2</td>
+                            <td>Working on first Draft</td>
+                        </tr>
+                        <tr id="Tr11">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>23/01/2014</td>
+                            <td>Assigned</td> 
+                            <td>PMP Preparation</td> 
+                            <td>10</td>
+                            <td>2</td>
+                            <td>Working on first Draft</td>
+                        </tr>
+                        <tr id="Tr12">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>23/01/2014</td>
+                            <td>Assigned</td> 
+                            <td>PMP Preparation</td> 
+                            <td>10</td>
+                            <td>2</td>
+                            <td>Working on first Draft</td>
+                        </tr>
+                        <tr id="Tr13">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>23/01/2014</td>
+                            <td>Assigned</td> 
+                            <td>PMP Preparation</td> 
+                            <td>10</td>
+                            <td>2</td>
+                            <td>Working on first Draft</td>
+                        </tr>
+                        <tr id="Tr14">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>23/01/2014</td>
+                            <td>Assigned</td> 
+                            <td>PMP Preparation</td> 
+                            <td>10</td>
+                            <td>2</td>
+                            <td>Working on first Draft</td>
+                        </tr>
+                        <tr id="Tr15">
+                            <td><input type="checkbox" data-id="T1" /></td> 
+                            <td>01/01/2014</td> 
+                            <td>23/01/2014</td>
+                            <td>Assigned</td> 
+                            <td>PMP Preparation</td> 
+                            <td>10</td>
+                            <td>2</td>
+                            <td>Working on first Draft</td>
+                        </tr>
+                </tbody>
+            </table>    
+                </div>
+            </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		    <button type="button" class="btn blue-bg" data-dismiss="modal">Link Selected Tasks</button>
+		</div>
+        </div>
+     </div>
+   </div>
+</div>                        
+
+	<script type="text/javascript">
+	    var onlyOnce = true;
+	    var config = {
+	        '.chzn-select': {},
+	        '.chzn-select-deselect': { allow_single_deselect: false },
+	        '.chzn-select-no-single': { disable_search_threshold: 10 },
+	        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+	        '.chzn-select-width': { width: "95%" }
+	    }
+	    for (var selector in config) {
+	        $(selector).chosen(config[selector]);
+	    }
+
+	    $(document).on("click", "#filterTS", function () {
+	        $(this).parent().children(".panel-body").eq(0).toggle("slow");
+	    });
+
+	    $("#filterTS").click();
+
+	    $("body").delegate(".showDetails", "click", function () {
+	        $("#empName").text($(this).data("emp"));
+	        $("#period").text($(this).data("period"));
+	        $("#viewTSDetails").modal("show");
+	    });
+
+	    $(document).on("click", "#NewRecord", function () {
+	        $("#newRecording").modal("show");
+	    });
+
+        $(document).on("change","#recordType", function() {
+            var recordType = $(this).val();
+            var htmlString = "";
+
+            switch (recordType)
+            {
+                case "Checklist":
+                    htmlString = '<select class="col-md-12 recDetailValue chzn-nopadd chzn-select-no-single"><option value="Coding Checklist" selected="selected">Coding Checklist</option> <option value="Code review checklist">Code Review checklist</option> </select>';
+                    $("#recordDetails").data("value","Coding Checklist");
+                    break;
+                case "Template":
+                    htmlString = '<select class="col-md-12 recDetailValue chzn-nopadd chzn-select-no-single"><option value="Test Plan Template" selected="selected">Test Plan Template</option> <option value="PMP Template">PMP Template</option>  <option value="SQA Template">SQA Template</option></select>';
+                    $("#recordDetails").data("value","Test Plan Template");
+                    break;            
+                case "Uploaded Doc":
+                    htmlString = '<input type="file" class="styled recDetailValue">';
+                    $("#recordDetails").data("value","");
+                    break;            
+            }
+            $("#recordDetails").html(htmlString);
+            if (recordType != "Uploaded Doc") $(".recDetailValue").chosen({ "disable_search_threshold": 10 });
+        });
+
+        $("body").delegate(".recDetailValue","change",function() {
+            $("#recordDetails").data("value",$(this).val());
+        });
+
+        $('#newRecording').on('shown.bs.modal', function () {
+            $("#selProj").chosen({ "disable_search_threshold": 10 });
+            $("#selGroup").chosen({ "disable_search_threshold": 10 });
+            $("#recordType").chosen({ "disable_search_threshold": 10 });
+            $("#recDetailValue").chosen({ "disable_search_threshold": 10 });
+            $("#filterTaskType").chosen({ "allow_single_deselect": false });
+        });
+
+        $('#linkTasks').on('shown.bs.modal', function () {
+            $("#filterTaskType").chosen({ "allow_single_deselect": false });
+            $("#fromDate").inputmask("d/m/y",{ "placeholder": "dd/mm/yyyy"});
+            $("#toDate").inputmask("d/m/y",{ "placeholder": "dd/mm/yyyy"});
+            $("#taskType").val("1");
+            $("#listAssignedTasks").hide();
+            $("#listTSTasksOther").show();
+        });   
+
+        $(document).on("change",".radioOption", function() {
+            if ($(this).val() == 1) {
+                $("#listAssignedTasks").show();
+                $("#listTSTasksOther").hide();
+            }
+            else
+            {
+                $("#listAssignedTasks").hide();
+                $("#listTSTasksOther").show();
+            }            
+        });
+
+    $("body").delegate(".linkTask","click", function() {
+        $("#newRecording").modal("show");
+        $("#LTT").click();
+    });
+        
+    $("body").delegate(".showRec","click", function() {
+        $("#newRecording").modal("show");
+        $("#RD").click();
+    });
+
+    $("body").delegate(".showDocumentData", "click", function () {
+        //        $("#showDocument").modal("show");
+        window.open("Documents/Projects/Example.pdf", null,"height=400,width=600,status=yes,toolbar=no,menubar=no,location=no,top=200,left=300");
+    });
+
+	</script> 
+               
+}

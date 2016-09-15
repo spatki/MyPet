@@ -1,0 +1,26 @@
+﻿@model IEnumerable<prc_emp_by_location>
+@{
+    Layout = null;
+}
+@if (Model.Any())
+{
+    var counter = 0;
+    foreach (var e in Model)
+    {
+        counter += 1;
+        <tr id="S@(e.ID)">
+            <td>@counter</td>
+            <td>@e.EmpCode</td>
+            <td>@e.GivenName @e.FamilyName</td>
+            <td>@e.ShortDesignation</td>
+            <td>@(e.LevelShortName == null ? "" : e.LevelShortName)</td>
+            <td>@e.StatusName</td>
+            <td><button class="btn btn-med green-bg openDialog" data-source="@Url.Action("AllocateEmployee", "ProjAllocation", new { projectID = ViewBag.projectID, employeeID = e.ID })"><i class="icon-ok"></i></button>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <p>No Employees found</p>
+}

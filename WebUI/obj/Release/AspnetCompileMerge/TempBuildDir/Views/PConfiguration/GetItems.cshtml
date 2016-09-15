@@ -1,0 +1,91 @@
+﻿@model IEnumerable<tbl_process_repository>
+@{
+    Layout = null;
+}
+@foreach (var o in Model)
+{
+<li id="L@(o.ID)"><a href="javascript:" data-toggle="modal" class="openDialog" data-id="L@(o.ID)" data-source="@(Url.Action("Edit",new {id=o.ID}))"><i class="icon-edit"></i></a>
+    <a class="tree-toggle repositoryDetails closed" data-toggle="branch" role="branch" data-id="@o.ID" id="Node@(o.ID)" href="javascript:">
+        <span id ="LvlDesc@(o.ID)" class="@(o.TreatAsTask == true ? "blue-bg" : "")">@(o.Sequence == null || o.Sequence == 0 ? "" : o.Sequence + ". ") @o.mstr_process_level.LongName : @o.Name&nbsp;&nbsp;</span>
+    </a>
+    <ul id="C@(o.ID)" class="branch">
+        <li id="edit@(o.ID)">
+            &nbsp;&nbsp;<a href="javascript:" class="tree-toggle closed repositoryDetails" role="branch" data-toggle="branch" id="editRep@(o.ID)" data-basenode="@(o.ID)">
+                <span class="label label-success">Repository</span>
+                        </a>
+                <ul class="branch" id="repo@(o.ID)">
+                    <!-- Procedures -->
+                    <li  id="Proc@(o.ID)">
+                        <a href="javascript:" class="tree-toggle closed repositoryDetails" data-basenode="@(o.ID)" role="branch" data-toggle="branch">
+                            <span class="label label-warning">Procedures</span>&nbsp;<span id="Proc@(o.ID)Count" class="badge badge-warning">@o.tbl_process_rep_procedure.Count()</span>
+                        </a>
+                        <ul class="branch">
+                            <li><a href="javascript:" data-toggle="modal" class="openDialog" data-id="Proc@(o.ID)" data-source="/PConfiguration/manageProcedures?repoID=@(o.ID)">Click to configure procedures</a></li>
+                            @foreach (var p in o.tbl_process_rep_procedure)
+                            {
+                                <li><a href="javascript:" class="label-configured openDialog" data-id="" data-source="@Url.Action("showPreview", "PProcedure", new { id = p.tbl_Process_ProcedureID })">@p.tbl_process_procedure.Name</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <!-- Templates -->
+                    <li id="Template@(o.ID)">
+                        <a href="javascript:" class="tree-toggle closed repositoryDetails" data-basenode="@(o.ID)" role="branch" data-toggle="branch">
+                            <span class="label label-warning">Templates</span>&nbsp;<span id="Template@(o.ID)Count" class="badge badge-warning">@o.tbl_process_rep_template.Count()</span>
+                        </a>
+                            <ul class="branch">
+                                <li><a href="#editTemplate" data-toggle="modal" class="openDialog" data-id="Template@(o.ID)" data-source="/PConfiguration/manageTemplates?repoID=@(o.ID)">Click to configure templates</a></li>
+                                @foreach (var t in o.tbl_process_rep_template)
+                                {
+                                    <li>@t.tbl_process_template.Name</li>
+                                }
+                            </ul>
+                    </li>
+                    <!-- Checklists -->
+                    <li id="Checklist@(o.ID)">
+                        <a href="javascript:" class="tree-toggle closed repositoryDetails" data-basenode="@(o.ID)" role="branch" data-toggle="branch">
+                            <span class="label label-warning">Checklists</span>&nbsp;<span id="Checklist@(o.ID)Count" class="badge badge-warning">@o.tbl_process_rep_chklst.Count()</span>
+                        </a>
+                        <ul class="branch">
+                            <li><a href="#editChkLst" data-toggle="modal" class="openDialog" data-id="Checklist@(o.ID)" data-source="/PConfiguration/manageChecklists?repoID=@(o.ID)">Click to configure checklists</a></li>
+                                @foreach (var c in o.tbl_process_rep_chklst)
+                                {
+                                    <li>@c.tbl_process_checklist.Name</li>
+                                }
+                        </ul>
+                    </li>
+                    <!-- Documents -->
+                    <li>
+                        <a href="javascript:" class="tree-toggle closed repositoryDetails" data-basenode="@(o.ID)" role="branch" data-toggle="branch">
+                            <span class="label label-warning">Processes</span>&nbsp;<span id="Documents@(o.ID)Count" class="badge badge-warning">@o.tbl_process_rep_task.Count()</span>
+                        </a>
+                        <ul class="branch" id="Documents@(o.ID)">
+                            <li><a href="javascript:" class="openDialog" data-id="Documents@(o.ID)" data-key="/PConfiguration/manageDocuments?repoID=@(o.ID)">Click to configure documents</a></li>
+                            @foreach (var d in o.tbl_process_rep_document)
+                            {
+                                if (d.tbl_process_document != null)
+                                {
+                                    <li>@d.tbl_process_document.tbl_docmgr_document.Name</li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                    <!-- Activities -->
+                    <li>
+                        <a href="javascript:" class="tree-toggle closed repositoryDetails" data-basenode="@(o.ID)" role="branch" data-toggle="branch">
+                            <span class="label label-warning">Activities</span>&nbsp;<span id="Activity@(o.ID)Count" class="badge badge-warning">@o.tbl_process_rep_task.Count()</span>
+                        </a>
+                        <ul class="branch" id="Activity@(o.ID)">
+                            <li><a href="javascript:" class="openActivities" data-source="@Url.Action("manageActivities","PConfiguration",new { repoID = o.ID })" data-id="Activity@(o.ID)">Click to configure activities</a></li>
+                            @foreach (var pr in o.tbl_process_rep_task)
+                            {
+                                <li>@pr.Name</li>
+                            }
+                        </ul>
+                    </li>
+            </ul>
+        </li>
+        <li id="L@(o.ID)newNode"><a href="javascript:" data-toggle="modal" class="openDialog" data-id="" data-source="@Url.Action("Create", new {level=o.Level + 1, parent=o.ID })">Add Repository</a></li>
+    </ul>
+</li>
+}
+

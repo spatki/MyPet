@@ -1,0 +1,191 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_resourceplan_humanInput
+@{
+    Layout = null;
+    IQueryable<tbl_workflow> workflow;
+    ViewBag.DialogOption = "openExtraWorkflow";
+    ViewBag.SaveOption = "saveExtraWorkflow";
+    ViewBag.UpdateID = "openDialogBox";
+    ViewBag.Key = Model.ID.ToString();
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else
+    {
+        workflow = null;
+    }
+}
+<div class="modal-dialog" style="width:50%">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Edit Resource Plan ( <strong>@Model.mstr_process_lc_status.Status</strong> )</h4>
+	</div>
+    <form method="post" action="@Url.Action("Edit")" id="WFForm"  role="form">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+            <ul class="nav nav-tabs" id="Ul1">
+                <li class="active"><a data-toggle="tab" href="#plan">Plan</a></li>
+                <li><a data-toggle="tab" href="#history">Review History</a></li>
+            </ul>
+            <div class="tab-content" id="Div3">
+                <br />
+                <div id="plan" class="tab-pane fade in active">
+		            <div class="row">
+			            <div class="col-md-12">
+                                <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+                                <input type="hidden" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" value="@Model.tbl_Org_ProjectID" />
+                                <input type="hidden" id="ClientID" name="ClientID" value="@Model.ClientID" />
+                                <input type="hidden" id="CreateDate" name="CreateDate" value="@(Model.CreateDate == null ? "" : Model.CreateDate.ToString(Globals.DateFormatString))" />
+                                <input type="hidden" id="CreatedBy" name="CreatedBy" value="@Model.CreatedBy" />
+                                <input type="hidden" value="" id="workflow_status" name="mstr_Process_LC_StatusID" />
+                                <input type="hidden" value="true" id="followWF" name="followWF" />
+                                <input type="hidden" value="@(Model.statusWF == null ? WebSecurity.CurrentUserId : Model.statusWF)" id="statusWF" name="statusWF" />
+                                <input type="hidden" value="@Model.workflow" id="workflow" name="workflow" />
+                                <input type="hidden" value="@WebSecurity.CurrentUserId" id="workflowUser" name="workflowUser" />
+            
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Role</label>
+                                        @Html.Action("getListItems", "OrgRole", new { selectedItem = Model.tbl_Org_RoleID, controlName = "tbl_Org_RoleID", excludeIds = "", includeIds = "", reload = "" })
+                                        @Html.ValidationMessageFor(o => o.tbl_Org_RoleID)
+                                    </div>    
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Count</label>
+                                        @Html.TextBoxFor(o => o.Count, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(o => o.Count)
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Allocation %</label>
+                                        @Html.TextBoxFor(o => o.AllocationPercent, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(o => o.AllocationPercent)
+                                    </div>
+                                </div>
+                        </div>
+			            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">    
+                                    <label class="control-label">Skills</label>
+                                    @Html.TextBoxFor(o => o.Skills, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(o => o.Skills)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">    
+                                    <label class="control-label">Planned Start</label>
+                                    <input type="text" name="PlannedStart" id="PlannedStart" value="@(Model.PlannedStart == new DateTime() ? "" : Model.PlannedStart.ToString(Globals.DateFormatString))" class="form-control datepicker"/>
+                                    @Html.ValidationMessageFor(o => o.PlannedStart)
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">    
+                                    <label class="control-label">Planned End</label>
+                                    <input type="text" name="PlannedEnd" id="PlannedEnd" value="@(Model.PlannedEnd == new DateTime() ? "" : Model.PlannedEnd.ToString(Globals.DateFormatString))" class="form-control"/>
+                                    @Html.ValidationMessageFor(o => o.PlannedEnd)
+                                </div>
+                            </div>
+                        </div>
+			            <div class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Job Description</label>
+                                    @Html.TextAreaFor(o => o.JobDescription, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(o => o.JobDescription)
+                                </div>
+                            </div>
+                        </div>
+			            <div class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Remarks</label>
+                                    @Html.TextAreaFor(o => o.Remarks, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(o => o.Remarks)
+                                </div>
+                            </div>
+                        </div>
+			            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">    
+                                    <label>Project Group</label>
+                                    @Html.Action("getListItemsFor", "ProjGroup", new { selectedItem = Model.tbl_Org_Proj_GroupID.GetValueOrDefault(), controlName = "tbl_Org_Proj_GroupID", excludeIds = "", selectIds = "", projectID = Model.tbl_Org_ProjectID, allowNewClient = false, reload = "" })
+                                    @Html.ValidationMessageFor(o => o.tbl_Org_Proj_GroupID)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">    
+                                    <label>Location</label>
+                                    @Html.Action("getListItemsFor", "ProjLocation", new { selectedItem = Model.tbl_Org_Proj_LocationID.GetValueOrDefault(), controlName = "tbl_Org_Proj_LocationID", excludeIds = "", selectIds = "", projectID = Model.tbl_Org_ProjectID })
+                                    @Html.ValidationMessageFor(o => o.tbl_Org_Proj_LocationID)
+                                </div>
+                            </div>
+			            </div>	
+		            </div>
+                </div>
+                <div id="history" class="tab-pane">
+                    <br />
+                    <div class="col-md-12">
+                        @Html.Action("ShowHistory", new { id = Model.ID })
+                    </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+                @if (workflow != null)
+                {
+                    @Html.Partial("printWorkflow", workflow)
+                }
+		        <button type="button" class="btn gray-bg closeDialog">Cancel</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+    <div id="parentUpdate" style="display:none;">
+        <div id="parentMode">@(ViewBag.Mode == "Add" ? "add" : "edit")</div>
+        <div id="parentSearchTable">processTable</div>
+        <div id="parentUpdateID">@(ViewBag.Mode == "Add" ? "listing" : Model.ID.ToString())</div>
+        <div >
+            <table>
+                <tbody id="parentContents">
+                    @{ tbl_org_resourceplan_human entity = new tbl_org_resourceplan_human()
+                                                                {
+                                                                    ID = Model.ID,
+                                                                    PlannedStart = Model.PlannedStart,
+                                                                    PlannedEnd = Model.PlannedStart,
+                                                                    Count = Model.Count,
+                                                                    AllocationPercent = Model.AllocationPercent,
+                                                                    CreateDate = Model.CreateDate,
+                                                                    Skills = Model.Skills,
+                                                                    tbl_Org_RoleID = Model.tbl_Org_RoleID,
+                                                                    mstr_org_role = Model.mstr_org_role,
+                                                                    tbl_Org_Proj_LocationID = Model.tbl_Org_Proj_LocationID,
+                                                                    tbl_org_proj_location = Model.tbl_org_proj_location,
+                                                                    tbl_Org_Proj_GroupID = Model.tbl_Org_Proj_GroupID,
+                                                                    tbl_org_proj_group = Model.tbl_org_proj_group,
+                                                                    mstr_Process_LC_StatusID = Model.mstr_Process_LC_StatusID,
+                                                                    mstr_process_lc_status = Model.mstr_process_lc_status
+                                                                };
+                        }
+                        @Html.Partial("GetHumanPlan", new[] { entity })
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div><!-- /.modal-dialog -->
+<!-- Modal -->
+
+<script>
+    $("#PlannedStart").datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    $("#PlannedEnd").datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+
+
+</script>

@@ -1,0 +1,64 @@
+﻿@model UserRoles
+@{
+    Layout = null; 
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#submitLevel").ajaxForm({
+            success: function (data) {
+                location.reload(true);
+            },
+            error: function (data) {
+                $("#openDialogBox").html(data.responseText);
+            }
+        });
+    });
+</script>    
+
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4>Change Role</h4>
+	</div>
+    <form method="post" action="@Url.Action("ChangeRole")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Role</label>
+                            @if (Model.type == "Sys")
+                            {
+                                @Html.Action("getListItems","SysRole",new { selectedItem = Model.Role, controlName = "Role", excludeIds = "", selectIds = Model.selectRoles, reload = ""})
+                            }
+                            else
+                            {
+                                @Html.Action("getListItems","OrgRole",new { selectedItem = Model.Role, controlName = "Role", excludeIds = "", selectIds = Model.selectRoles, reload = ""})
+                            }
+                            @Html.ValidationMessageFor(o => o.Role)
+                        </div>
+                        @Html.HiddenFor(o => o.userid)
+                        @Html.HiddenFor(o => o.type)
+                        @Html.HiddenFor(o => o.selectRoles)
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="submit" class="btn blue-bg">Change Role</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script>
+    $("#Role").click(function () {
+        if ($(this).find("option:selected").val() == "0") {
+            alert("Select a role");
+            return false;
+        }
+    });
+</script>

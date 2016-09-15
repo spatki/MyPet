@@ -1,0 +1,259 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+                <div class="row">            
+                <div class="col-md-12">
+					<div class="panel colored">
+
+
+                    <div class="panel-body">
+                       <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-2">Select Project</label>
+                                <div class="controls col-md-10"><select class="col-md-12 chzn-nopadd chzn-select-no-single"><option>Payroll System</option> <option>Code Migration</option></select></div>
+                            </div>
+                       </div>
+                        <hr />
+                            <div class="panel">
+                            <br />
+                            <div class="row">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-1"></th>
+                                            <th>Doc Type</th>
+                                            <th>Name</th>
+                                            <th>Owner</th>
+                                            <th>Remarks</th>
+                                            <th>Version</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="AsupportingDocs" data-count="1">
+                                        <tr id="A1">
+                                            <td><a href="#" data-id="A1" class="addDoc" data-toggle="modal" data-tableid="AsupportingDocs" data-key="A" data-version="1.0"><i class="icon-plus-sign"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+                </div>                                
+
+        <div class="modal fade" id="supDocDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog">
+  <div class="modal-content">
+	<div class="modal-header blue-bg">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="model-title emphasize">Add Supporting Document</h4>
+	</div>
+	<div class="modal-body">
+		<form role="form" id="documentForm">
+            <div class="row">
+                <input type="hidden" id="nodeid" />
+                <input type="hidden" id="tableid" />
+                <input type="hidden" id="keyid" />
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label >Document Type</label>
+                        <div class="controls"><select id="DocType"><option value="Statement Of Work">Statement Of Work</option><option value="Project Management Plan">Project Management Plan</option><option value="SQA Plan">SQA Plan</option><option value="Business Requirement Document">Business Requirement Document</option><option value="Contract">Contract</option><option value="Other">Other</option></select></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label >Owner:</label>
+                        <div class="controls"><input type="text" class="col-md-12 form-control" name="DocOwner" id="DocOwner"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <br />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <div class="controls"><textarea  rows="3" class="col-md-12" name="DocRemarks" id="DocRemarks"></textarea></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <br />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Select File</label>
+                        <div class="controls"><input type="file" class="styled" name="DocFile" id="DocFile"></div>
+                    </div>
+                </div>
+            </div>
+		</form>
+        <div class="modal-footer">
+            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+    	    <button type="submit" class="btn blue-bg" id="saveSuppDoc">Save</button>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    
+<div class="modal fade" id="reviseProjDoc" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog">
+  <div class="modal-content">
+	<div class="modal-header blue-bg">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="model-title emphasize">Upload Revised Document</h4>
+	</div>
+	<div class="modal-body">
+		<form role="form" id="Form1">
+            <div class="row">
+                <input type="hidden" id="revNodeid" />
+                <input type="hidden" id="revTableid" />
+                <input type="hidden" id="revKeyid" />
+                <input type="hidden" id="Version" />
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label >Document Type</label>
+                        <div class="controls"><select id="revDocType" disabled><option value="Statement Of Work">Statement Of Work</option><option value="Project Management Plan">Project Management Plan</option><option value="SQA Plan">SQA Plan</option><option value="Business Requirement Document">Business Requirement Document</option><option value="Contract">Contract</option><option value="Other">Other</option></select></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label >Revised By:</label>
+                        <div class="controls"><input type="text" class="col-md-12 form-control" name="DocOwner" id="revDocOwner"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <br />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Revision Comments</label>
+                        <div class="controls"><textarea  rows="3" class="col-md-12" name="DocRemarks" id="revDocRemarks"></textarea></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <br />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Select File</label>
+                        <div class="controls"><input type="file" class="styled" name="DocFile" id="revDocFile"></div>
+                    </div>
+                </div>
+            </div>
+		</form>
+        <div class="modal-footer">
+            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+    	    <button type="submit" class="btn blue-bg" id="revDocSave">Save</button>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+    	<script type="text/javascript">
+	    var config = {
+	        '.chzn-select': {},
+	        '.chzn-select-deselect': { allow_single_deselect: false },
+	        '.chzn-select-no-single': { disable_search_threshold: 10 },
+	        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+	        '.chzn-select-width': { width: "95%" }
+	    }
+	    for (var selector in config) {
+	        $(selector).chosen(config[selector]);
+	    }
+
+
+	    $(document).on("click", "#saveSuppDoc", function () {
+	        var nodeid = "#" + $("#nodeid").val();
+	        var tableid = "#" + $("#tableid").val();
+	        var keyid = $("#keyid").val();
+
+	        var anchorNode = $(nodeid).children('td').first().children("a").first();
+
+	        var count = parseInt($(tableid).data("count"));
+
+	        if ($("#DocType").val() == "" || $("#DocFile").val().trim() == "" || $("#DocOwner").val().trim() == "" || $("#DocRemarks").val().trim() == "") alert("All inputs are mandatory. Pl. provide all required input.");
+	        else {
+
+	            anchorNode.removeClass("addDoc");
+	            anchorNode.addClass("removeDoc");
+	            anchorNode.attr("href", "#");
+	            anchorNode.children("i").eq(0).removeClass("icon-plus-sign");
+	            anchorNode.children("i").eq(0).addClass("icon-remove");
+
+	            anchorNode.after('&nbsp;|&nbsp;<a href="#" data-toggle="modal" class="reviseDoc" data-id="' + nodeid + '" data-version="1.0" data-tableid="' + tableid + '" data-keyid="' + keyid + '">Revise</a>');
+	            $(nodeid).append('<td>' + $("#DocType").val() + '</td> <td><a href="#" data-toggle="modal" class="showDocumentData">' + $("#DocFile").val() + '</a></td> <td>' + $("#DocOwner").val() + '</td> <td>' + $("#DocRemarks").val() + '</td><td>1.0</td>');
+
+	            //if ((count % 2) == 0) $(nodeid).addClass("success");
+	            count = count + 1;
+	            $(tableid).data("count", count);
+
+	            $(nodeid).after('<tr id="' + keyid + '' + count + '"><td><a href="#supDocDialog" data-id="' + keyid + '' + count + '" class="addDoc" data-toggle="modal"><i class="icon-plus-sign"></i></a></td></tr>');
+	            $("#supDocDialog").modal('hide');
+	        }
+
+	    });
+
+	    $("body").delegate(".addDoc", "click", function () {
+	        $("#nodeid").val($(this).data("id"));
+            $("#tableid").val($(this).data("tableid"));
+            $("#keyid").val($(this).data("key"));
+
+            $("#supDocDialog").modal('show');
+	    });
+
+	    $("body").delegate(".removeDoc", "click", function () {
+	        if (confirm("Do you want to remove this document ?")) {
+	            $("#" + $(this).data("id")).remove();
+	        }
+	    });
+
+	    $("body").delegate(".showDocumentData", "click", function () {
+	        //        $("#showDocument").modal("show");
+	        window.open("Documents/Projects/Example.pdf", null, "height=400,width=600,status=yes,toolbar=no,menubar=no,location=no,top=200,left=300");
+	    });
+
+	    $("body").delegate(".reviseDoc", "click", function () {
+	        if (confirm("Do you want to upload a revised document and maintain its history ?")) 
+	        {
+	            $("#revNodeid").val($(this).data("id"));
+	            $("#revTableid").val($(this).data("tableid"));
+	            $("#revKeyid").val($(this).data("key"));
+	            $("#Version").val($(this).data("version"));
+
+	            $("#revDocType").val($(this).parent().next().text());
+	            $("#reviseProjDoc").modal("show");
+	        }
+	    });
+
+	    $(document).on("click", "#revDocSave", function () {
+	        var nodeid = $("#revNodeid").val();
+	        var tableid = $("#revTableid").val();
+	        var keyid = $("#revKeyid").val();
+	        var version = parseFloat($("#Version").val());
+
+	        var anchorNode = $(nodeid).children('td').first().children("a").eq(1);
+
+	        if ($("#DocType").val() == "" || $("#DocFile").val().trim() == "" || $("#DocOwner").val().trim() == "" || $("#DocRemarks").val().trim() == "") alert("All inputs are mandatory. Pl. provide all required input.");
+	        else {
+	            anchorNode.data("version",(version + 0.1));
+	            $(nodeid).children().eq(2).children('a').first().text($("#revDocFile").val());
+	            $(nodeid).children().eq(3).text($("#revDocOwner").val());
+	            $(nodeid).children().eq(4).text($("#revDocRemarks").val());
+	            $(nodeid).children().eq(5).text((version + 0.1).toFixed(2));
+
+	            $("#reviseProjDoc").modal('hide');
+	        }
+	    });
+
+   </script> 
+
+}

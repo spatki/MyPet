@@ -1,0 +1,23 @@
+﻿@{
+    if (ViewBag.Menu == "" || ViewBag.Menu == null)
+    {
+        Layout = null;
+    }
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+
+    @Html.Action("GetMobileMenu","Menu", new { functionID = ViewBag.FunctionID, bcInfo = ViewBag.bc, bcURLInfo = ViewBag.bcURL })
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+}
+
+

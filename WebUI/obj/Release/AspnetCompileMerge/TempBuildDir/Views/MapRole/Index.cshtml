@@ -1,0 +1,58 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@model IEnumerable<vw_role_mapping>
+@{
+    Layout = null;
+}
+            @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="panel colored col-md-12">
+                    <div class="panel-heading green-bg">
+                        <h3 class="panel-title">Map Organisation & Process Roles</h3>
+                        <ul class="pull-right toolbar">
+                            <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                            <li><a href="javascript:;" class="icon-button reload-box reLoad" data-container="dataList" data-url="/OrgRole/ReloadItems"><i class="icon-">&#xf021;</i></a></li>
+                            <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="processTable">
+                            <thead>
+                                <tr>
+                                <th>Organisation Role</th>
+                                <th class="hidden-xs">Process Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Any())
+                                {
+                                    foreach (var r in Model)
+                                    {
+                                        <tr>
+                                            <td>@r.LongName</td>
+                                            <td>
+                                                @if (r.mstr_Process_RoleID == null)
+                                                {
+                                                    <a href="javascript:;" id="L@(r.ID)" class="openDialog" data-source="@Url.Action("addRole","MapRole",new { id = r.ID })" data-id="@r.ID">Click to link</a>
+                                                }
+                                                else {
+                                                    <a href="javascript:;" id="L@(r.MapID)" class="openDialog" data-source="@Url.Action("editRole","MapRole",new { id = r.MapID })" data-id="@r.MapID">@r.processLongName</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                
+            </div>
+
+
+<script>
+
+    jsTable('processTable');
+
+</script>
+
+

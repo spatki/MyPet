@@ -1,0 +1,52 @@
+﻿@using ProcessAccelerator.WebUI;
+@model reviewCommentsInput
+@{
+    Layout = null;
+}
+
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Review Comments</h4>
+	</div>
+    <form method="post" action="@Url.Action("CloseObs")" id="submitClosure">
+        <div class="modal-body"> 
+            @Html.HiddenFor(o => o.ID)
+            @Html.HiddenFor(o => o.ClosedBy)
+            @Html.HiddenFor(o => o.CloseDate)
+            @Html.HiddenFor(o => o.AuditorName)
+		    <div class="row">
+			    <div class="col-md-6">
+                    <div class="form-group">    
+                        <label class="control-label"><strong>Auditor : </strong>@Model.AuditorName</label>
+                    </div>
+                </div>
+			    <div class="col-md-6">
+                    <div class="form-group">    
+                        <label class="control-label"><strong>Closure Date : </strong>@Model.CloseDate.ToString(Globals.DateFormatString)</label>
+                    </div>
+                </div>
+            </div>
+            <hr />
+		    <div class="row">
+    		    <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">Review Comments</label>
+                        <div class="col-md-12">
+                            <textarea name="ReviewComments" id="ReviewComments" class="form-control" >@Model.ReviewComments</textarea>
+                            @Html.ValidationMessageFor(o => o.ReviewComments)
+                        </div>
+                    </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveAuditPlan" data-mode="closeAudit" data-id="containerDetails" data-form="submitClosure">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

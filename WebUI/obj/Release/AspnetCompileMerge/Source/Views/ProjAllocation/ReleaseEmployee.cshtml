@@ -1,0 +1,47 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_proj_allocationInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog" style="width:500px;">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title"><strong>Project: </strong>@Model.ProjectName | <strong>Release: </strong>@Model.EmployeeName</h4>
+	</div>
+    <form method="post" action="@Url.Action("ReleaseEmployee","ProjAllocation")" id="allocDetails">
+	    <div class="modal-body">
+            <br />
+            <input type="hidden" value="@Model.ID" name="ID" id="ID" />
+            <input type="hidden" value="@Model.ProjectName" name="ProjectName" id="ProjectName" />
+            <input type="hidden" value="@Model.EmployeeName" name="EmployeeName" id="EmployeeName" />
+            <div class="row">
+                <div class="col-md-11 pull-right">@Html.ValidationSummary(true)</div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-md-4">Release Date:</label>
+                        <div class="input-group date datepicker col-md-7">
+                            <input type="text" class="form-control" name="ActualEndDate" id="ActualEndDate" value="@(Model.ActualEndDate == null ? "" : Model.ActualEndDate.GetValueOrDefault().ToString(Globals.DateFormatString))">
+                            <span class="input-group-addon accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                        </div>
+                        @Html.ValidationMessageFor(o => o.ActualEndDate)
+                    </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		    <button type="button" class="btn blue-bg openDeleteDialog" data-id="@Model.ID" data-mode="delete" data-source="@Url.Action("Delete", new { id = Model.ID })"  title="Permanently Delete this allocation">Delete</button>
+		    <button type="button" class="btn blue-bg save" data-mode="deleteProjectAllocation" data-id="@Model.ID" data-form="allocDetails" title="Release and maintain history">Release</button>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script>
+    $('.datepicker').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false,
+    });
+</script>

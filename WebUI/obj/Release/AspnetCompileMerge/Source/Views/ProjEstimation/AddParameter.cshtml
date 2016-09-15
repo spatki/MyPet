@@ -1,0 +1,46 @@
+﻿@model proj_estm_size_parameter
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Select Parameter</h4>
+	</div>
+    <form method="post" action="@Url.Action("AddParameter")" id="addEstmParamForm">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <div class="form-group">    
+                            <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+                            <input type="hidden" id="Proj_EstimationID" name="Proj_EstimationID" value="@Model.Proj_EstimationID" />
+                            <input type="hidden" id="ProjectID" name="ProjectID" value="@Model.ProjectID" />
+                            <input type="hidden" id="ClientID" name="ClientID" value="@Model.ClientID" />
+                            <input type="hidden" id="GroupID" name="GroupID" value="@Model.GroupID" />
+                            <input type="hidden" id="ExcludeIDs" name="ExcludeIDs" value="@Model.ExcludeIDs" />
+                            <label>Parameter</label>
+                            <div class="input-group">
+                                @Html.Action("getListItemsCustom", "ProjEstmParams", new { selectedItem = Model.ParameterID.GetValueOrDefault(), controlName = "ParameterID", excludeIds = Model.ExcludeIDs, selectIds = "", reload = "" })
+								<div class="input-group-btn">
+                                    <button type="button" class="btn btn-med green-bg editDropDown" data-dialog="extraDialogBox" data-sourceid="ParameterID" data-source="@Url.Action("EditParam", "ProjEstmParams")" data-id="ParameterID" id="GoButton" title="Click to add plans"><i class="icon-pencil"></i></button>
+								</div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg save" data-mode="addEstmParameter" data-id="G@(Model.GroupID)" data-form="addEstmParamForm">Select</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<!-- Modal -->
+<div class="modal fade" id="extraDialogBox" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div><!-- /.modal -->

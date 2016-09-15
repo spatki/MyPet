@@ -1,0 +1,99 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_defectInput
+@{
+    Layout = null;
+    IQueryable<tbl_workflow> workflow;
+    ViewBag.DialogOption = "openWorkflow";
+    ViewBag.SaveOption = "saveExtraWorkflow";
+    ViewBag.UpdateID = "openDialogBox";
+    ViewBag.Key = "";
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else
+    {
+        workflow = null;
+    }
+    @Scripts.Render("~/bundles/editor")
+}
+<div class="modal-dialog" style="width:90%">
+	<div class="modal-content">
+	    <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		    <h4 class="modal-title" id="dialogTitle">Create New Defect for @(ViewBag.ProjectName)</h4>
+	    </div>
+        <form method="post" action="@Url.Action("Create")" id="WFForm">
+            <div class="modal-body"> 
+                @Html.ValidationSummary(true)
+        		<div class="row">
+                    <input type="hidden" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" value="@Model.tbl_Org_ProjectID" />
+                    <input type="hidden" id="ClientID" name="ClientID" value="@Model.ClientID" />
+                    <input type="hidden" id="CreatedOn" name="CreatedOn" value="@System.DateTime.Now.Date.ToString(Globals.DateFormatString)" />
+                    <input type="hidden" id="CreatedBy" name="CreatedBy" value="@WebSecurity.CurrentUserId" />
+                    <input type="hidden" value="" id="workflow_status" name="mstr_Process_LC_StatusID" />
+                    <input type="hidden" value="false" id="followWF" name="followWF" />
+                    <input type="hidden" value="0" id="statusWF" name="statusWF" />  
+                    <input type="hidden" value="@WebSecurity.CurrentUserId" id="workflowUser" name="workflowUser" />
+                    <input type="hidden" value="null" id="workflow" name="workflow" />
+                    <div class="col-md-12">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="control-label">Short Description</label>
+                                @Html.TextBoxFor(o => o.Short_Description, new { @class = "form-control"})
+                                @Html.ValidationMessageFor(o => o.Short_Description)
+                            </div>    
+                            <div class="form-group">
+                                <label class="control-label">Details</label>
+                                <textarea name="Details" id="Details" class="form-control showEditor">@Html.Raw(Model.Details)</textarea>
+                                @Html.ValidationMessageFor(o => o.Details)
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Identified On</label>
+                                <input type="text" value="@(Model.IdentifiedOn == null ? "" : Model.IdentifiedOn.GetValueOrDefault().ToString(Globals.DateFormatString))" name="IdentifiedOn" id="IdentifiedOn" class="form-control"/>
+                                @Html.ValidationMessageFor(o => o.IdentifiedOn)
+                            </div>    
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Defect Type</label>
+                                @Html.Action("getListItems", "DefectType", new { selectedItem = Model.Type, controlName = "Type", excludeIds = "", includeIds = "", reload = "" })
+                                @Html.ValidationMessageFor(o => o.Type)
+                            </div>    
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Severity</label>
+                                @Html.Action("getListItems", "DefectSeverity", new { selectedItem = Model.SeverityID, controlName = "SeverityID", excludeIds = "", includeIds = "", reload = "" })
+                                @Html.ValidationMessageFor(o => o.SeverityID)
+                            </div>    
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Phase</label>
+                                @Html.Action("getListItemsFor", "OrgPhaseInProj", new { selectedItem = Model.PhaseID.GetValueOrDefault(), controlName = "PhaseID", excludeIds = "", includeIds = "", projectTypeID = Model.ProjectType.GetValueOrDefault(), reload = "" })
+                                @Html.ValidationMessageFor(o => o.PhaseID)
+                            </div>    
+                            <div class="form-group col-md-12">
+                                <label class="control-label">Group</label>
+                                @Html.Action("getListItemsFor", "ProjGroup", new { selectedItem = Model.GroupID.GetValueOrDefault(), controlName = "GroupID", excludeIds = "", selectIds = "", projectID = Model.tbl_Org_ProjectID, allowNewClient = false, reload = "" })
+                                @Html.ValidationMessageFor(o => o.GroupID)
+                            </div>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+	        <div class="modal-footer">
+			    <div class="form-group">
+                    @if (workflow != null)
+                    {
+                        @Html.Partial("printWorkflow", workflow)
+                    }
+		            <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+			    </div>
+	        </div>        
+        </form>
+    </div>
+</div>
+<script>
+    $('#IdentifiedOn').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    configureCkEditor(".showEditor");
+</script>

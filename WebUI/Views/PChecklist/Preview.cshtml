@@ -1,0 +1,192 @@
+﻿@using ProcessAccelerator.WebUI
+@using Omu.AwesomeMvc
+@using System.Linq;
+@model tbl_process_checklistInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog" style="width:80%;height:80%;">
+	<div class="modal-content">
+        <div class="modal-body"> 
+            <div class="container-fluid">
+                <div class="panel colored">
+                    <div class="panel-body">
+                        <div class="panel-header">
+                            <h1>@Model.Name</h1>
+                        </div>
+                        <div class="row">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <th class="docTableHeader-bg" colspan="4">Document Release Note</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th class="docTableLabel-bg">Project Name</th>
+                                                <td colspan="3">Not Applicable</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="docTableLabel-bg">Document Name</th>
+                                                <td colspan="3">@Model.Name</td>
+                                            </tr>                                                
+                                            <tr>
+                                                <th class="docTableLabel-bg">Version</th>
+                                                <td colspan="3">@((Model.tbl_process_chklst_revision.LastOrDefault().version == "") ? "" : Model.tbl_process_chklst_revision.LastOrDefault().version + "." )@(Model.tbl_process_chklst_revision.Count() - 1)</td>
+                                            </tr>                                                
+                                            <tr>
+                                                <th class="docTableLabel-bg">Release Date</th>
+                                                <td colspan="3">@(Model.PublishDate == null ? "" : Model.PublishDate.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="docTableLabel-bg">Prepared By</th>
+                                                <td >@((Model.CreatedByName == "") ? Model.UpdatedByName : Model.CreatedByName)</td>
+                                                <th class="docTableLabel-bg">Date</th>
+                                                <td>@Model.CreateDate.ToString(Globals.DateFormatString)</td>
+                                            </tr>             
+                                            <tr>
+                                                <th class="docTableLabel-bg">Reviewed By</th>
+                                                <td ></td>
+                                                <th class="docTableLabel-bg">Date</th>
+                                                <td></td>
+                                            </tr>             
+                                            <tr>
+                                                <th class="docTableLabel-bg">Approved By</th>
+                                                <td ></td>
+                                                <th class="docTableLabel-bg">Date</th>
+                                                <td></td>
+                                            </tr>             
+                                            <tr>
+                                                <th class="docTableHeader-bg" colspan="4">Revision History</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="docTableLabel-bg">SNo</th>
+                                                <th class="docTableLabel-bg">Revision Date</th>
+                                                <th class="docTableLabel-bg">Revision Description</th>
+                                                <th class="docTableLabel-bg">Release Date</th>
+                                            </tr>    
+                                            @{var revCounter = 0;
+                                            foreach (var revision in Model.tbl_process_chklst_revision)
+                                            {
+                                                revCounter = revCounter + 1;
+                                                <tr>
+                                                    <th>@revCounter</th>
+                                                    <th>@revision.RevisionDate.ToString(Globals.DateFormatString)</th>
+                                                    <th>@revision.Comments</th>
+                                                    <th>@(revision.PublishDate == null ? "" : revision.PublishDate.GetValueOrDefault().ToString(Globals.DateFormatString))</th>
+                                                </tr>                                                         
+                                            }         
+                                            var SNO_caption = (Model.C_SNO == null || Model.C_SNO == "") ? "SNO" :  Model.C_SNO;
+                                            var SNO_Len = (Model.C_SNO_Len == null || Model.C_SNO_Len == 0) ? 5 :  Model.C_SNO_Len;
+                                            var CP_caption = (Model.C_ChkPt == null || Model.C_ChkPt == "") ? "Checklist Item" : Model.C_ChkPt;
+                                            var CP_Len = (Model.C_ChkPt_Len == null || Model.C_ChkPt_Len == 0) ? 70 : Model.C_ChkPt_Len;
+                                            var Result_caption = (Model.C_Result == null || Model.C_Result == "") ? "Y/N" : Model.C_Result;
+                                            var Result_Len = (Model.C_Result_Len == null || Model.C_Result_Len == 0) ? 10 : Model.C_Result_Len;
+                                            var Rem_caption = (Model.C_Remarks == null || Model.C_Remarks == "") ? "Remarks" : Model.C_Remarks;
+                                            var Rem_Len = (Model.C_Remarks_Len == null || Model.C_Remarks_Len == 0) ? 15 : Model.C_Remarks_Len;
+                                            }
+                                            <tr>
+                                                <td colspan="4">
+                                                    <table class="table table-bordered">
+                                                        <tr>
+                                                            <th class="docTableHeader-bg" style="width:@(SNO_Len)%;max-width:@(SNO_Len)%;min-width:@(SNO_Len)%">@(SNO_caption)</th>
+                                                            <th class="docTableHeader-bg" style="width:@(CP_Len)%;max-width:@(CP_Len)%;min-width:@(CP_Len)%">@(CP_caption)</th>
+                                                            <th class="docTableHeader-bg" style="width:@(Result_Len)%;max-width:@(Result_Len)%;min-width:@(Result_Len)%">@(Result_caption)</th>
+                                                            <th class="docTableHeader-bg" style="width:@(Rem_Len)%;max-width:@(Rem_Len)%;min-width:@(Rem_Len)%">@(Rem_caption)</th>
+                                                        </tr>             
+                                                        @{  seededChklstItems items = new seededChklstItems { seed = null, isParent = true, tbl_process_chklst_item = Model.tbl_process_chklst_item, tbl_process_chklst_group = Model.tbl_process_chklst_group };
+                                                            var itemsInDoc = Model.tbl_process_chklst_item.Where(o => o.tbl_Process_Chklst_GroupID == null).OrderBy(o => o.SequenceNo).GetEnumerator(); ; // Begin with root
+                                                            var groupsInDoc = Model.tbl_process_chklst_group.Where(o => o.Level == 1).OrderBy(o => o.SequenceNo).GetEnumerator(); ;
+                                                            var sequence = 0;   // ****** Check whether needed and then discard
+                                                            short itemSequence = 0; // First sequence in the item
+                                                            short groupSequence = 0;   // First sequence in the group
+                                                            var keepProcessing = true;
+                                                            var itemsFound = true;
+                                                            var groupsFound = true;
+                                                            var resultOptions = "";
+                                                            
+
+                                                            if (itemsInDoc.MoveNext()) { itemSequence = itemsInDoc.Current.SequenceNo; } else { itemsFound = false; }
+                                                            if (groupsInDoc.MoveNext()) { groupSequence = groupsInDoc.Current.SequenceNo; } else { groupsFound = false; }
+                                                            if (!itemsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+                                                                                                                        if (keepProcessing) { 
+                                                                while (keepProcessing)    // Handling sequence of groups and items under this group. As the sequence can be intermixed
+                                                                {
+                                                                    // If the item comes first in sequence, print the item first
+                                                                    if (itemsFound && (!groupsFound || itemSequence < groupSequence))
+                                                                    {
+                                                                        sequence = sequence + 1;
+                                                                        if (itemsInDoc.Current.ChklstOptionList != null && itemsInDoc.Current.ChklstOptionList.Any())
+                                                                        {
+                                                                            resultOptions = "";
+                                                                            foreach (var o in itemsInDoc.Current.ChklstOptionList)
+                                                                            {
+                                                                                resultOptions = resultOptions + (resultOptions == "" ? "" : ",") + (o == "1" ? "Yes" : (o == "2" ? "No" : "NA"));
+                                                                            }
+                                                                        }
+                                                                         <tr>
+                                                                            <td>@sequence </td>
+                                                                            <td>@Html.Raw(itemsInDoc.Current.ItemDescription)</td>
+                                                                            <td>
+                                                                                @if (ViewBag.Editable != null && ViewBag.Editable == true)
+                                                                                {
+                                                                                    <select id="fillItem@(itemsInDoc.Current.ID)" name="fillItem@(itemsInDoc.Current.ID)" class="form-control">
+                                                                                        <option value="0">NA</option>
+                                                                                        <option value="1">Yes</option>
+                                                                                        <option selected="selected" value="2">No</option>
+                                                                                    </select>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @resultOptions
+                                                                                }
+                                                                            </td>
+                                                                            <td>@if (ViewBag.Editable != null && ViewBag.Editable == true)
+                                                                                {
+                                                                                    <div id="FillDetail@(itemsInDoc.Current.ID)" class="col-md-12 EditEditor" contenteditable="true">
+                                                                                        @Html.Raw(itemsInDoc.Current.Remarks)
+                                                                                    </div>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @Html.Raw(itemsInDoc.Current.Remarks)
+                                                                                }
+                                                                            </td>
+                                    
+                                                                        </tr>
+                                                                       if (itemsInDoc.MoveNext()) { itemSequence = itemsInDoc.Current.SequenceNo; } else { itemsFound = false; }  // Get the next item
+                                                                    }
+
+                                                                    if (groupsFound && (!itemsFound || groupSequence < itemSequence))
+                                                                    {
+                                                                        sequence = sequence + 1;
+                                                                        items.seed = groupsInDoc.Current.ID;
+                                                                        items.sequence = sequence;
+                                                                        items.isParent = false;
+                                                                        items.sequencePrefix = "";
+                                                                        @Html.Partial("_showItemsPreview", items)
+                                                                        if (groupsInDoc.MoveNext()) { groupSequence = groupsInDoc.Current.SequenceNo; } else { groupsFound = false; }  
+                                                                    }
+                                                                    if (!itemsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing                  
+                                                                }
+                                                            }                                                        
+                                                        }
+                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                     </table>                             
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+			</div>
+	    </div>
+      </div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

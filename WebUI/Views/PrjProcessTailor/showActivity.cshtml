@@ -1,0 +1,159 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_process_rep_task_ref_docsInput
+@{
+    Layout = null;
+    ActivityType activityType = new ActivityType();
+    DocReferenceType docRef = new DocReferenceType();
+    int totalDocs = 1;
+    totalDocs = (Model.refDocs != null && Model.refDocs.Any() ? Model.refDocs.Max(o => o.ID) + 1 : 1);
+    if (Model.TailorName == null || Model.TailorName == "")
+    {
+        Model.TailorName = Model.Name;
+    }
+}
+<div class="modal-dialog" style="width:900px;">
+	<div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task / Activity Details</h4>
+		</div>
+		    <div class="modal-body">
+                    <div class="row">
+                        @Html.ValidationSummary(true)
+                    </div>
+                    <form method="post" action="@Url.Action("showActivity", "PrjProcessTailor")" id="submitLevel">
+                        <ul class="nav nav-tabs" id="Ul1">
+                            <li class="active"><a data-toggle="tab" href="#Detail">Activity</a></li>
+                            <li><a data-toggle="tab" href="#SuppDoc">Supporting Documents</a></li>
+                        </ul>
+                        <div class="tab-content" id="Contents">
+                            <br />
+                            <div id="Detail" class="tab-pane fade in active">
+                                <div class="panel">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="hidden" value="@Model.ID" name="ID" id="ID" />
+                                                    <input type="hidden" value="@Model.ClientID" name="ClientID" id="ClientID" />
+                                                    <input type="hidden" value="@Model.Name" name="Name" id="Name" />
+                                                    <input type="hidden" name="tbl_Process_Repository_ID" id="tbl_Process_Repository_ID" value="@Model.tbl_Process_Repository_ID" />
+                                                    <input type="hidden" name="tbl_Process_Rep_TaskID" id="tbl_Process_Rep_TaskID" value="@Model.tbl_Process_Rep_TaskID" />
+                                                    <input type="hidden" value="@Model.tbl_Org_ProjectID" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" />  
+                                                    <input type="hidden" value="@Model.Type" name="Type" id="Type"/>
+                                                    <div class="control-label">Activity Name</div>
+                                                    <div><input value="@Model.TailorName" name="TailorName" id="TailorName" class="form-control"/></div>
+                                                    @Html.ValidationMessageFor(o => o.TailorName)
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <div class="control-label">Activity Type</div>
+                                                    <div><input value="@activityType.getTypeName(Model.Type)" name="TypeName" readonly="true"  class="form-control"/></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <div class="control-label">Description</div>
+                                                    <div><textarea rows="4" class="form-control">@Model.Description</textarea></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SuppDoc" class="tab-pane">
+                                <br />
+                                <div class="row dialogScroll">
+                                    <div class="panel">
+                                            <div class="panel-body">
+		                                            <div class="col-md-12">
+                                                        <table class="table table-striped table">
+                                                            <thead>
+                                                                <th></th>
+                                                                <th>Document</th>
+                                                                <th>Remarks</th>
+                                                                <th>Mandatory</th>
+                                                            </thead>
+                                                            <tbody data-count="1">
+                                                                @if (Model.refDocs != null && Model.refDocs.Any())
+                                                                {
+                                                                    totalDocs = Model.refDocs.Max(o => o.ID) + 1;
+                                                                    foreach (var i in Model.refDocs)
+                                                                    {
+                                                                        <tr id="Doc@(i.ID)">
+                                                                            <td>
+                                                                                <input type="hidden" name="refDocs.Index" value="@i.ID" />
+                                                                                <input type="hidden" name="refDocs[@i.ID].ID" value="@i.ID" />
+                                                                                <input type="hidden" name="refDocs[@i.ID].ClientID" value="@i.ClientID" />
+                                                                                <input type="hidden" name="refDocs[@i.ID].DocType" value="@i.DocType" id="refDocs@(i.ID)refKeyDocType" />
+                                                                                <input type="hidden" name="refDocs[@i.ID].referenceID" value="@i.referenceID" id="refDocs@(i.ID)refKeyRefID" />
+                                                                                <input type="hidden" name="refDocs[@i.ID].DocumentName" value="@i.DocumentName" id="refDocs@(i.ID)refKeyDocumentName" />
+                                                                                @if (ViewBag.ReadOnly != true)
+                                                                                {
+                                                                                    <a href="javascript:;" class="deleteRow" data-id="Doc@(i.ID)" data-dialogname="deleteDialogBox" 
+                                                                                        data-clientdelete="N" data-source="@Url.Action("DeleteActivityDoc", "PrjProcessTailor", new { id = i.ID })"><i class="icon-remove"></i></a>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.Action("GetReferenceData", "PrjProcessTailor", new { id = i.DocType, taskID = Model.ID, selectedValue = i.refKey, controlName = "refDocs[" + i.ID + "].refKey", reload = "updateDocType" })
+                                                                                @Html.ValidationMessage("refDocs[" + i.ID + "].referenceID")
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.TextBox("refDocs[" + i.ID + "].Remarks", i.Remarks, new { @class = "form-control" })
+                                                                                @Html.ValidationMessage("refDocs[" + i.ID + "].Remarks")
+
+                                                                            </td>
+                                                                            <td>
+                                                                                @Html.DropDownList("refDocs[" + i.ID + "].Mandatory", docRef.getList((short)i.Mandatory.GetValueOrDefault()), "Select ...", new { @class = "col-md-12 form-control" })
+                                                                                @Html.ValidationMessage("refDocs[" + i.ID + "].Mandatory")
+                                                                            </td>
+                                                                        </tr>                                                                
+                                                                    }
+                                                                }
+                                                                @if (ViewBag.ReadOnly != true)
+                                                                {
+                                                                    <tr id="newSuppDoc">
+                                                                        <td>
+                                                                            <a href="javascript:;" class="loadDetails" data-element="newSuppDoc" data-source="@Url.Action("addSupportingDoc", "PrjProcessTailor", new { taskID = Model.ID, projectID = Model.tbl_Org_ProjectID, key = totalDocs })" data-mode="edit" ><i class="icon-plus"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+		                                            </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>       
+                    </form>
+		    </div>
+		    <div class="modal-footer">
+    			<div class="form-group">
+		            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+                    @if (ViewBag.ReadOnly != true)
+                    {
+    		            <button type="button" class="btn blue-bg save" data-mode="uptSuppTailoredDocs" data-id="LTask@(Model.ID)" data-form="submitLevel">Save</button>
+                    }
+                </div>
+		    </div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<!-- Modal -->
+<div class="modal fade" id="deleteDialogBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+</div><!-- /.modal -->
+
+<script>
+    $(".datepicker").datepicker("destroy");   // Remove previous functions, if any
+    $('.datepicker').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    $(".mask_percent").inputmask({ "mask": "9", "repeat": 3, "greedy": false }, { placeholder: " ", clearMaskOnLostFocus: true }); //default
+    $(".mask_number").inputmask("[9]9[.99]", { clearMaskOnLostFocus: true }); //default
+    $("#PlannedDuration").inputmask('decimal', { rightAlignNumerics: true });
+    getAllResourceDetails();
+</script>

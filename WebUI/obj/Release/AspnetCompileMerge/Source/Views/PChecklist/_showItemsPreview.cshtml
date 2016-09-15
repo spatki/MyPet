@@ -1,0 +1,85 @@
+﻿@model seededChklstItems
+
+@{  var groupCounter = 1;
+    var grpDetails = Model.tbl_process_chklst_group.Where(o => o.ID == Model.seed).Single();
+    var sequencePrefix = Model.sequencePrefix == "" ? "" + Model.sequence : Model.sequencePrefix + "." + Model.sequence;
+    groupCounter = Model.tbl_process_chklst_group.Where(o => o.SequenceNo <= grpDetails.SequenceNo).Count();   // No. of groupd present before this group. This is to get the correct sequence no
+}
+    <tr>
+        <th class="docTableLabel-bg" colspan="4">@grpDetails.Name</th>
+    </tr>
+    @{var itemsInGroup = Model.tbl_process_chklst_item.Where(o => o.tbl_Process_Chklst_GroupID == Model.seed).OrderBy(o => o.SequenceNo).GetEnumerator(); // Sections in this group
+            var groupsInGroup = Model.tbl_process_chklst_group.Where(o => o.ParentGroup == Model.seed).OrderBy(o => o.SequenceNo).GetEnumerator(); // Sub groups in this group
+            short itemSequence = 0; // First sequence in the item
+            short groupSequence = 0;   // First sequence in the group
+            var keepProcessing = true;
+            var itemsFound = true;
+            var groupsFound = true;
+            var resultOptions = "";
+
+            if (itemsInGroup.MoveNext()) { itemSequence = itemsInGroup.Current.SequenceNo; } else { itemsFound = false; }
+            if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }
+            if (!itemsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+              
+            var indexCount = 1;
+            while (keepProcessing)    // Handling sequence of groups and items under this group. As the sequence can be intermixed
+            {
+                // If the item comes first in sequence, print the item first
+                if (itemsFound && (!groupsFound || itemSequence < groupSequence))
+                {
+                    if (itemsInGroup.Current.ChklstOptionList != null && itemsInGroup.Current.ChklstOptionList.Any())
+                    {
+                        resultOptions = "";
+                        foreach (var o in itemsInGroup.Current.ChklstOptionList)
+                        {
+                            resultOptions = resultOptions + (resultOptions == "" ? "" : ",") + (o == "1" ? "Yes" : (o == "2" ? "No" : "NA"));
+                        }
+                    }
+                    <tr>
+                        <td>@(itemsInGroup.Current.SequenceNo - groupCounter) </td>
+                        <td>@Html.Raw(itemsInGroup.Current.ItemDescription)</td>
+                        <td>
+                            @if (ViewBag.Editable != null && ViewBag.Editable == true)
+                            {
+                                <select id="fillItem@(itemsInGroup.Current.ID)" name="fillItem@(itemsInGroup.Current.ID)" class="form-control selectOption">
+                                    <option value="0">NA</option>
+                                    <option value="1">Yes</option>
+                                    <option selected="selected" value="2">No</option>
+                                </select>
+                            }
+                            else
+                            {
+                                @resultOptions
+                            }
+                        </td>
+                        <td>@if (ViewBag.Editable != null && ViewBag.Editable == true)
+                            {
+                                <div id="FillDetail@(itemsInGroup.Current.ID)" class="col-md-12 EditEditor" contenteditable="true">
+                                    @Html.Raw(itemsInGroup.Current.Remarks)
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.Raw(itemsInGroup.Current.Remarks)
+                            }
+                        </td>
+                                    
+                    </tr>
+                indexCount = indexCount + 1;
+                if (itemsInGroup.MoveNext()) { itemSequence = itemsInGroup.Current.SequenceNo; } else { itemsFound = false; }  // Get the next item
+                }
+
+                if (groupsFound && (!itemsFound || groupSequence < itemSequence))
+                {
+                    Model.seed = groupsInGroup.Current.ID;
+                        Model.sequence = indexCount;
+                        Model.sequencePrefix = sequencePrefix;
+                        Model.isParent = false;
+                        @Html.Partial("_showItemsPreview", Model)
+                        indexCount = indexCount + 1;
+                        if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }
+                }
+                if (!itemsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing                  
+            }
+}
+

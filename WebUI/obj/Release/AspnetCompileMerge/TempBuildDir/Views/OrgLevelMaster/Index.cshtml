@@ -1,0 +1,43 @@
+﻿@using ProcessAccelerator.WebUI.Dto
+@using Omu.AwesomeMvc
+@model mstr_org_level_masterInput
+@{
+    Layout = null;
+}
+            @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="col-md-8">
+                    <label class="control-label col-md-2">Level :</label>
+                    <div class="col-md-10">@Html.Action("getListItems","OrgLevel",new { selectedItem = 0, controlName = "mstr_Org_LevelID", excludeIds = "", includeIds = "", reload = "reLoadOnChange" })
+                        @Html.ValidationMessageFor(o => o.mstr_Org_LevelID)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pull-right"><a href="javascript:;" data-toggle="modal" class="btn btn-med blue-bg relativeAddNew" data-sourceid="mstr_Org_LevelID" data-id="listing" data-source="@Url.Action("Create")">Add New</a></div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="panel colored col-md-12">
+                    <div class="panel-heading green-bg">
+                        <h3 class="panel-title" id="masterTitle">Level Master</h3>
+                        <ul class="pull-right toolbar">
+                            <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                            <li><a href="javascript:;" class="icon-button reload-box reLoad" data-container="dataList" data-filter="mstr_Org_LevelID" data-url="/OrgLevelMaster/ReloadItems"><i class="icon-">&#xf021;</i></a></li>
+                            <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body" id="dataList">
+                        <p> Select a level to display its master data</p>
+                    </div>
+                </div>                
+            </div>
+
+
+<script>
+    jsTable('processTable');
+    specialDropDown(".specialCombo");
+
+</script>
+
+

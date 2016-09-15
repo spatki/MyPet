@@ -1,0 +1,25 @@
+﻿@model proj_estm_size_parameter
+@{
+    Layout = null;
+}
+
+<tr id="Prod@(Model.ID)" class="EditRow checkTeamRole" data-id="@Model.ParameterID">
+    <td><a href="Javascript:;" class="confirmAction" data-id="Prod@(Model.ID)" data-messagetitle="Confirm Action" data-message="Do you want to remove this role ?"
+        data-class="removeLineItem" data-classparams="data-id='Prod@(Model.ID)'" data-source="">
+        <i class="icon-remove"></i></a>
+        <input type="hidden" id="tbl_org_proj_estm_productivity.Index" name="tbl_org_proj_estm_productivity.Index" value="@Model.ID" />
+        <input type="hidden" id="tbl_org_proj_estm_productivity[@(Model.ID)].ID" name="tbl_org_proj_estm_productivity[@(Model.ID)].ID" value="@Model.ID" />
+        <input type="hidden" id="tbl_org_proj_estm_productivity[@(Model.ID)].ClientID" name="tbl_org_proj_estm_productivity[@(Model.ID)].ClientID" value="@Model.ClientID" />
+        <input type="hidden" id="Prod@(Model.ID)]FP_Per_DayInput" name="tbl_org_proj_estm_productivity[@(Model.ID)].FP_Per_Day" value="" />
+        <input type="hidden" id="Prod@(Model.ID)PercentAllocationInput" name="tbl_org_proj_estm_productivity[@(Model.ID)].PercentAllocation" value="" />
+        <input type="hidden" id="Prod@(Model.ID)ResourceCountInput" name="tbl_org_proj_estm_productivity[@(Model.ID)].ResourceCount" value="" />
+        <input type="hidden" id="Prod@(Model.ID)tbl_Org_ProjectIDInput" name="tbl_org_proj_estm_productivity[@(Model.ID)].tbl_Org_ProjectID" value="@Model.ProjectID" />
+        <input type="hidden" id="Prod@(Model.ID)tbl_Proj_EstimationIDInput" name="tbl_org_proj_estm_productivity[@(Model.ID)].tbl_Proj_EstimationID" value="@Model.Proj_EstimationID" />
+        <input type="hidden" id="Prod@(Model.ID)tbl_Org_RoleIDInput" name="tbl_org_proj_estm_productivity[@(Model.ID)].tbl_Org_RoleID" value="@Model.ParameterID" />
+    </td>
+    <td>@Model.Name</td>
+    <td id="Prod@(Model.ID)ResourceCount" class="EditNumber teamProd updateInput" data-navkey="EditNumber"></td>
+    <td id="Prod@(Model.ID)ResourceCountFP" class="EditNumber updateInput" data-navkey="EditNumber"></td>
+    <td id="Prod@(Model.ID)ResourceCountPC" class="EditNumber updateInput" data-navkey="EditNumber"></td>
+</tr>
+

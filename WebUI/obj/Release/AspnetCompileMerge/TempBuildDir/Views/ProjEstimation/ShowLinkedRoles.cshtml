@@ -1,0 +1,8 @@
+﻿@model tbl_org_proj_estm_effort_schedule
+@{
+    Layout = null;
+}
+<a href="Javascript:;" class="addLineItem" data-source="@Url.Action("LinkRolesForCost","ProjEstimation", new {  ProjectID = Model.tbl_Org_ProjectID, EstmID = Model.tbl_Proj_EstimationID, PhaseID = Model.ID, SelectedIDs = Model.RoleIDs } )" 
+    data-params="LinkedSkillParams" data-duplicate="checkLinkedSkills" title="Link Role(s)">@(Model.Roles == null || Model.Roles == "" ? "Add Roles" : Model.Roles)</a>
+<input type="hidden" id="Ph@(Model.ID)RoleInput" name="tbl_org_proj_estm_effort_schedule[@(Model.ID)].Roles" value="@Model.Roles" />
+<input type="hidden" id="Ph@(Model.ID)RoleIDsInput" class="checkLinkedSkills" data-id="@Model.RoleIDs" name="tbl_org_proj_estm_effort_schedule[@(Model.ID)].RoleIDs" value="@Model.RoleIDs" />                                                    

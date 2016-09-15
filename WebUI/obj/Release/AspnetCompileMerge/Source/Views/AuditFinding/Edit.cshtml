@@ -1,0 +1,26 @@
+﻿@using ProcessAccelerator.WebUI
+@model auditRecordingInput
+@{
+    Layout = null;
+}
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+@Html.ValidationSummary(true)
+@if (Model.Type == 1)
+{
+    // QA Observation
+    @Html.Partial("QAObservation", Model)
+}
+else
+{
+    // Audit
+    @Html.Partial("NCForm", Model)
+}
+
+<script>
+    configureInlineCkEditor(".EditDetail");
+    $('.date').each(function(index,element) {
+        $("#" + $(this).prop("id")).datetimepicker({
+            format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+        });
+    });
+</script>

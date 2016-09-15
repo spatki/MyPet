@@ -1,0 +1,86 @@
+﻿@model seededChklstItems
+
+@{
+    if (Model.seed == null)
+    {
+        return;     // No Group found
+    }
+    var grpDetails = Model.tbl_process_chklst_group.Where(o => o.ID == Model.seed).Single();
+<li class="branch-in" id="L@(grpDetails.ID)">
+    <input type="hidden" name="tbl_process_chklst_group.Index" value="@(grpDetails.ID)" />
+    <input type="hidden" name="tbl_process_chklst_group[@(grpDetails.ID)].ID" value="@(grpDetails.ID)"/>
+    <input type="hidden" name="tbl_process_chklst_group[@(grpDetails.ID)].Name" id= "name@(grpDetails.ID)" value="@(grpDetails.Name)"/>
+    <input type="hidden" name="tbl_process_chklst_group[@(grpDetails.ID)].SequenceNo" class="sequence" value="@(grpDetails.SequenceNo)"/>
+    <input type="hidden" name="tbl_process_chklst_group[@(grpDetails.ID)].ParentGroup"  class="Parent" data-lnode="L@(grpDetails.ID)" value="@(grpDetails.ID)"/> <!-- This value is overwritten on save using jquery -->
+    <input type="hidden" name="tbl_process_chklst_group[@(grpDetails.ID)].IsParent" value="false"/>
+    <input type="hidden" name="tbl_process_chklst_group[@(grpDetails.ID)].Level"  class="level" data-lnode="L@(grpDetails.ID)" value="@(grpDetails.Level)"/>
+    <input type="hidden" name="tbl_process_chklst_group[@(grpDetails.ID)].tbl_Process_ChecklistID" value="@(grpDetails.tbl_Process_ChecklistID)"/>
+    <a class="editGroup" data-id="@(grpDetails.ID)" data-toggle="modal" href="Javascript:;"><i class="icon-edit"></i></a> 
+    <a href="Javascript:;" role="branch in" class="tree-toggle" data-toggle="branch" role="branch" data-id="@(grpDetails.ID)" id="@(grpDetails.ID)">@(grpDetails.Name)</a>        
+
+    <ul class="sortable-list branch in" id="C@(grpDetails.ID)" data-groupid="@(grpDetails.ID)">
+        @{var itemsInGroup = Model.tbl_process_chklst_item.Where(o => o.tbl_Process_Chklst_GroupID == Model.seed).OrderBy(o => o.SequenceNo).GetEnumerator(); // Items in this group
+            var groupsInGroup = Model.tbl_process_chklst_group.Where(o => o.ParentGroup == Model.seed).OrderBy(o => o.SequenceNo).GetEnumerator(); // Sub groups in this group
+            short itemSequence = 0; // First sequence in the item
+            short groupSequence = 0;   // First sequence in the group
+            var keepProcessing = true;
+            var itemsFound = true;
+            var groupsFound = true;
+
+            if (itemsInGroup.MoveNext()) { itemSequence = itemsInGroup.Current.SequenceNo; } else { itemsFound = false; }
+            if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }
+            if (!itemsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+              
+            while (keepProcessing)    // Handling sequence of groups and items under this group. As the sequence can be intermixed
+            {
+                // If the item comes first in sequence, print the item first
+                if (itemsFound && (!groupsFound || itemSequence < groupSequence))
+                {
+                <li class="MainSection" id="Item@(itemsInGroup.Current.ID)">
+                    <input type="hidden" name="tbl_process_chklst_item.Index" value="@(itemsInGroup.Current.ID)" />
+                    <input type="hidden" name="tbl_process_chklst_item[@(itemsInGroup.Current.ID)].ID" value="@(itemsInGroup.Current.ID)" />
+                    <input type="hidden" name="tbl_process_chklst_item[@(itemsInGroup.Current.ID)].SequenceNo" class="sequence" value="@(itemsInGroup.Current.SequenceNo)" />
+                    <input type="hidden" name="tbl_process_chklst_item[@(itemsInGroup.Current.ID)].tbl_Process_ChecklistID" value="@(itemsInGroup.Current.tbl_Process_ChecklistID)" />
+                    <input type="hidden" name="tbl_process_chklst_item[@(itemsInGroup.Current.ID)].tbl_Process_Chklst_GroupID" class="Parent" data-lnode="Item@(itemsInGroup.Current.ID)" value="@(itemsInGroup.Current.tbl_Process_Chklst_GroupID)" />
+                    <input type="hidden" name="tbl_process_chklst_item[@(itemsInGroup.Current.ID)].ItemDescription" value="@(itemsInGroup.Current.ItemDescription)" id="Check@(itemsInGroup.Current.ID)_CPinput"/>
+                    <input type="hidden" name="tbl_process_chklst_item[@(itemsInGroup.Current.ID)].Remarks" value="@(itemsInGroup.Current.Remarks)" id="Check@(itemsInGroup.Current.ID)_Remarksinput"/>
+                    <div class="row">
+                        <div class="col-md-1 CheckItem"><a href="#" class="icon-button confirmAction" data-messagetitle="Confirm Deletion" data-message="Do you want to delete this check item ?" data-class="removeItem" data-classparams="data-id='@(itemsInGroup.Current.ID)'" data-id="Check@(itemsInGroup.Current.ID)"><i class="icon-">&#xf05c</i></a></div>
+                        <div class="col-md-5">
+                            <div class="EditEditor CheckItem" data-width="20px" id="Check@(itemsInGroup.Current.ID)_CP" contenteditable="true">@Html.Raw(itemsInGroup.Current.ItemDescription)</div>
+                            <div>@Html.ValidationMessage("tbl_process_chklst_item[" + itemsInGroup.Current.ID + "].ItemDescription")</div>
+                        </div>
+                        <div class="col-md-3 CheckItem" data-width="20px">
+                            <select data-placeholder="Choose Results" class="col-md-12 chzn-nopadd resultOptions" multiple id="Check@(itemsInGroup.Current.ID)_Result" name="tbl_process_chklst_item[@(itemsInGroup.Current.ID)].ChklstOptionList">
+                                <option value="1" @(itemsInGroup.Current.ChklstOptionList.Exists(o => o.Equals("1")) ? "selected='selected'" : "")>Yes</option>
+                                <option value="2" @(itemsInGroup.Current.ChklstOptionList.Exists(o => o.Equals("2")) ? "selected='selected'" : "")>No</option>
+                                <option value="3" @(itemsInGroup.Current.ChklstOptionList.Exists(o => o.Equals("3")) ? "selected='selected'" : "")>NA</option>
+                            </select>
+                            <span class="field-validation-error" data-valmsg-replace="true" data-val-msg-for="tbl_process_chklst_item[@(itemsInGroup.Current.ID)].ChklstOptionList">@((itemsInGroup.Current.ChklstOptionList == null || itemsInGroup.Current.ChklstOptionList.Count() <= 0) ? "Select Option(s)" : "")</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="EditEditor CheckItem" data-width="20px" id="Check@(itemsInGroup.Current.ID)_Remarks" data-navkey="NoEdit"  contenteditable="true">@Html.Raw(itemsInGroup.Current.Remarks)</div>
+                            <div>@Html.ValidationMessage("tbl_process_chklst_item[" + itemsInGroup.Current.ID + "].Remarks")</div>
+                        </div>
+                    </div>
+                </li>
+                if (itemsInGroup.MoveNext()) { itemSequence = itemsInGroup.Current.SequenceNo; } else { itemsFound = false; }  // Get the next item
+                }
+                if (groupsFound && (!itemsFound || groupSequence < itemSequence))
+                {
+                    Model.seed = groupsInGroup.Current.ID;
+                    Model.isParent = false;
+                    @Html.Partial("_showItems", Model)  // Recursive call to print sub-nodes
+                    if (groupsInGroup.MoveNext()) { groupSequence = groupsInGroup.Current.SequenceNo; } else { groupsFound = false; }
+                }
+                if (!itemsFound && !groupsFound) { keepProcessing = false; }   // No need to continue processing
+            }
+            }
+        <li >
+            <div class="row">
+                <div class="col-md-1 NoEdit CheckItem" data-width="2px">&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="newItem" data-parent="@(grpDetails.ID)" data-proc="@(grpDetails.tbl_Process_ChecklistID)"  data-type="chklst"><i class="icon-">&#xf055</i></a></div>
+            </div>
+        </li>
+    </ul>
+</li>
+}

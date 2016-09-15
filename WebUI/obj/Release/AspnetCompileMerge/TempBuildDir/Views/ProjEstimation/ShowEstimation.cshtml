@@ -1,0 +1,371 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_proj_estimationInput
+@{
+    Layout = null;
+}
+    <div class="row">
+        <div class="col-md-12"  id="fixHeader">
+            <div class="col-md-12">
+                <div class="col-md-3 pull-left">
+                    <div class="col-md-6"><a href="Javascript:;" class="openDialog" title="Click to view previous cycles" data-source="@Url.Action("ShowPreviousCycles","ProjEstimation",new { id = Model.tbl_Org_ProjectID })" data-id="listing">Estimation Cycle</a></div>
+                    <div class="col-md-6" id="Version">@Model.Version</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-4 pull-left"><strong>SDLC Phase</strong></div>
+                    <div class="col-md-8" >@Model.phaseName</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="pull-right">
+                        <div class="form-group">
+                            <a href="Javascript:;" class="btn blue-bg loadDetails" data-element="listing" data-source="@Url.Action("Edit","ProjEstimation", new { id = Model.tbl_Org_ProjectID })" data-sourceid="" data-mode="">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered filterParams">
+                <tbody>
+                    <tr>
+                        <th class="docTableLabel-bg columnMediumWidth">Size (FP)</th>
+                        <td id="Size" class="columnMediumWidth">@Model.Size</td>
+                        <th class="docTableLabel-bg columnMediumWidth">Efforts (Pers-Days)</th>
+                        <td id="Overall_Project_PDs" class="columnMediumWidth">@Model.Overall_Project_PDs</td>
+                        <th class="docTableLabel-bg columnMediumWidth">Project Cost (INR)</th>
+                        <td id="Cost" class="columnMediumWidth">@Model.Cost</td>
+                        <th class="docTableLabel-bg columnMediumWidth">Estimated Defects</th>
+                        <td id="TotalDefects" class="columnMediumWidth">@Model.TotalDefects</td>
+                    </tr>
+                    <tr>
+                        <th class="docTableLabel-bg columnMediumWidth">CUT Effort % of Total Effort</th>
+                        <td >
+                            @(Model.CUT_EffortPercent == 0 ? 65 : Model.CUT_EffortPercent)
+                        </td>
+                        <th class="docTableLabel-bg columnMediumWidth">Schedule (Months)</th>
+                        <td id="ScheduleMonths" class="columnMediumWidth">@Model.ScheduleMonths</td>
+                        <th class="docTableLabel-bg columnMediumWidth">PM SBR</th>
+                        <td class="columnMediumWidth">@Model.PMSBR</td>
+                        <th class="docTableLabel-bg columnMediumWidth">Defect Density</th>
+                        <td class="columnMediumWidth">@Model.DefectDensity</td>
+                    </tr>             
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel colored">
+            <div class="panel-body">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li class="active"><a data-toggle="tab" href="#sizeEstimate">Size Estimate</a></li>
+                    <li><a data-toggle="tab" href="#valAdjment">Value Adjustment Factor</a></li>
+                    <li><a data-toggle="tab" href="#teamProd">CUT Team Productivity</a></li>
+                    <li><a data-toggle="tab" href="#effEstimate">Effort/Cost Estimate</a></li>
+                    <li><a data-toggle="tab" href="#schEstimate">Schedule Estimate</a></li>
+                    <li><a data-toggle="tab" href="#defEstimate">Defect Estimate</a></li>
+                </ul>
+                        
+                <div class="tab-content" id="myTabContent">
+                    <div id="sizeEstimate" class="tab-pane fade in active">
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered filterParams pull-right">
+                                    <tr>
+                                        <th rowspan="2" class="docTableHeader-bg">Normalised Points</th>
+                                        <th class="docTableLabel-bg">Simple</th>
+                                        <td id="SimpleEfforts" class="TableHighlight">@Model.SimpleEfforts</td>
+                                        <th class="docTableLabel-bg">Medium</th>
+                                        <td id="MediumEfforts" class="TableHighlight">@Model.MediumEfforts</td>
+                                        <th class="docTableLabel-bg">Complex</th>
+                                        <td id="ComplexEfforts" class="TableHighlight">@Model.ComplexEfforts</td>
+                                        <th class="docTableLabel-bg">Total</th>
+                                        <td id="TotalEfforts" class="TableHighlight">@Model.TotalEfforts</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row col-lg-12">
+                            <div class="col-lg-12 column left">
+                                <ul class="tree" id="DefaultNode" data-modules="0">
+                                    @if (Model.proj_estm_group != null && Model.proj_estm_group.Any())
+                                    {
+                                        foreach (var grp in Model.proj_estm_group)
+                                        {
+                                            <li id="LG@(grp.GroupID)">
+                                                <a href="Javascript:;" class="editLineItem" data-source="@Url.Action("EditModuleForEstm", "ProjGroup", new { ProjectID = Model.tbl_Org_ProjectID, EstmID = Model.ID, GroupID = grp.GroupID })" 
+                                                    id="@grp.GroupID" data-params="sizeEstmParams" data-duplicate="checkmodule" data-id="@(grp.GroupID)"><i class="icon-edit"></i></a>
+                                                <a class="tree-toggle checkmodule" data-toggle="branch" role="branch" data-id="@grp.GroupID" id="G@(grp.GroupID)" href="Javascript:;">@grp.Name</a>
+                                                <ul id="CLG@(grp.GroupID)" class="branch in">
+                                                    <li>
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="docTableLabel-bg" rowspan="2"></th>
+                                                                    <th class="docTableLabel-bg" rowspan="2">Parameters For Development</th>
+                                                                    <th class="docTableLabel-bg" colspan="3">Count (Numbers)</th>
+                                                                    <th class="docTableLabel-bg" colspan="3">Weightage</th>
+                                                                    <th class="docTableLabel-bg" colspan="3">Weighted Points</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="docTableLabel-bg">S</th>
+                                                                    <th class="docTableLabel-bg">M</th>
+                                                                    <th class="docTableLabel-bg">C</th>
+                                                                    <th class="docTableLabel-bg">S</th>
+                                                                    <th class="docTableLabel-bg">M</th>
+                                                                    <th class="docTableLabel-bg">C</th>
+                                                                    <th class="docTableLabel-bg">S</th>
+                                                                    <th class="docTableLabel-bg">M</th>
+                                                                    <th class="docTableLabel-bg">C</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var sz in Model.tbl_org_proj_estm_size.Where(o => o.ProjGroupID == grp.GroupID))
+                                                                {
+                                                                    <tr id="@sz.ID" class="checksize EditRow" data-id="@sz.ParameterID">
+                                                                        <td></td>
+                                                                        <td>@sz.tbl_org_estm_parameters.Name</td>
+                                                                        <td>@sz.SimpleC</td>
+                                                                        <td>@sz.MediumC</td>
+                                                                        <td>@sz.ComplexC</td>
+                                                                        <td>@sz.SimpleW</td>
+                                                                        <td>@sz.MediumW</td>
+                                                                        <td>@sz.ComplexW</td>
+                                                                        <td>@sz.SimpleWP</td>
+                                                                        <td>@sz.MediumWP</td>
+                                                                        <td>@sz.ComplexWP</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="valAdjment" class="tab-pane">
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered filterParams pull-right">
+                                    <tr>
+                                        <th class="docTableLabel-bg">Total Degree of Influence (TDI)</th>
+                                        <td id="TDI" class="TableHighlight">@Model.TDI</td>
+                                        <th class="docTableLabel-bg">VAF = 0.65 + (TDI * 0.01)</th>
+                                        <td id="VAF" class="TableHighlight">@Model.VAF</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table  class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="tblActionIcon"></th> 
+                                        <th class="EstGSCTitle">General Systems Characteristics (GSC)</th>
+                                        <th class="TSHours">Degree of Influence (0-5)</th>
+                                        <th >Interpretation</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    @if (Model.tbl_org_proj_estm_gsc != null)
+                                    {
+                                        foreach (var tdi in Model.tbl_org_proj_estm_gsc)
+                                        {
+                                            var tdiDetails = Model.tbl_org_estm_gsc_master.Where(o => o.ID == tdi.tbl_Org_Estm_TDI_ID).SingleOrDefault();
+                                            if (tdiDetails != null)
+                                            {
+                                            <tr class="EditRow checkGSC" data-id="@tdiDetails.ID" id="GSC@(tdi.ID)">
+                                                <td></td>
+                                                <td>@tdiDetails.Name</td>
+                                                <td>@tdi.Rating</td>
+                                                <td ><div class="col-md-12">@Html.Raw(tdiDetails.HelpText)</div></td>
+                                            </tr>                                                                                 
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="teamProd" class="tab-pane">
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered filterParams pull-right">
+                                    <tr>
+                                        <th class="docTableLabel-bg">CUT Team Size</th>
+                                        <td id="CUT_TeamSize" class="TableHighlight">@Model.CUT_TeamSize</td>
+                                        <th class="docTableLabel-bg">Team Productivity</th>
+                                        <td id="Team_Productivity" class="TableHighlight">@Model.Team_Productivity</td>
+                                        <th class="docTableLabel-bg">Size in FP for Cut (with VAF)</th>
+                                        <td id="CUT_Effort_FPs" class="TableHighlight">@Model.CUT_Effort_FPs</td>
+                                        <th class="docTableLabel-bg">CUT Effort in Person-days</th>
+                                        <td id="CUT_Effort_PDs" class="TableHighlight">@Model.CUT_Effort_PDs</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table  class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Role</th>
+                                        <th>Number</th>
+                                        <th>FP / day</th>
+                                        <th>% Assigned</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.tbl_org_proj_estm_productivity != null)
+                                    {
+                                        foreach (var rl in Model.tbl_org_proj_estm_productivity)
+                                        {
+                                            <tr>
+                                                <td></td>
+                                                <td>@rl.mstr_org_role.LongName</td>
+                                                <td>@rl.ResourceCount</td>
+                                                <td>@rl.FP_Per_Day</td>
+                                                <td>@rl.PercentAllocation</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="effEstimate" class="tab-pane">
+                        <br />
+                        <div class="row">
+                            <table  class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Phases</th>
+                                        <th>Effort (%)</th>
+                                        <th>Pers Days</th>
+                                        <th>Role</th>
+                                        <th>SBR</th>
+                                        <th>PM Load</th>
+                                        <th>PM Effort</th>
+                                        <th>PM Cost</th>
+                                        <th>Other Costs</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.tbl_org_proj_estm_effort_schedule != null)
+                                    {
+                                        foreach (var ph in Model.tbl_org_proj_estm_effort_schedule)
+                                        {
+                                            <tr>
+                                                <td></td>
+                                                <td id="PPC@(ph.ID)Name" class="@(ph.IsCutPhase == true ? "TableDisabledLabel" : "")">@ph.mstr_org_proj_phase.LongName</td>
+                                                <td class="@(ph.IsCutPhase == true ? "TableDisabledLabel" : "") effSchEst" 
+                                                    data-navkey="@(ph.IsCutPhase == true ? "" : "")" data-class="@(ph.IsCutPhase == true ? "" : "")" 
+                                                    data-type="sch" id="@(ph.IsCutPhase == true ? "CUT_Phase" : "PPC" + ph.ID.ToString())">@ph.EffortPercent</td>
+                                                <td class="TableDisabledLabel" id="@(ph.IsCutPhase == true ? "CUT_PhaseEff" : "PPC" + ph.ID.ToString() + "Eff")">@ph.PDs</td>
+                                                <td id="Ph@(ph.ID)Role">@ph.Roles</td>
+                                                <td>@ph.SBR</td>
+                                                <td>@ph.PM_Loading</td>
+                                                <td>@ph.PM_Effort</td>
+                                                <td>@ph.PM_Cost</td>
+                                                <td>@ph.Other_Costs</td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td></td>
+                                        <th >Total</th>
+                                        <td class="TableDisabledLabel" id="PCTotal">@(Model.tbl_org_proj_estm_effort_schedule == null ? 0 : Model.tbl_org_proj_estm_effort_schedule.Sum(o => o.EffortPercent))</td>
+                                        <td class="TableDisabledLabel" id="EffTotal">@(Model.tbl_org_proj_estm_effort_schedule == null ? 0 : Model.tbl_org_proj_estm_effort_schedule.Sum(d => d.PDs))</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="TableDisabledLabel" id="PMCostTotal"></td>
+                                        <td class="TableDisabledLabel" id="OtherCostTotal"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="schEstimate" class="tab-pane">
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered filterParams pull-right">
+                                    <tr>
+                                        <th class="docTableLabel-bg">Schedule Total Days</th>
+                                        <td id="schDays">@(@Model.ScheduleMonths * 30)</td>
+                                        <th class="docTableLabel-bg">Schedule Months</th>
+                                        <td id="schMonths">@Model.ScheduleMonths</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table  class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Phases</th>
+                                        <th>Pers Days</th>
+                                        <th>People</th>
+                                        <th>Days</th>
+                                        <th>Holiday</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ScheduleParams">
+                                    @if (Model.tbl_org_proj_estm_effort_schedule != null)
+                                    {
+                                        foreach (var sch in Model.tbl_org_proj_estm_effort_schedule.OrderBy(o => o.SequenceNo))
+                                        {
+                                            <tr class="EditRow" id="Ph@(sch.ID)Sch">
+                                                <td class="docTableLabel-bg">@sch.mstr_org_proj_phase.LongName</td>
+                                                <td class="TableDisabledLabel" >@sch.PDs</td>
+                                                <td >@sch.Sch_People</td>
+                                                <td class="TableDisabledLabel">@sch.Sch_Days</td>
+                                                <td >@sch.Sch_Holidays</td>
+                                                <td >@sch.Sch_StartDate.GetValueOrDefault().ToString(Globals.DateFormatString)</td>
+                                                <td class="TableDisabledLabel">@sch.Sch_EndDate.GetValueOrDefault().ToString(Globals.DateFormatString)</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="defEstimate" class="tab-pane">
+                        <br />
+                        <div class="row">
+                            <table  class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Phases</th>
+                                        <th>Efforts</th>
+                                        <th>Defects</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="DefectParams">
+                                    @if (Model.tbl_org_proj_estm_effort_schedule != null)
+                                    {
+                                        foreach (var def in Model.tbl_org_proj_estm_effort_schedule.OrderBy(o => o.SequenceNo))
+                                        {
+                                            <tr id="Ph@(def.ID)Defect">
+                                                <td class="docTableLabel-bg">@def.mstr_org_proj_phase.LongName</td>
+                                                <td class="TableDisabledLabel" >@def.PDs</td>
+                                                <td class="TableDisabledLabel" >@def.Defects</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

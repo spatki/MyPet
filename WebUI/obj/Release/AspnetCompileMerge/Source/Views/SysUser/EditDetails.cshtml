@@ -1,0 +1,79 @@
+﻿@using ProcessAccelerator.WebUI
+@model EditUserDetailsInput
+@{
+    Layout = null;
+    UserTypes userTypes = new UserTypes();
+}
+
+
+<div class="row">
+    <div class="panel colored col-md-12">
+        <div class="panel-heading green-bg">
+            <h3 class="panel-title">User Details</h3>
+        </div>
+        <form name="frmUserDetails" id="frmUserDetails" method="post" action="@Url.Action("EditDetails","SysUser")">
+            <div class="panel-body">
+                <div class="row">
+			        <div class="col-md-3">
+                        <img id="displayProfilePic" src="@Url.Content("~/Content/images/" + User.Identity.Name + "_pic.jpg")"  title='Profile Picture' width='200' height='200' alt='Profile Picture'  class="thumbnail"/>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row col-md-12">
+                            @Html.ValidationSummary(false)
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                @Html.HiddenFor(o => o.ID)
+                                @Html.HiddenFor(o => o.ClientID)
+                                @Html.HiddenFor(o => o.UserName)
+                                @Html.HiddenFor(o => o.UserType)
+                                <div class="form-group">
+                                    <label class="control-label">User ID (Used as Login ID)</label>
+                                    <input class="form-control" value="@Model.UserName" readonly="true"/>
+                                </div>
+                            </div>                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">User Type</label>
+                                    <input class="form-control" value="@userTypes.getTypeName(Model.UserType.GetValueOrDefault())" readonly="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Name</label>
+                                    @Html.TextBoxFor(o => o.DisplayName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(o => o.DisplayName)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Email Address</label>
+                                    @Html.TextBoxFor(o => o.EMailID, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(o => o.EMailID)
+                                </div>
+                            </div>
+                        </div>                        
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Mobile Contact</label>
+                                    @Html.TextBoxFor(o => o.MobileContact, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(o => o.MobileContact)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group pull-right">
+                                    <label class="control-label col-md-12">&nbsp;</label>
+				                    <a href="javascript:;" class="btn btn-med blue-bg save pull-right" data-id="Details" data-form="frmUserDetails" data-mode="update">Update Details</a>
+			                    </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>            
+            </div>
+        </form>
+    </div>
+</div>
+

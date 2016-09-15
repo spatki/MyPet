@@ -1,0 +1,147 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+
+                <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-md-5">Map Project Locations to Org. Level <strong><small>(Used to search for employees)</small></strong></label>
+                    <select class="col-md-5 chzn-nopadd chzn-select-no-single"><option>Organisation</option> <option>Company</option> <option>Branch</option> <option selected="selected">Location</option> <option>Business Unit</option> <option>Department</option> </select>
+                    <div class="col-md-1 pull-right">
+                        <button class="btn blue-bg pull-right" type="submit">Save Mapping</button>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="panel colored col-md-4">
+                    <div class="panel-heading orange-bg">
+                        <h3 class="panel-title">Add / Update Locations</h3>
+            		</div>
+					<form role="form">
+                    <div class="panel-body">
+					
+					<div class="row">
+					<div class="col-md-12">
+                            <div class="form-group">
+                                <label>Sequence No</label>
+                                <input type="text" class="form-control">
+                            </div>                        
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Location Type</label>
+                                <select class="col-md-12 chzn-nopadd chzn-select-no-single"> <option>Internal</option> <option>Client</option> <option>on-site</option></select>
+                            </div>
+					</div>		
+					</div>
+                        
+                    </div>
+					<div class="panel-footer">
+						<div class="form-group">
+						<div class="row">
+                            <div class="col-lg-12">
+                            <button class="btn blue-bg" type="submit">Save</button>
+                            <input type="reset" class="btn gray-bg">
+                            </div>
+                        </div>
+						</div>
+					</div>
+					</form>
+                </div>  
+
+                <div class="col-md-8">
+                
+                	<div class="panel colored">
+                    <div class="panel-heading blue-bg">
+                        <h3 class="panel-title">Project Locations</h3>
+                        <ul class="pull-right toolbar">
+                            <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                            <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                            <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+					
+                    	<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="advanced-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              
+                                    <tr>
+                                        <td>1</td> 
+                                        <td>Mumbai</td> 
+                                        <td>Internal</td> 
+                                        <td><a href="#" class="btn btn-med green-bg"><i class="icon-">&#xf044;</i></a></td>
+                                        <td><a href="#confirmModal" class="btn btn-med red-bg" role="button" data-toggle="modal"><i class="icon-">&#xf057;</i></a></td>
+                                </tr>
+                         
+						          <tr>
+                                        <td>2</td> 
+                                        <td>Bengaluru</td> 
+                                        <td>Internal</td> 
+                                        <td><a href="#" class="btn btn-med green-bg"><i class="icon-">&#xf044;</i></a></td>
+                                        <td><a href="#confirmModal" class="btn btn-med red-bg" role="button" data-toggle="modal"><i class="icon-">&#xf057;</i></a></td>
+                                </tr>
+								<tr>
+                                        <td>3</td> 
+                                        <td>US - Chicago</td> 
+                                        <td>Client</td> 
+                                        <td><a href="#" class="btn btn-med green-bg"><i class="icon-">&#xf044;</i></a></td>
+                                        <td><a href="#confirmModal" class="btn btn-med red-bg" role="button" data-toggle="modal"><i class="icon-">&#xf057;</i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                       
+                    </div>
+                    </div>
+
+                </div>  
+              
+        	</div>
+   
+     <!-- Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Confirm Delete</h4>
+		</div>
+		<div class="modal-body">
+		  Are you sure you want to delete this level ?
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">No</button>
+		  <button type="button" class="btn blue-bg">Yes</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+   
+ 	<script type="text/javascript">
+	    var config = {
+	        '.chzn-select': {},
+	        '.chzn-select-deselect': { allow_single_deselect: false },
+	        '.chzn-select-no-single': { disable_search_threshold: 10 },
+	        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+	        '.chzn-select-width': { width: "95%" }
+	    }
+	    for (var selector in config) {
+	        $(selector).chosen(config[selector]);
+	    }
+   </script> 
+
+}

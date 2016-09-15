@@ -1,0 +1,35 @@
+﻿@model tbl_mapping_roleInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Map to Process Role</h4>
+	</div>
+    <form method="post" action="@Url.Action("Create")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                    <input type="hidden" name="ClientID" value="@Model.ClientID" />
+                    <input type="hidden" name="mstr_Org_RoleID" value="@Model.mstr_Org_RoleID" />
+                    <div class="form-group">
+                        <label>Process Role</label>
+                        @Html.Action("getListItems","ProcessRole",new { selectedItem = Model.mstr_Process_RoleID, controlName = "mstr_Process_RoleID", excludeIds = "", includeIds = "", reload = ""})
+                        @Html.ValidationMessageFor(o => o.mstr_Process_RoleID)
+                    </div>                        
+			    </div>	
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveDefault" data-mode="edit" data-id="L@(Model.mstr_Org_RoleID)" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+

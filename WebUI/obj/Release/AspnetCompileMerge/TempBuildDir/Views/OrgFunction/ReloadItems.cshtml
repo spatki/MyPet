@@ -1,0 +1,28 @@
+﻿@model IEnumerable<mstr_org_function>
+@{
+    Layout = null;
+}
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="processTable">
+    <thead>
+        <tr>
+        <th>Short Name</th>
+        <th class="hidden-xs">Long Name</th>
+        <th class="hidden-xs">Description</th>
+        <th class="docTableResult">Action</th>
+        </tr>
+    </thead>
+    <tbody id="listing">
+        @foreach (var o in Model)
+        {
+            <tr id="@o.ID">
+                <td>@o.ShortName</td>
+                <td>@o.LongName</td>
+                <td>@o.Description</td>
+                <td><button class="btn btn-med green-bg openDialog" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "OrgFunction", new { id = o.ID })"><i class="icon-">&#xf044;</i></button>
+                    <button class="btn btn-med red-bg openDeleteDialog" data-id="@o.ID" data-mode="delete" data-source="@Url.Action("Delete", "OrgFunction", new { id = o.ID })"><i class="icon-">&#xf057;</i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

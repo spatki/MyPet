@@ -1,0 +1,475 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+                <div class="row">
+                <div class="col-md-12">
+                    <a href="javascript:;" id="showfilter" class="pull-left">Filter Tasks <i class="icon-">&#xf00e;</i></a>
+                </div>
+                <hr />
+                <div class="panel colored" id="filterParams">
+                    <div class="panel-body filter-bg">
+                        <div class="row col-md-12">
+                            <div class="col-md-5">
+                                    <label class="col-md-2 pull-left filterParams">From</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group date datepicker">
+                                            <input type="text" id="filter_fromDt" class="form-control col-md-9 filterParams">
+                                            <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="col-md-2 pull-left filterParams">To</label>
+                                <div class="col-md-9">
+                                    <div class="input-group date datepicker">
+                                        <input type="text" id="filter_toDt" class="form-control col-md-9 filterParams">
+                                        <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-med blue-bg searchProcedure pull-right filterParams">GO</button>
+                            </div>
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="col-md-2 pull-left filterParams">Audit Status</label>
+                                    <div class="col-md-9">
+                                        <select class="chzn-select-no-single col-md-12 filterParams">
+                                            <option value="0" selected="selected">Open</option>
+                                            <option value="1">Closed</option>
+                                            <option value="2">Escalated</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="col-md-2 pull-left filterParams">Track Status</label>
+                                    <div class="col-md-9">
+                                        <select class="col-md-12 filterParams chzn-select-no-single">
+                                            <option value="0" selected="selected">Delayed</option>
+                                            <option value="1">Pending</option>
+                                            <option value="2">On Time</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>     
+                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered advanced-table" >
+                    <thead>
+                        <tr>
+                            <th class="docTableHeader-bg">Ref. ID</th>
+                            <th class="docTableHeader-bg">Type</th>
+                            <th class="docTableHeader-bg">Audit Start</th>
+                            <th class="docTableHeader-bg">Audit Finish</th>
+                            <th class="docTableHeader-bg">Auditor Name</th>
+                            <th class="docTableHeader-bg">Audit Status</th>
+                            <th class="docTableHeader-bg">Tracking</th>
+                            <th class="docTableHeader-bg">Report</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>P122-O1</td>
+                            <td>QA Obs</td>
+                            <td>10-Nov-14</td>
+                            <td>10-Nov-14</td>
+                            <td>Jagdish Zaveri</td>
+                            <td>Open</td>
+                            <td><span class="label label-danger col-md-12">Delayed</span></td>
+                            <td><a href="#repDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>P012-A1</td>
+                            <td>Audit</td>
+                            <td>02-Jan-14</td>
+                            <td>03-Nov-14</td>
+                            <td>Surekha Shetty</td>
+                            <td>Open</td>
+                            <td><span class="label label-success col-md-12">Pending</span></td>
+                            <td><a href="#repDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>                        
+                        <tr>
+                            <td>P132-A2</td>
+                            <td>Audit</td>
+                            <td>24-Mar-14</td>
+                            <td>24-Mar-14</td>
+                            <td>Kapil Khanna</td>
+                            <td>Open</td>
+                            <td><span class="label label-success col-md-12">Pending</span></td>
+                            <td><a href="#repDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>                        
+                        <tr>
+                            <td>P435-O1</td>
+                            <td>QA Obs</td>
+                            <td>01-Apr-14</td>
+                            <td>01-Apr-14</td>
+                            <td>Kapil Khanna</td>
+                            <td>Closed</td>
+                            <td><span class="label label-success col-md-12">On Time</span></td>
+                            <td><a href="#repDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>P111-A11</td>
+                            <td>Audit</td>
+                            <td>12-Mar-14</td>
+                            <td>14-Mar-14</td>
+                            <td>Gauri Singh</td>
+                            <td>Escalated</td>
+                            <td><span class="label label-danger col-md-12">Delayed</span></td>
+                            <td><a href="#repDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+    
+    <div class="modal fade" id="repDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:100%;height:70%;overflow:auto;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h3 class="modal-title">Audit Observations</h3>
+		</div>
+		<div class="modal-body">
+          <div class="panel-body">
+              <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="control-label"><strong>Audit Date:</strong> 11/11/2014</label>
+                        </div>
+                        <div class="col-md-6">
+                                <label class="control-label"><strong>Department / Project:</strong> Finance, HRM, Payroll Processing</label>
+                        </div>                                
+                        <div class="col-md-4">
+                            <ul class="pagination pull-right" style="margin:-2px 0;">
+                                <li class="active"><a href="#" class="selectTabOption" id="NCForm"><i class="icon-file-alt"></i>&nbsp;&nbsp;NC Report</a></li>
+                                <li ><a href="#" class="selectTabOption" id="strength"><i class="icon-thumbs-up"></i>&nbsp;&nbsp;Strengths</a></li>
+                                <li ><a href="#" class="selectTabOption" id="weakness"><i class="icon-thumbs-down"></i>&nbsp;&nbsp;Weakness</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="NCFormDetails">
+                    <div class="row">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                        <tr class="EditRow">
+                                            <th rowspan="2">Date</th>
+                                            <th rowspan="2">NC / Observation</th>
+                                            <th rowspan="2">Objective Evidence / Ref. Docs</th>
+                                            <th rowspan="2">Category</th>
+                                            <th rowspan="2">Ref.Clause</th>
+                                            <th rowspan="2">Ref.</th>
+                                            <th rowspan="2">Root Cause Analysis</th>
+                                            <th colspan="2">Corrective Action</th>
+                                            <th colspan="2">Preventive Action</th>
+                                            <th rowspan="2">NC Closure Status</th>
+                                        </tr>
+                                        <tr class="EditRow">
+                                            <th>Details</th>
+                                            <th>Target Date</th>
+                                            <th>Details</th>
+                                            <th>Target Date</th>
+                                        </tr>
+                            </thead>
+                            <tbody data-count="1">
+                                <tr id="R1" class="EditRow">
+                                        <tr class="EditRow">
+                                            <td>10-Nov-14</td>
+                                            <td>Reviewed CBS product requirements of Banyan Tree Bank, Mauritius & Abu Dhabi Commercial Bank, UAE & observed that adequate evidence related to statutory requirements (e.g. Islamic Banking laws - type of account & interest accrual mechanisms; DTAA & FEMA regulation, etc.) was not available on the day of audit.</td>
+                                            <td>interview verbal</td>
+                                            <td>Minor</td>
+                                            <td>QMS</td>
+                                            <td>7.2.1</td>
+                                            <td>Statutory requirements are complied with as per customer request. However, the same is not being done proactively to ensure that determination of product requirements include all statutory / legal compliances.</td>
+                                            <td>To ensure that SRS / FS & GAD reflects statutory requirements as applicable for these projects / customers.</td>
+                                            <td>25-Nov-14 <span class="label label-success">Closed</span></td>
+                                            <td>To prepare a legal / statutory requirement checklist for future projects as part of Risk Management.</td>
+                                            <td>25-Nov-14  <span class="label label-success">Closed</span></td>
+                                            <td><a href="#closureComments" class="btn btn-sm black-bg" data-toggle="modal" title="Closure Comments"><i class="icon-file-alt"></i></a>
+                                                <span class="label label-warning">Open</span></td>
+                                        </tr>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="strengthDetails" style="display:none;">
+                    <div class="row">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="tblActionIcon">#</th>
+                                    <th class="col-md-9">Strength</th>
+                                </tr>
+                            </thead>
+                            <tbody data-count="1">
+                                <tr id="S1" class="EditRow">
+                                    <td class="tblActionIcon">1</td>
+                                    <td class="col-md-12">Process Accelerator being used optimally. This will reduce possible gaps and help project compliance effectively</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="weaknessDetails" style="display:none;">
+                    <div class="row">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="tblActionIcon">#</th>
+                                    <th class="col-md-9">Weakness</th>
+                                </tr>
+                            </thead>
+                            <tbody data-count="1">
+                                <tr id="W1" class="EditRow">
+                                    <td class="tblActionIcon">1</td>
+                                    <td class="col-md-12">Review tasks are not pre-planned. Too many unplanned reviews are observed.</td>
+                                </tr>
+                                <tr id="Tr1" class="EditRow">
+                                    <td class="tblActionIcon">2</td>
+                                    <td class="col-md-12">Coding best practices not followed.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="modal-footer">
+            <button type="button" class="btn blue-bg" id="Button4">Save</button>
+            <button type="button" class="btn blue-bg" id="closeObservation">Close Observations</button>
+            <button type="button" class="btn blue-bg" id="reOpen" disabled="disabled">Re-Open</button>
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="closureComments" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Auditor Closure Comments</h4>
+		</div>
+		<div class="modal-body">
+            <div class="container-fluid">
+                <div class="row col-md-12 show-border">
+                    <div class="show-border-title">NC Closure and Acceptance of CA / PA</div>
+                    <div class="col-md-6">
+                        <label class="control-label col-md-12">Notes</label>
+                         <textarea class="col-md-12" rows="5"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12">Next Audit On</label>
+                            <div class="col-md-12"><input type="text" id="Text2" class="form-control mask_date"></div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12">Status</label>
+                            <div class="col-md-12"><select class="col-md-12 chzn-nopadd chzn-nopadd chzn-select"><option value="Open" selected="selected">Open</option> <option value="Close">Close</option></select></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12 show-border">
+                    <div class="show-border-title">Evaluation of effectiveness of CA / PA</div>
+                    <div class="col-md-12"><textarea class="form-control col-md-12" rows="3"></textarea></div>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		  <button type="button" class="btn blue-bg" data-dismiss="modal" id="saveReview">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<script type="text/javascript">
+	    var newTaskParams = true;
+	    var newClosureParams = true;
+
+		var config = {
+		  '.chzn-select-no-single' : {disable_search_threshold:10},
+		}
+		for (var selector in config) {
+		  $(selector).chosen(config[selector]);
+		}
+        
+        $("body").delegate("#Audit_ID", "change", function() {
+            if ($("#Audit_ID").val().trim() == "") $("#obs_sheet").hide();
+            else $("#obs_sheet").show("slow");
+        });
+
+		$("body").delegate(".report", "click", function () {
+		    $("#Audit_ID").val($(this).data("id"));
+            $("#obs_sheet").show();
+		    $("#QA_Obsv").click();
+		});
+
+		$("body").delegate(".addObs", "click", function () {
+		    // add additional columns for edit
+		    var count = parseInt($(this).parent().parent().parent().data("count"));
+
+		    count = count + 1;
+		    var newColumns = '<td class="getEditor EditObs nav" data-field="Observation" data-navkey="EditObs" data-class="EditObs"contenteditable="true"></td>' +
+                             '<td  class="getEditor EditObs nav" data-field="Impact" data-navkey="EditObs" data-class="EditObs" contenteditable="true"></td>' +
+                             '<td class="EditObs"  data-field="Res" data-navkey="EditObs" data-class="EditObs"></td>' +
+                             '<td>Open</td>' +
+                             '<td class="EditObs" data-field="Date" data-navkey="EditObs" data-class="EditObs"></td>';
+		    $(this).parent().after(newColumns);
+		    $(this).parent().parent().parent().data("count", count);
+
+		    // Add the option to add more rows
+		    $(this).parent().parent().parent().append('<tr id="R' + count + '" class="EditRow"><td><a href="#" class="addObs nav" data-id="R' + (count + 1) + '" ><i class="icon-">&#xf055</i></a></td></tr>');
+		    $(this).removeClass("addObs");
+		    $(this).addClass("removeObs");
+		    $(this).children().first().html("&#xf00d");
+		    $(this).parent().next().click();
+		    // Go to the new rule
+		    $('html, body').animate({
+		        scrollTop: $(this).parent().next().offset().top
+		    }, 2000);
+		});
+
+
+		//CKEDITOR.inline(".getEditor");
+
+ 	   $("#showfilter").click();
+
+
+		$('#repDetails').on('shown.bs.modal', function () {
+		    if (newTaskParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newTaskParams = false;
+		    }
+		})
+
+		$('#closureComments').on('shown.bs.modal', function () {
+		    if (newClosureParams) {
+		        $(".chzn-select").chosen({ "disable_search_threshold": 10 });
+		        $(".mask_date").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		        newClosureParams = false;
+		    }
+		});
+
+		$("body").delegate(".group", "click", function () {
+		    $("#" + $(this).data("childid")).toggle();
+		    $(this).toggleClass("closed");
+		});
+
+		$("body").delegate(".EditObs", "click", function () {
+		    var field = $(this).data("field");
+		    var originalValue = $(this).text();
+
+		    switch (field) {
+		        case "Observation", "Impact":
+		            break;
+		        case "Res":
+		            keypressCode = -1;
+		            keypressShift = false;
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue col-md-12' data-class='EditObs' data-navkey='EditObs'><option value='Sandeep Honawar'>Sandeep Honawar</option><option value='Kapil Khanna'>Kapil Khanna</option><option value='Supriya Phatak'>Supriya Phatak</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "Status":
+		            keypressCode = -1;
+		            keypressShift = false;
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<select class='inputValue col-md-12' data-class='EditObs' data-navkey='EditObs'><option value='Open'>Open</option><option value='Close'>Close</option><option value='Escalated'>Escalated</option></select>");
+		            $(this).children().first().val(originalValue);
+		            $(this).children().first().focus();
+		            break;
+		        case "Date":
+		            keypressCode = -1;
+		            keypressShift = false;
+                    
+		            $(this).addClass("cellEditing");
+		            $(this).removeClass("EditObs");
+		            $(this).html("<input type='text' size='12' id='mask_date2' class='inputValue' data-class='EditObs' data-navkey='EditObs'/>");
+		            $("#mask_date2").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+		            if (originalValue != "") $(this).children().val(originalValue);
+		            $(this).children().first().focus();on
+		            $(this).children().first().select();
+		            break;
+		        default:
+		            break;
+		    }
+		});
+
+		$("body").delegate(".removeObs", "click", function () {
+		    if (confirm("Do you want to delete this observation ? ")) {
+		        $("#" + $(this).data("id")).remove();
+		    }
+		});
+
+		$(document).on("click", "#closeObservation", function () {
+		    $("#closureComments").modal("show");
+		});
+
+		$(document).on("click", "#saveReview", function () {
+            $("td[data-field='Status']").text("Close");
+            $("#closeObservation").prop("disabled","disabled");
+            $("#reOpen").removeAttr("disabled");
+		});
+
+		$(document).on("click", "#reOpen", function () {
+            $("td[data-field='Status']").text("Open");
+            $("#closeObservation").removeAttr("disabled");
+            $("#reOpen").prop("disabled","disabled");
+		});
+
+		$("body").delegate(".selectTabOption", "click", function () {
+		    if (!$(this).parent().hasClass("active")) {
+		        switch ($(this).prop("id")) {
+		            case "NCForm":
+		                $("#strengthDetails").hide();
+		                $("#weaknessDetails").hide();
+		                $("#NCFormDetails").show();
+		                if ($("#strength").parent().hasClass("active")) $("#strength").parent().removeClass("active");
+		                if ($("#weakness").parent().hasClass("active")) $("#weakness").parent().removeClass("active");
+		                $(this).parent().addClass("active");
+		                break;
+		            case "strength":
+		                $("#NCFormDetails").hide();
+		                $("#weaknessDetails").hide();
+		                $("#strengthDetails").show();
+		                if ($("#NCForm").parent().hasClass("active")) $("#NCForm").parent().removeClass("active");
+		                if ($("#weakness").parent().hasClass("active")) $("#weakness").parent().removeClass("active");
+		                $(this).parent().addClass("active");
+		                break;
+		            case "weakness":
+		                $("#NCFormDetails").hide();
+		                $("#strengthDetails").hide();
+		                $("#weaknessDetails").show();
+		                if ($("#NCForm").parent().hasClass("active")) $("#NCForm").parent().removeClass("active");
+		                if ($("#strength").parent().hasClass("active")) $("#strength").parent().removeClass("active");
+		                $(this).parent().addClass("active");
+		                break;
+		            default:
+		                break;
+		        }
+		    }
+		});
+
+		var calculateValues = function () { };
+    </script> 
+
+}

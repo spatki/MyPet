@@ -1,0 +1,1458 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+                <div class="row">
+                 <div class="panel colored col-md-12">
+					<form role="form">
+					
+                 <div class="panel-body">
+                        <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	    <div class="row pull-right panel-footer">
+                                <div class="col-lg-12 col-lg-offset-1">
+                                    <button type="button" class="btn blue-bg" id="NewTask">Save</button>
+                                    <button type="button" class="btn blue-bg" id="newCycle" data-last="1">Create New Cycle</button>
+                                    <button type="button" class="btn gray-bg" id="projCalendar" data-last="1">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                       <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-2">Select Project</label>
+                                <div class="controls col-md-10"><select class="col-md-12 chzn-nopadd chzn-select-no-single"><option>Payroll System</option> <option>Code Migration</option></select></div>
+                            </div>
+                       </div>
+                        <hr />
+                       <div class="row">
+                           <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th class="docTableLabel-bg"><a href="#EstimationCycles" data-toggle="modal" title="Click to view previous cycles">Estimation Cycle</a></th>
+                                            <td id="cycleID">5</td>
+                                            <th class="docTableLabel-bg">SDLC Phase</th>
+                                            <td ><select class="chzn-nopadd"><option>Pre-Sales</option><option selected="selected">Requirements</option><option>Design</option><option>Coding</option><option>Testing</option></select></td>
+                                            <th class="docTableLabel-bg">Project Cost (INR)</th>
+                                            <td id="projCost"></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="docTableLabel-bg">Size (FP)</th>
+                                            <td id="projSize">27</td>
+                                            <th class="docTableLabel-bg">Efforts (Pers-Days)</th>
+                                            <td id="projEfforts"></td>
+                                            <th class="docTableLabel-bg">Schedule (Months)</th>
+                                            <td colspan="3">3.2</td>
+                                        </tr>             
+                                    </tbody>
+                                </table>
+                            </div>
+                       </div>
+                        <div class="row">
+                            <div class="panel colored">
+                                <div class="panel-body">
+                                    <ul class="nav nav-tabs" id="myTab">
+                                      <li class="active"><a data-toggle="tab" href="#sizeEstimate">Size Estimate</a></li>
+                                      <li><a data-toggle="tab" href="#valAdjment">Value Adjustment Factor</a></li>
+                                      <li><a data-toggle="tab" href="#teamProd">Team Productivity</a></li>
+                                      <li><a data-toggle="tab" href="#effEstimate">Effort/Cost Estimate</a></li>
+                                      <li><a data-toggle="tab" href="#schEstimate">Schedule Estimate</a></li>
+                                      <li><a data-toggle="tab" href="#defEstimate">Defect Estimate</a></li>
+                                    </ul>
+                        
+                                    <div class="tab-content" id="myTabContent">
+                                        <div id="sizeEstimate" class="tab-pane fade in active">
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered filterParams pull-right">
+                                                        <tr>
+                                                            <th rowspan="2" class="docTableHeader-bg">Normalised Points</th>
+                                                            <th class="docTableLabel-bg">Simple</th>
+                                                            <td id="STotal" class="TableHighlightLabel">0</td>
+                                                            <th class="docTableLabel-bg">Medium</th>
+                                                            <td id="MTotal" class="TableHighlightLabel">0</td>
+                                                            <th class="docTableLabel-bg">Complex</th>
+                                                            <td id="CTotal" class="TableHighlightLabel">0</td>
+                                                            <th class="docTableLabel-bg">Total</th>
+                                                            <td id="Total" class="TableHighlightLabel">0</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row col-lg-12">
+                                                <div class="col-lg-12 column left">
+                                                    <ul class="tree" id="DefaultNode" data-modules="0">
+                                                        <li id="LR1">
+                                                            <a class="tree-toggle addTreeNode" data-toggle="modal" data-id="R1" id="R1" href="#responsive">Add Module</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="effEstimate" class="tab-pane">
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered filterParams pull-right">
+                                                        <tr>
+                                                            <th class="docTableLabel-bg">Estimated Effort (Person Days)</th>
+                                                            <td id="Td1" class="estEff">0</td>
+                                                            <th class="docTableLabel-bg">Estimated Cost</th>
+                                                            <td id="Td2" class="estCost">0</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table  class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Phases</th>
+                                                            <th>Effort (%)</th>
+                                                            <th>Pers Days</th>
+                                                            <th>Role</th>
+                                                            <th>SBR</th>
+                                                            <th>Cost (INR)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-count="8">
+                                                        <tr class="EditRow">
+                                                            <td id="PPC1Name">Planning</td>
+                                                            <td class="EditNumber effSchEst" data-navkey="EditNumber" data-class="EditNumber" data-type="sch" id="PPC1">1</td>
+                                                            <td class="TableDisabledLabel" id="PPC1Eff"></td>
+                                                            <td class="Edit" data-class="Edit" data-navkey="EditNumber">PM</td>
+                                                            <td class="EditNumber" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC1PerCost">125000</td>
+                                                            <td class="TableDisabledLabel" id="PPC1Cost"></td>
+                                                        </tr>
+                                                        <tr class="EditRow">
+                                                            <td id="PPC2Name">Requirement</td>
+                                                            <td class="EditNumber effSchEst" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC2">3</td>
+                                                            <td class="TableDisabledLabel" id="PPC2Eff"></td>
+                                                            <td class="Edit" data-class="Edit" data-navkey="EditNumber">BA/TL</td>
+                                                            <td class="EditNumber" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC2PerCost">100000</td>
+                                                            <td class="TableDisabledLabel" id="PPC2Cost"></td>
+                                                        </tr>
+                                                        <tr class="EditRow">
+                                                            <td id="PPC3Name">Design</td>
+                                                            <td class="EditNumber effSchEst" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC3">4</td>
+                                                            <td class="TableDisabledLabel" id="PPC3Eff"></td>
+                                                            <td class="Edit" data-class="EditNumber" data-navkey="EditNumber">TA/TL</td>
+                                                            <td class="EditNumber" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC3PerCost">75000</td>
+                                                            <td class="TableDisabledLabel" id="PPC3Cost"></td>
+                                                        </tr>
+                                                        <tr class="EditRow">
+                                                            <td class="TableDisabledLabel" id="PPC4Name">CUT</td>
+                                                            <td class="TableDisabledLabel effSchEst" data-type="sch" id="PPC4">65</td>
+                                                            <td class="TableDisabledLabel" id="PPC4Eff"></td>
+                                                            <td class="Edit" data-class="Edit" data-navkey="EditNumber">Dev</td>
+                                                            <td class="EditNumber" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC4PerCost">60000</td>
+                                                            <td class="TableDisabledLabel" id="PPC4Cost"></td>
+                                                        </tr>
+                                                        <tr class="EditRow">
+                                                            <td id="PPC5Name">SIT</td>
+                                                            <td class="EditNumber effSchEst" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC5">20</td>
+                                                            <td class="TableDisabledLabel" id="PPC5Eff"></td>
+                                                            <td class="Edit" data-class="Edit" data-navkey="EditNumber">Tester</td>
+                                                            <td class="EditNumber" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC5PerCost">60000</td>
+                                                            <td class="TableDisabledLabel" id="PPC5Cost"></td>
+                                                        </tr>
+                                                        <tr class="EditRow">
+                                                            <td id="PPC6Name">Support</td>
+                                                            <td class="EditNumber effSchEst" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC6">6</td>
+                                                            <td class="TableDisabledLabel" id="PPC6Eff"></td>
+                                                            <td class="Edit" data-class="Edit" data-navkey="EditNumber">Dev</td>
+                                                            <td class="EditNumber" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC6PerCost">60000</td>
+                                                            <td class="TableDisabledLabel" id="PPC6Cost"></td>
+                                                        </tr>
+                                                        <tr class="EditRow">
+                                                            <td >Project Closure</td>
+                                                            <td class="EditNumber effSchEst" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC7">1</td>
+                                                            <td class="TableDisabledLabel" id="PPC7Eff"></td>
+                                                            <td class="Edit" data-class="Edit" data-navkey="EditNumber">PM</td>
+                                                            <td class="EditNumber" data-class="EditNumber" data-navkey="EditNumber" data-type="sch" id="PPC7PerCost">125000</td>
+                                                            <td class="TableDisabledLabel" id="PPC7Cost"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th >Total</th>
+                                                            <td class="TableDisabledLabel" id="PCTotal">100</td>
+                                                            <td class="TableDisabledLabel" id="daysTotal"></td>
+                                                            <td ></td>
+                                                            <td ></td>
+                                                            <td class="TableDisabledLabel" id="costTotal"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div id="schEstimate" class="tab-pane">
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered filterParams pull-right">
+                                                        <tr>
+                                                            <th class="docTableLabel-bg">Schedule Total Days</th>
+                                                            <td id="Td3" class="schDays">0</td>
+                                                            <th class="docTableLabel-bg">Schedule Months</th>
+                                                            <td id="Td4" class="schMonths">0</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table  class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Phases</th>
+                                                            <th>Pers Days</th>
+                                                            <th>People</th>
+                                                            <th>Days</th>
+                                                            <th>Start Date</th>
+                                                            <th>Holiday</th>
+                                                            <th>End Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-count="8">
+                                                        <tr>
+                                                            <td class="docTableLabel-bg" id="PPC1SchName">Planning</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="PPC1SchEff">1</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" data-type="projSch" id="PPC1SchPpl">1</td>
+                                                            <td class="TableDisabledLabel" id="PPC1SchPD">0.55</td>
+                                                            <td class="EditDate"  data-navkey="EditNumber" id="PPC1SchStDate">04-Aug-14</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" id="PPC1SchHoliday">0</td>
+                                                            <td class="TableDisabledLabel" id="PPC1SchEndDt">04-Aug-14</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Requirement</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td5">2</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" data-type="projSch" id="Td6">1</td>
+                                                            <td class="TableDisabledLabel" id="Td7">1.64</td>
+                                                            <td class="TableDisabledLabel" id="Td8">04-Aug-14</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" data-navkey="EditNumber" id="Td9">0</td>
+                                                            <td class="TableDisabledLabel" id="Td10">06-Aug-14</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Design</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td11">2</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" data-type="projSch" id="Td12">1</td>
+                                                            <td class="TableDisabledLabel" id="Td13">2.18</td>
+                                                            <td class="TableDisabledLabel" id="Td14">06-Aug-14</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" id="Td15">0</td>
+                                                            <td class="TableDisabledLabel" id="Td16">09-Aug-14</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">CUT</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td17">35</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" data-type="projSch" id="Td18">1</td>
+                                                            <td class="TableDisabledLabel" id="Td19">35.43</td>
+                                                            <td class="TableDisabledLabel" id="Td20">09-Aug-14</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" id="Td33">0</td>
+                                                            <td class="TableDisabledLabel" id="Td34">23-Sep-14</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">SIT</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td21">11</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" data-type="projSch" id="Td22">1</td>
+                                                            <td class="TableDisabledLabel" id="Td23">10.90</td>
+                                                            <td class="TableDisabledLabel" id="Td24">23-Sep-14</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" id="Td35">0</td>
+                                                            <td class="TableDisabledLabel" id="Td36">07-Oct-14</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Support</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td25">3</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" data-type="projSch" id="Td26">1</td>
+                                                            <td class="TableDisabledLabel" id="Td27">3.27</td>
+                                                            <td class="TableDisabledLabel" id="Td28">07-Oct-14</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" id="Td37">0</td>
+                                                            <td class="TableDisabledLabel" id="Td38">11-Oct-14</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Project Closure</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td29">1</td>
+                                                            <td class="EditNumber" data-type="projSch" id="Td30">1</td>
+                                                            <td class="TableDisabledLabel" id="Td31">0.55</td>
+                                                            <td class="TableDisabledLabel" id="Td32">11-Oct-14</td>
+                                                            <td class="EditNumber" data-navkey="EditNumber" id="Td39">0</td>
+                                                            <td class="TableDisabledLabel" id="Td40">12-Oct-14</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div id="defEstimate" class="tab-pane">
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered filterParams pull-right">
+                                                        <tr>
+                                                            <th class="docTableLabel-bg">Defect Density</th>
+                                                            <td id="Td41" ><input type="text" id="defDensity" size="4" value="2.00" /> Per FP</td>
+                                                            <th class="docTableLabel-bg">Total Estimated Defects</th>
+                                                            <td id="Td42" class="defEstDays">54</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table  class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Phases</th>
+                                                            <th>Efforts</th>
+                                                            <th>Defects</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-count="8">
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Planning</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td43">0.55</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td44">0.54</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Requirement</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td45">1.64</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td46">1.63</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Design</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td47">2.18</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td48">2.17</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">CUT</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td49">35.43</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td50">35.31</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">SIT</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td51">10.90</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td52">10.86</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Support</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td53">3.27</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td54">3.26</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="docTableLabel-bg">Project Closure</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td55">0.55</td>
+                                                            <td class="TableDisabledLabel" data-type="updateSchedule" id="Td56">0.54</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div id="valAdjment" class="tab-pane">
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered filterParams pull-right">
+                                                        <tr>
+                                                            <th class="docTableLabel-bg">Total Degree of Influence (TDI)</th>
+                                                            <td id="degreeInfluence" class="TableHighlightLabel">0</td>
+                                                            <th class="docTableLabel-bg">VAF = 0.65 + (TDI * 0.01)</th>
+                                                            <td id="vaf" class="TableHighlightLabel">0</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table  class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="tblActionIcon"></th>
+                                                            <th class="EstGSCTitle">General Systems Characteristics (GSC)</th>
+                                                            <th class="TSHours">Degree of Influence (0-5)</th>
+                                                            <th >Interpretation</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-count="15">
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Data Communication</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">2</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Data Communication" data-content="<strong>0</strong> Application is pure batch processing or a standalone PC.<br/><strong>1</strong> Application is batch but has remote data entry or remote rinting.<br/><strong>2</strong> Application is batch but has remote data entry and remote printing.3 Application includes online data collection or TP (teleprocessing) front  end to batch process or query system.<br/><strong>4</strong> Application is more than a front-end, but supports only one type of TP communications protocol.<br/><strong>5</strong> Application is more than a front-end and supports more than one type of TP communications protocol." data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>Application is pure batch processing</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1" style="display:none;">
+                                                                            <p>Application is batch, but has remote data entry or remote printing</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2">
+                                                                            <p>Application is batch, but has remote data entry and remote printing</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>Application includes online data collection or TP (Teleprocessing) front end to batch process or query system.</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4" style="display:none;">
+                                                                            <p>Application is more than a front-end, but supports only one type of TP communications protocol</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>Application is more than a front-end and supports more than one type of TP communications protocol</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Data Processing</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">3</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Data Processing" data-content="<strong>0</strong> Application does not aid the transfer of data or processing function between components of the system<br/><strong>1</strong> Application prepares data for end user processing or another component of the system such as PC spreadseheets and PC DBMS<br/><strong>2</strong> Data is prepared for transfer, then is transferred and processed on another component of the system (not for end-user processing)<br/><strong>3</strong> Distributed processing and data transfer are online and in one direction only<br/><strong>4</strong> Distributed processing and data transfer are online and in both directions<br/><strong>5</strong> Processing functions are dynamically performed on the most appropriate component  of the system" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>Application does not aid the transfer of data or processing function between  components of the system</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1" style="display:none;">
+                                                                            <p>Application prepares data for end user processing on another component of the system such as PC spreadsheets and PC DBMS</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2">
+                                                                            <p>Data is prepared for transfer, then is transferred and processed on another component  of the system  (not for end-user processing)</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>Distributed processing and data transfer are online and in one direction only</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4" style="display:none;">
+                                                                            <p>Distributed processing and data transfer are online and in both directions</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>Processing functions are dynamically performed on the most appropriate component  of the system</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Performance</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">4</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Performance" data-content="<strong>0</strong> No special performance requirements were stated by the user<br/><strong>1</strong> Performance and design requirements were stated and reviewed but no special actions were required<br/><strong>2</strong> Response time or throughput is critical during peak hours.  No special design for CPU utilization was required.  Processing deadline is for the next business day<br/><strong>3</strong> Response time or throughput is critical during all business hours. No special design for CPU utilization was required.  Processing deadline requirements with interfacing systems are constraining<br/><strong>4</strong> In addition, stated user performance requirements are stringent enough to require performance analysis tasks in the design phase<br/><strong>5</strong> In addition, performance analysis tools were used in the design, development, and/or implementation phases to meet the stated user performance requirements" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>No special performance requirements were stated by the user</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1" style="display:none;">
+                                                                            <p>Performance and design requirements were stated and reviewed but no special actions were required</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2" style="display:none;">
+                                                                            <p>Response time or throughput is critical during peak hours.  No special design for CPU utilization was required.  Processing deadline is for the next business day</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>Response time or throughput is critical during all business hours. No special design for CPU utilization was required.  Processing deadline requirements with interfacing systems are constraining</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4">
+                                                                            <p>In addition, stated user performance requirements are stringent enough to require performance analysis tasks in the design phase</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>In addition, performance analysis tools were used in the design, development, and/or implementation phases to meet the stated user performance requirements</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Heavily Used Configuration</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">2</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Heavily Used Configuration" data-content="<strong>0</strong> No explicit or implicit operational restrictions are included<br/><strong>1</strong> Operational restrictions do exist, but are less restrictivem than a typical application. No special effort is needed to meet the restrictions<br/><strong>2</strong> Some security or timing considerations are included<br/><strong>3</strong> Specific processor requirements for a specific piece of the application are included<br/><strong>4</strong> Stated operation restrictions require special constraints on the application in the central processor or a dedicated processor<br/><strong>5</strong> In addition, there are special constraints on the application in the distributed  components of the system" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>No explicit or implicit operational restrictions are included</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1" style="display:none;">
+                                                                            <p>Operational restrictions do exist, but are less restrictivem than a typical application. No special effort is needed to meet the restrictions</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2">
+                                                                            <p>Some security or timing considerations are included</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>Specific processor requirements for a specific piece of the application are included</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4" style="display:none;">
+                                                                            <p>Stated operation restrictions require special constraints on the application in the central processor or a dedicated processor</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>In addition, there are special constraints on the application in the distributed  components of the system</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Transaction Rates</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">0</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Transaction Rates" data-content="<strong>0</strong> No peak transaction periodis anticipated<br/><strong>1</strong> Peak transaction period (e.g., monthly, quarterly, seasonally, annually) is anticipated<br/><strong>2</strong> Weekly peak transaction period is anticipated<br/><strong>3</strong> Daily peak transaction period is anticipated<br/><strong>4</strong> High transaction rate(s) stated by the user in the application requirements or service level agreements are high enough to require performance analysis tasks in the design phase<br/><strong>5</strong> High transaction rate(s) stated by the user in the application requirements or service level agreements are high enough to require performance analysis tasks and, in addition, require the use of performance analysis tools in the design, development, and/or installation phases" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0">
+                                                                            <p>No peak transaction periodis anticipated</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1" style="display:none;">
+                                                                            <p>Peak transaction period (e.g., monthly, quarterly, seasonally, annually) is anticipated</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2" style="display:none;">
+                                                                            <p>Weekly peak transaction period is anticipated</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>Daily peak transaction period is anticipated</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4" style="display:none;">
+                                                                            <p>High transaction rate(s) stated by the user in the application requirements or service level agreements are high enough to require performance analysis tasks in the design phase</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>High transaction rate(s) stated by the user in the application requirements or service level agreements are high enough to require performance analysis tasks and, in addition, require the use of performance analysis tools in the design, development, and/or installation phases</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Online Data Entry</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">1</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Online Data Entry" data-content="<strong>0</strong> All transactions are processed in batch mode<br/><strong>1</strong> 1% to 7% of transactions are interactive data entry<br/><strong>2</strong> 8% to 15% of transactions are interactive data entry<br/><strong>3</strong> 16% to 23% of transactions are interactive data entry<br/><strong>4</strong> 24% to 30% of transactions are interactive data entry<br/><strong>5</strong> More than 30% of transactions are interactive data entry" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>All transactions are processed in batch mode</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1">
+                                                                            <p>1% to 7% of transactions are interactive data entry</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2" style="display:none;">
+                                                                            <p>8% to 15% of transactions are interactive data entry</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>16% to 23% of transactions are interactive data entry</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4" style="display:none;">
+                                                                            <p>24% to 30% of transactions are interactive data entry</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>More than 30% of transactions are interactive data entry</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>End User Efficiency</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">2</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="End User Efficiency" data-content="<p>( Consider the following & use your Judgement)</p><ul><li>Navigational aids (for example, function keys, jumps, dynamically generated menus)</li><li>Menus</li><li>Online help and documents</li><li>List boxes, drop downs</li><li>Preassigned function keys</li><li>Heavy use of reverse video, highlighting, colours underlining, and other indicators</li><li>Mouse and key board interface</li> <li>As few screens as possible to accomplish a business function</li><li>Ability to service untrained users</li></ul>" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0 GSC1 GSC2 GSC3 GSC4 GSC5">
+                                                                            <p>( Consider the following & use your Judgement)</p>
+                                                                            <ul>
+                                                                                <li>Navigational aids (for example, function keys, jumps, dynamically generated menus)</li>
+                                                                                <li>Menus</li>
+                                                                                <li>Online help and documents</li>
+                                                                                <li>List boxes, drop downs</li>
+                                                                                <li>Preassigned function keys</li>
+                                                                                <li>Heavy use of reverse video, highlighting, colours underlining, and other indicators</li>
+                                                                                <li>Mouse and key board interface</li> 
+                                                                                <li>As few screens as possible to accomplish a business function</li>
+                                                                                <li>Ability to service untrained users</li>
+                                                                            </ul>                                                                        
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Online Update</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">2</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Online Update" data-content="<strong>0</strong> None<br/><strong>1</strong> Online update of one to three control files is included. Volume of updating is low and recovery is easy<br/><strong>2</strong> Online update of four or more control files is included.  Volume of updating is low and recovery easy<br/><strong>3</strong> Online update of major internal logical files is included<br/><strong>4</strong> In addition, protection against data lost is essential and has been specially designed and programmed in the system<br/><strong>5</strong> In addition, high volumes bring cost considerations into the recovery process. Highly automated recovery procedures with minimum operator intervention are included" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>None</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1" style="display:none;">
+                                                                            <p>Online update of one to three control files is included. Volume of updating is low and recovery is easy</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2">
+                                                                            <p>Online update of four or more control files is included.  Volume of updating is low and recovery easy</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>Online update of major internal logical files is included</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4" style="display:none;">
+                                                                            <p>In addition, protection against data lost is essential and has been specially designed and programmed in the system</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>In addition, high volumes bring cost considerations into the recovery process. Highly automated recovery procedures with minimum operator intervention are included</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Complex Processing</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">3</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Complex Processing" data-content="<p>( Consider the following & use your Judgement)</p><ul><li>Specific security processing</li><li>Extensive logical processing</li><li>Extensive mathematical processing</li><li>Sensitive control (for example, special audit processing) and/or application</li><li>Much exception processing resulting in incomplete transactions that must be</li><li>Processed again, for example, incomplete ATM transactions caused by TP</li><li>Interruption, missing data values, or failed edits</li></ul>" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0 GSC1 GSC2 GSC3 GSC4 GSC5">
+                                                                            <p>( Consider the following & use your Judgement)</p>
+                                                                            <ul>
+                                                                                <li>Specific security processing</li>
+                                                                                <li>Extensive logical processing</li>
+                                                                                <li>Extensive mathematical processing</li>
+                                                                                <li>Sensitive control (for example, special audit processing) and/or application</li>
+                                                                                <li>Much exception processing resulting in incomplete transactions that must be</li>
+                                                                                <li>Processed again, for example, incomplete ATM transactions caused by TP</li>
+                                                                                <li>Interruption, missing data values, or failed edits</li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Reusability</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">4</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Reusability" data-content="<strong>0</strong> No reusable code<br/><strong>1</strong> Reusable code is used within the application<br/><strong>2</strong> Less than 10% of the application considered more than one users needs<br/><strong>3</strong> Ten percent (10%) or more of the application considered more than one users needs<br/><strong>4</strong> The application was specifically packaged and/or documented to ease re-use, and the application is customized by the user at source code level<br/><strong>5</strong> The application was specifically packaged and/or documented to ease re-use, and  the application is customized for use by means of user parameter maintenance" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>No reusable code</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1" style="display:none;">
+                                                                            <p>Reusable code is used within the application</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2" style="display:none;">
+                                                                            <p>Less than 10% of the application considered more than one user’s needs</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>Ten percent (10%) or more of the application considered more than one user’s needs</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4">
+                                                                            <p>The application was specifically packaged and/or documented to ease re-use, and the application is customized by the user at source code level</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>The application was specifically packaged and/or documented to ease re-use, and  the application is customized for use by means of user parameter maintenance</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Installation Ease</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">3</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Installation Ease" data-content="<strong>0</strong> No special considerations were stated by the user, and no special set-up is required for installation<br/><strong>1</strong> No special considerations were stated by the user but special set-up is required for installation<br/><strong>2-3</strong> Installation requirements were stated by the user, and installation guides were provided and tested<br/><strong>4-5</strong> In addition, automated installation tools were provided and tested" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>No special considerations were stated by the user, and no special set-up is required for installation</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1" style="display:none;">
+                                                                            <p>No special considerations were stated by the user but special set-up is required for installation</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2 GSC3">
+                                                                            <p>Installation requirements were stated by the user, and installation guides were provided and tested</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4 GSC5" style="display:none;">
+                                                                            <p>In addition, automated installation tools were provided and tested</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Operational Ease</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">0</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Operational Ease" data-content="<strong>0</strong> No special operational considerations other than the normal back-up procedures were stated by the user<br/><strong>1-4</strong> One , some, or all of the following items apply to the application. Effective start-up, back-up , and recovery processes were provided, but operator Intervention is required.  Effective startup, back-up and recovery processes were Provided, but no operator intervention is required.  The application minimizes. The need for tape mounts<br/><strong>5</strong> The application is designed for unattended operation.  Unattended operation means  no operator intervention is required to operate the system other than to start up or shut down the application.  Automatic error recovery is a feature of the application" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0">
+                                                                            <p>No special operational considerations other than the normal back-up procedures were stated by the user</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1 GSC2 GSC3 GSC4" style="display:none;">
+                                                                            <p>One , some, or all of the following items apply to the application. Effective start-up, back-up , and recovery processes were provided, but operator Intervention is required.  Effective startup, back-up and recovery processes were Provided, but no operator intervention is required.  The application minimizes. The need for tape mounts</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>The application is designed for unattended operation.  Unattended operation means  no operator intervention is required to operate the system other than to start up or shut down the application.  Automatic error recovery is a feature of the application</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Multiple Site</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">1</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Multiple Site" data-content="<strong>0</strong> User requirements do not require onsidering the needs of more than one user/installation site<br/><strong>1</strong> Needs of multiple sites were considered in the design, and the application is designed to operate only under identical hardware and software environments<br/><strong>2</strong> Needs of multiple sites were considered in the design, and the application is designed to operate only under similar hardware and/or software environments<br/><strong>3</strong> Needs of multiple sites were considered in the design, and the application is designed to operate only under different hardware and/or software environments<br/><strong>4</strong> Documentation and support plan are provided and tested to support the application at multiple sites and the application is as described by 1 or 2<br/><strong>5</strong> Documentation and support plan are provided and tested to support the application at multiple sites and the application is as described by 3" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0" style="display:none;">
+                                                                            <p>User requirements do not require onsidering the needs of more than one user/installation site</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC1">
+                                                                            <p>Needs of multiple sites were considered in the design, and the application is designed to operate only under identical hardware and software environments</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC2" style="display:none;">
+                                                                            <p>Needs of multiple sites were considered in the design, and the application is designed to operate only under similar hardware and/or software environments</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC3" style="display:none;">
+                                                                            <p>Needs of multiple sites were considered in the design, and the application is designed to operate only under different hardware and/or software environments</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC4" style="display:none;">
+                                                                            <p>Documentation and support plan are provided and tested to support the application at multiple sites and the application is as described by 1 or 2</p>
+                                                                        </div>
+                                                                        <div class="col-md-12 GSC5" style="display:none;">
+                                                                            <p>Documentation and support plan are provided and tested to support the application at multiple sites and the application is as described by 3</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr class="EditRow">
+                                                            <td></td>
+                                                            <td>Facilitate Change</td>
+                                                            <td class="EditGSC GSCParam" data-navkey="EditGSC">5</td>
+                                                            <td >
+                                                                <div class="col-md-12">
+                                                                    <div class="col-md-1 pull-left">
+                                                                        <a class="popovers pull-right" data-original-title="Facilitate Change" data-content="<p>( Consider the following & use your Judgement)</p><ul><li>Flexible query with query specification saving facility</li><li>Report  layout customization</li><li>Screen customization</li><li>Ad-hoc report design</li></ul>" data-trigger="hover" data-placement="right"><i class="icon-info-sign"></i></a>
+                                                                    </div>
+                                                                    <div class="col-md-11 info">
+                                                                        <div class="col-md-12 GSC0 GSC1 GSC2 GSC3 GSC4 GSC5">
+                                                                            <p>( Consider the following & use your Judgement)</p>
+                                                                            <ul>
+                                                                                <li>Flexible query with query specification saving facility</li>
+                                                                                <li>Report  layout customization</li>
+                                                                                <li>Screen customization</li>
+                                                                                <li>Ad-hoc report design</li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>                                 
+                                                        <tr id="S15" class="EditRow">
+                                                            <td><a href="#" data-id="S15" class="addGSC" data-toggle="modal" data-key="S"><i class="icon-">&#xf055</i></a></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div id="teamProd" class="tab-pane">
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered filterParams pull-right">
+                                                        <tr>
+                                                            <th class="docTableLabel-bg">Team Productivity</th>
+                                                            <td id="TProductivity" class="TableHighlightLabel">0</td>
+                                                            <th class="docTableLabel-bg">Size in FP for Cut</th>
+                                                            <td id="TSizeFPCut" class="TableHighlightLabel">0</td>
+                                                            <th class="docTableLabel-bg">CUT Effort in Person-days</th>
+                                                            <td id="TCutEffPDs" class="TableHighlightLabel">0</td>
+                                                            <th class="docTableLabel-bg">CUT Effort % of Total Effort</th>
+                                                            <td class="TableHighlightLabel"><input type="text" value="65" id="TCutEffTotal" size="4"/></td>
+                                                            <th class="docTableLabel-bg">Overall Project Effort P-Days</th>
+                                                            <td id="TOvrllProjEff" class="TableHighlightLabel">0</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <table  class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Role</th>
+                                                            <th>Number</th>
+                                                            <th>FP / day</th>
+                                                            <th>% Assigned</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-count="1">
+                                                        <tr id="E1" class="EditRow">
+                                                            <td><a href="#" data-id="E1" class="addEff nav" data-navkey="EditEff" data-toggle="modal" data-key="E"><i class="icon-">&#xf055</i></a></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>					
+					</form>
+                </div>  
+            </div>
+
+            <div class="panel colored">
+                <div class="panel-body">
+                </div>
+            </div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="editOptions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Edit Module</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <label class="col-lg-12">Module Name</label>
+                    <input type="text" class="col-lg-12 form-control" id="editGrpName">
+                    <input type="hidden" name="editNodeID" id="editNodeID" value="Preset" />
+                    <p>Select from the editing options below</p>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		  <button type="button" class="btn blue-bg" id="deleteGroup">Delete this Module</button>
+		  <button type="button" class="btn blue-bg" id="saveGroup" data-dismiss="modal">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <!-- Responsive Modal -->
+    <div class="modal fade" id="responsive" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Enter New Module Name</h4>
+		</div>
+		<div class="modal-body">
+  		  <div class="row">
+			<div class="col-lg-12">
+			<h4>Module Name</h4>
+            <input type="text" class="col-lg-12 form-control" id="newGrpName"/>
+            <input type="hidden" name="NewNodeID" id="NewNodeID" value="Preset" />
+			</div>
+		  </div>
+    	</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		    <button type="button" class="btn blue-bg" id="addNewGroup" data-dismiss="modal">Save changes</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+        <!-- Modal. Options prompted while saving the Checklist -->
+    <div class="modal fade" id="EstimationCycles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:80%;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Estimation Cycles</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <label class="col-md-12 control-label"><strong>Project: </strong>Payroll Processing</label>
+            </div>
+            <div class="row">
+                <table class="table table-striped table-bordered advanced-table">
+                    <thead>
+                        <tr>
+                            <th>Cycle No</th>
+                            <th>Phase</th>
+                            <th>Size (FP)</th>
+                            <th>Cost (INR)</th>
+                            <th>Efforts (PD)</th>
+                            <th>Schedule (Months)</th>
+                            <th>Created On</th>
+                            <th>Last Updated On</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Pre-Sales</td>
+                            <td>1124</td>
+                            <td>2,45000</td>
+                            <td>432</td>
+                            <td>5</td>
+                            <td>12-Feb-14</td>
+                            <td>01-Mar-14</td>
+                            <td><a href="#" class="btn btn-sm blue-bg" data-dismiss="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Planning</td>
+                            <td>1150</td>
+                            <td>2,50000</td>
+                            <td>450</td>
+                            <td>5</td>
+                            <td>23-Apr-14</td>
+                            <td>30-Apr-14</td>
+                            <td><a href="#" class="btn btn-sm blue-bg" data-dismiss="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Requirements</td>
+                            <td>2341</td>
+                            <td>4,23000</td>
+                            <td>790</td>
+                            <td>6</td>
+                            <td>28-May-14</td>
+                            <td>30-May-14</td>
+                            <td><a href="#" class="btn btn-sm blue-bg" data-dismiss="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Requirements</td>
+                            <td>3111</td>
+                            <td>7,37000</td>
+                            <td>922</td>
+                            <td>8</td>
+                            <td>15-Jun-14</td>
+                            <td>26-Jun-14</td>
+                            <td><a href="#" class="btn btn-sm blue-bg" data-dismiss="modal"><i class="icon-file-alt"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<script type="text/javascript">
+		var config = {
+		  '.chzn-select-no-single' : {disable_search_threshold:10},
+		}
+		for (var selector in config) {
+		  $(selector).chosen(config[selector]);
+		}
+
+        $(document).ready(function() {
+            calculateValues();
+            });
+
+		var calculateGSC = function () {
+		    var total
+		    total = 0;
+
+		    $(".GSCParam").each(function () {
+		        total = total + parseFloat($(this).text());
+		    });
+		    $("#degreeInfluence").text(total);
+		    $("#vaf").text((0.65 + (total * 0.01)));
+		};
+
+        var calculateSizeLineItem = function(element) {
+            var node = element.data("node");
+
+            $("#" + node + "WP").text((parseFloat($("#" + node).text()) * parseFloat($("#" + node + "W").text())).toFixed(1));
+        };
+
+		var calculateValues = function ()
+        {
+                calculateEffSch();
+                calculateEffort();
+                calculateGSC();
+                calculateNValues();
+        };
+
+        var calculateEffSch = function () {
+            var CUT = $("#TCutEffPDs").text(); // CUT efforts
+            var CUTPC = $("#TCutEffTotal").val(); // CUT %
+            var estPD = 0;
+            var estCost = 0;
+            var PCTotal = 0;
+            
+            $("#PPC4").text(CUTPC); // Cut %
+
+            $(".effSchEst").each(function () {
+                $(this).text(parseFloat($(this).text()).toFixed(0));
+                $("#" + $(this).prop("id") + "Eff").text(((parseFloat($("#TOvrllProjEff").text()) * parseFloat($(this).text()))/100).toFixed(2));
+                $("#" + $(this).prop("id") + "Cost").text(((parseFloat($("#" + $(this).prop("id") + "Eff").text()) * parseFloat($("#" + $(this).prop("id") + "PerCost").text())) / 24).toFixed(0));
+                estPD = estPD + parseFloat($("#" + $(this).prop("id") + "Eff").text());
+                estCost = estCost + parseFloat($("#" + $(this).prop("id") + "Cost").text());
+                PCTotal = PCTotal + parseInt($(this).text());
+
+                // Update the schedule
+                $("#" + $(this).prop("id") + "SchEff").text(parseFloat($("#" + $(this).prop("id") + "Eff").text()).toFixed(0));
+                $("#" + $(this).prop("id") + "SchPD").text($("#" + $(this).prop("id") + "Eff").text());
+            });
+            $("#estEff").text(estPD);
+            $("#estCost").text(estCost);
+            $("#PCTotal").text(PCTotal);
+            $("#daysTotal").text(estPD);
+            $("#costTotal").text(estCost);
+        };
+
+        var calculateNValues = function() {
+            var total
+            var grandTotal
+            total = 0;
+            grandTotal = 0;
+
+            $(".simpleW").each(function() {
+                total = total + parseFloat($(this).text());
+            });
+            $("#STotal").text(total);
+            grandTotal = grandTotal + total;
+            total = 0;
+            $(".mediumW").each(function() {
+                total = total + parseFloat($(this).text());
+            });
+            $("#MTotal").text(total);
+            grandTotal = grandTotal + total;
+            total = 0;
+            $(".complexW").each(function() {
+                total = total + parseFloat($(this).text());
+            });
+            $("#CTotal").text(total);
+            grandTotal = grandTotal + total;
+            $("#Total").text(grandTotal);
+        };
+
+		$("body").delegate(".removeCheck", "click", function () {
+		    if (confirm("Do you want to remove this check ?")) {
+		        var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+		        $("#" + $(this).data("id")).remove();
+                calculateValues();
+		        $('html, body').animate({
+		            scrollTop: scroll
+		        }, 2000);
+
+		        // $("html").scrollTop(scroll).offset().top();
+		    }
+		});
+
+		$("body").delegate(".addCheck", "click", function () {
+		    addNewCheck(this);
+		});
+
+		var addNewCheck = function (refNode) {
+		    var chkSeqNo = parseInt($(refNode).parent().parent().parent().data("check"));
+		    var newSeqNo = chkSeqNo + 1;
+            
+
+		    var checkElement = $(refNode).parent();
+		    var moduleId = checkElement.parent().parent().parent().data("module");
+
+		    checkElement.html('<a href="#" data-id="M' + moduleId + 'P' + chkSeqNo + '" class="removeCheck"><i class="icon-">&#xf05c</i></a>');
+		    checkElement.after('<td class="Edit" data-navkey="EditNumber" ></td>' +
+                                    '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleId + 'P' + chkSeqNo + 'S"  id="M' + moduleId + 'P' + chkSeqNo + 'S">0</td>' +
+                                    '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleId + 'P' + chkSeqNo + 'M" id="M' + moduleId + 'P' + chkSeqNo + 'M">0</td>' +
+                                    '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleId + 'P' + chkSeqNo + 'C" id="M' + moduleId + 'P' + chkSeqNo + 'C">0</td>' +
+                                    '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleId + 'P' + chkSeqNo + 'S" id="M' + moduleId + 'P' + chkSeqNo + 'SW">0</td>' +
+                                    '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleId + 'P' + chkSeqNo + 'M" id="M' + moduleId + 'P' + chkSeqNo + 'MW">0</td>' +
+                                    '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleId + 'P' + chkSeqNo + 'C" id="M' + moduleId + 'P' + chkSeqNo + 'CW">0</td>' +
+                                    '<td class="simpleW TableDisabledLabel" id="M' + moduleId + 'P' + chkSeqNo + 'SWP">0</td>' +
+                                    '<td class="mediumW TableDisabledLabel" id="M' + moduleId + 'P' + chkSeqNo + 'MWP">0</td>' +
+                                    '<td class="complexW TableDisabledLabel" id="M' + moduleId + 'P' + chkSeqNo + 'CWP">0</td>');
+		    // Add option to add more parameters
+		    checkElement.parent().after('<tr id="M' + moduleId + 'P' + newSeqNo + '" class="EditRow">' +
+                                            '<td class="NoEdit CheckItem"><a href="#" data-id="M' + moduleId + 'P' + newSeqNo + '" id="CheckAnc' + newSeqNo + '" class="addCheck nav"><i class="icon-plus"></i></a></td>' +
+                                        '</tr>');
+		    checkElement.parent().parent().data("check", newSeqNo);
+
+		    // Go to the new check
+		    $('html, body').animate({
+		        scrollTop: checkElement.parent().offset().top
+		    }, 2000);
+		    checkElement.next().click();
+		};
+
+		$(document).on("click", ".addTreeNode", function () {
+		    var myNodeId = $(this).data('id');
+		    $("#NewNodeID").val(myNodeId);
+		    $("#newGrpName").val("");
+		});
+
+		$('#responsive').on('shown.bs.modal', function () {
+		    $("#newGrpName").focus();
+		})
+
+		$('#editOptions').on('shown.bs.modal', function () {
+		    $("#editGrpName").focus();
+		})
+
+		$(document).on("click", ".editTreeNode", function () {
+		    var myNodeId = $(this).data('id');
+		    $("#editNodeID").val(myNodeId);
+		    $("#editGrpName").val($("#" + myNodeId).text());
+		});
+
+
+		$(document).on("click", "#addNewGroup", function () {
+		    var myNodeName = $("#NewNodeID").val();
+		    var myNodeId = "#" + myNodeName;
+		    var myNxtNode = myNodeName.substr(0, myNodeName.length - 2) + "R" + (parseInt(myNodeName.substr(myNodeName.length - 1, 1)) + 1);
+		    var moduleID = parseInt($("#DefaultNode").data("modules")) + 1;
+
+		    $("#DefaultNode").data("modules", "" + moduleID);
+		    $(myNodeId).removeClass("addTreeNode");
+		    $(myNodeId).attr("data-childid", myNodeName + "R1");
+		    //$(myNodeId).addClass("editTreeNode");
+		    //$(myNodeId).prop("href", "#editOptions");
+		    $(myNodeId).attr("data-toggle", "branch");
+		    $(myNodeId).attr("role", "branch");
+		    $(myNodeId).prop("href", "#");
+		    $(myNodeId).text($("#newGrpName").val());
+		    $(myNodeId).before('<a href="#editOptions" data-toggle="modal" class="editTreeNode" data-id="' + myNodeName + '"><i class="icon-">&#xf044</i></a>');
+		    $(myNodeId).after('<ul class="branch in" id="C' + myNodeName + '"><li>' +
+                            '<table class="table table-bordered" data-module="' + moduleID + '">' +
+                                '<thead>' +
+                                '<tr>' +
+                                    '<th rowspan="2" class="docTableLabel-bg"><a href="#" data-id="C' + myNodeName + '" class="showOption" title="Show all hidden parameters" ><i class="icon-eye-open"></i></a></th>' +
+                                    '<th rowspan="2" class="docTableLabel-bg">Parameters For Development</th>' +
+                                    '<th colspan="3" class="docTableLabel-bg">Count (Numbers)</th>' +
+                                    '<th colspan="3" class="docTableLabel-bg">Weightage</th>' +
+                                    '<th colspan="3" class="docTableLabel-bg">Weighted Points</th>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<th class="docTableLabel-bg">S</th>' +
+                                    '<th class="docTableLabel-bg">M</th>' +
+                                    '<th class="docTableLabel-bg">C</th>' +
+                                    '<th class="docTableLabel-bg">S</th>' +
+                                    '<th class="docTableLabel-bg">M</th>' +
+                                    '<th class="docTableLabel-bg">C</th>' +
+                                    '<th class="docTableLabel-bg">S</th>' +
+                                    '<th class="docTableLabel-bg">M</th>' +
+                                    '<th class="docTableLabel-bg">C</th>' +
+                                '</tr>' +
+                                '</thead>' +
+                                '<tbody data-check="5">' +
+                                    '<tr id="M' + moduleID + 'P1" class="EditRow">' +
+                                        '<td><a href="#" data-id="M' + moduleID + 'P1" class="hideOption" ><i class="icon-eye-close"></i></a></td>' +
+                                        '<td >Screens</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P1S" id="M' + moduleID + 'P1S">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P1M" id="M' + moduleID + 'P1M">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P1C" id="M' + moduleID + 'P1C">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P1S" id="M' + moduleID + 'P1SW">1.0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P1M" id="M' + moduleID + 'P1MW">2.0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P1C" id="M' + moduleID + 'P1CW">4.0</td>' +
+                                        '<td class="simpleW TableDisabledLabel" id="M' + moduleID + 'P1SWP">0</td>' +
+                                        '<td class="mediumW TableDisabledLabel" id="M' + moduleID + 'P1MWP">0</td>' +
+                                        '<td class="complexW TableDisabledLabel" id="M' + moduleID + 'P1CWP">0</td>' +
+                                    '</tr>' +
+                                    '<tr id="M' + moduleID + 'P2" class="EditRow">' +
+                                        '<td><a href="#" data-id="M' + moduleID + 'P2" class="hideOption" ><i class="icon-eye-close"></i></a></td>' +
+                                        '<td >Interfaces</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P2S" id="M' + moduleID + 'P2S">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P2M" id="M' + moduleID + 'P2M">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P2C" id="M' + moduleID + 'P2C">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P2S" id="M' + moduleID + 'P2SW">0.5</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P2M" id="M' + moduleID + 'P2MW">1.0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P2C" id="M' + moduleID + 'P2CW">2.0</td>' +
+                                        '<td class="simpleW TableDisabledLabel" id="M' + moduleID + 'P2SWP">0</td>' +
+                                        '<td class="mediumW TableDisabledLabel" id="M' + moduleID + 'P2MWP">0</td>' +
+                                        '<td class="complexW TableDisabledLabel" id="M' + moduleID + 'P2CWP">0</td>' +
+                                    '</tr>' +
+                                    '<tr id="M' + moduleID + 'P3" class="EditRow">' +
+                                        '<td><a href="#" data-id="M' + moduleID + 'P3" class="hideOption" ><i class="icon-eye-close"></i></a></td>' +
+                                        '<td >Database Tables</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P3S" id="M' + moduleID + 'P3S">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P3M" id="M' + moduleID + 'P3M">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P3C" id="M' + moduleID + 'P3C">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P3S" id="M' + moduleID + 'P3SW">0.5</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P3M" id="M' + moduleID + 'P3MW">1.0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P3C" id="M' + moduleID + 'P3CW">2.0</td>' +
+                                        '<td class="simpleW TableDisabledLabel" id="M' + moduleID + 'P3SWP">0</td>' +
+                                        '<td class="mediumW TableDisabledLabel" id="M' + moduleID + 'P3MWP">0</td>' +
+                                        '<td class="complexW TableDisabledLabel" id="M' + moduleID + 'P3CWP">0</td>' +
+                                    '</tr>' +
+                                    '<tr id="M' + moduleID + 'P4" class="EditRow">' +
+                                        '<td><a href="#" data-id="M' + moduleID + 'P4" class="hideOption" ><i class="icon-eye-close"></i></a></td>' +
+                                        '<td >Reports</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P4S" id="M' + moduleID + 'P4S">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P4M" id="M' + moduleID + 'P4M">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P4C" id="M' + moduleID + 'P4C">0</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P4S" id="M' + moduleID + 'P4SW">1</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P4M" id="M' + moduleID + 'P4MW">3</td>' +
+                                        '<td class="EditNumber" data-navkey="EditNumber" data-type="size" data-node="M' + moduleID + 'P4C" id="M' + moduleID + 'P4CW">6</td>' +
+                                        '<td class="simpleW TableDisabledLabel" id="M' + moduleID + 'P4SWP">0</td>' +
+                                        '<td class="mediumW TableDisabledLabel" id="M' + moduleID + 'P4MWP">0</td>' +
+                                        '<td class="complexW TableDisabledLabel" id="M' + moduleID + 'P4CWP">0</td>' +
+                                    '</tr>' +
+                                    '<tr id="M' + moduleID + 'P5" class="EditRow">' +
+                                        '<td class="NoEdit CheckItem"><a href="#" data-id="M' + moduleID + 'P5" id="CheckAnc4" class="addCheck nav"><i class="icon-plus"></i></a></td>' +
+                                    '</tr>' +
+                                    '</tbody>' +
+                                '</table>' +
+                                '</li></ul>');
+
+		    // Option to add new root
+		    $("#L" + myNodeName).after('<li id="L' + myNxtNode + '"><a class="tree-toggle addTreeNode" data-toggle="modal" data-id="' + myNxtNode + '" id="' + myNxtNode + '" href="#responsive">Add Module</a></li>');
+
+		    $('html, body').animate({
+		        scrollTop: $("#C" + myNodeName).offset().top
+		    }, 2000);
+		    $("#M" + moduleID + "P1S").click();
+		});
+
+        $("body").delegate(".hideOption","click", function() {
+            var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+            if (confirm("Do you want to hide this parameter ? "))
+            {
+                $("#" + $(this).data("id")).addClass("hiddenParam");
+                $("#" + $(this).data("id")).hide("slow");
+                $("#" + $(this).data("id")).find(".EditNumber").each(function () { $(this).text(0); });
+                $("#" + $(this).data("id")).find(".simpleW").each(function () { $(this).text(0); });
+                $("#" + $(this).data("id")).find(".mediumW").each(function () { $(this).text(0); });
+                $("#" + $(this).data("id")).find(".complexW").each(function () { $(this).text(0); });
+
+                calculateNValues();
+
+            	$('html, body').animate({
+		            scrollTop: scroll
+		        }, 2000);
+            }
+        });
+
+        $("body").delegate(".showOption","click", function() {
+            var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+            if (confirm("Do you want to show all hidden parameters ? "))
+            {
+                $("#" + $(this).data("id")).find(".hiddenParam").show("slow");
+
+            	$('html, body').animate({
+		            scrollTop: scroll
+		        }, 2000);
+            }
+        });
+
+		$(document).on("click", "#saveGroup", function () {
+		    var myNodeName = $("#editNodeID").val();
+		    $("#" + myNodeName).text($("#editGrpName").val());
+		});
+
+		$(document).on("click", "#deleteGroup", function () {
+		    if (confirm("Do you want to delete this group. All sections contained in it will be deleted.")) {
+		        alert($("#editNodeID").val());
+		        $('#L' + $("#editNodeID").val()).remove();
+		    }
+		    $('#editOptions').modal('hide');
+		});
+
+    $("body").delegate(".addGSC", "click", function () {
+        // add additional columns for edit
+        var count = parseInt($(this).parent().parent().parent().data("count"));
+        var nodeKey = $(this).parent().parent().parent().prop("id");
+        var newColumns = '<td class="Edit" data-navkey="EditGSC">Enter Parameter Name</td>' +
+                            '<td class="EditGSC GSCParam" data-navkey="EditGSC">0</td>' +
+                            '<td>Custom Paramter: Not Applicable</td>';
+        $(this).parent().after(newColumns);
+        count = count + 1;
+        $(this).parent().parent().parent().data("count", count);
+
+        // Add the option to add more rows
+        $(this).parent().parent().parent().append('<tr id="S' + count + '" class="EditRow"><td><a href="#" class="addGSC" data-id="S' + count + '" data-count="' + count + '"><i class="icon-">&#xf055</i></a></td></tr>');
+        $(this).removeClass("addGSC");
+        $(this).addClass("removeGSC");
+        $(this).children().first().html("&#xf00d");
+        // Go to the new rule
+        $('html, body').animate({
+            scrollTop: $("#" + "S" + count).offset().top
+        }, 2000);
+        $(this).parent().next().click();
+    });
+
+    $("body").delegate(".removeGSC", "click", function () {
+        var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+        if (confirm("Do you want to remove this parameter ?")) {
+            $("#" + $(this).data("id")).remove();
+            calculateValues();
+            $('html, body').animate({
+		        scrollTop: scroll
+		    }, 2000);
+        }
+    });
+
+    $("body").delegate(".addEff", "click", function () {
+        // add additional columns for edit
+        var count = parseInt($(this).parent().parent().parent().data("count"));
+        var nodeKey = $(this).parent().parent().parent().prop("id");
+        var newColumns = '<td class="Edit" data-navkey="EditEff">Enter Role</td>' +
+                         '<td class="EditEff effort" data-navkey="EditEff" id="EffNo' + count + '">1</td>' +
+                         '<td class="EditEff" data-navkey="EditEff" id="EffNo' + count + 'FP">1</td>' +
+                         '<td class="EditEff" data-navkey="EditEff" id="EffNo' + count + 'PC">100</td>';
+        $(this).parent().after(newColumns);
+        count = count + 1;
+        $(this).parent().parent().parent().data("count", count);
+
+        // Add the option to add more rows
+        $(this).parent().parent().parent().append('<tr id="E' + count + '" class="EditRow"><td><a href="#" class="addEff" data-id="E' + count + '" data-count="' + count + '"><i class="icon-">&#xf055</i></a></td></tr>');
+        $(this).removeClass("addEff");
+        $(this).addClass("removeEff");
+        $(this).children().first().html("&#xf00d");
+        calculateValues();
+        // Go to the new rule
+        $('html, body').animate({
+            scrollTop: $("#" + "E" + count).offset().top
+        }, 2000);
+        $(this).parent().next().click();
+    });
+
+    $("body").delegate(".removeEff", "click", function () {
+        var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+        if (confirm("Do you want to remove this entry ?")) {
+            $("#" + $(this).data("id")).remove();
+            calculateValues();
+            $('html, body').animate({
+                scrollTop: scroll
+            }, 2000);
+        }
+    });
+
+    $(document).on("keypress", "#TCutEffTotal", function () {
+        if (e.which == 13) {
+            if (parseFloat($(this).val()) <= 0) {
+                alert("CUT effort should be greater than 0");
+            }
+            else {
+                calculateValues();
+            }
+        }
+    });
+
+    $(document).on("blur", "#TCutEffTotal", function () {
+        if (parseFloat($(this).val()) <= 0) {
+            alert("CUT effort should be greater than 0");
+        }
+        else {
+            calculateValues();
+        }
+    });
+
+    $("body").delegate(".EditEff", "click", function () {
+        var OriginalContent = $(this).text();
+
+        keypressCode = -1;
+        keypressShift = false;
+        $(this).addClass("cellEditing");
+        $(this).removeClass("EditEff");
+        $(this).html("<input type='text' value='" + OriginalContent + "' size='3' class='mask_decimal inputValue' data-type='sch' data-class='EditEff' data-navkey='EditEff'/>");
+        $("#mask_decimal").inputmask('decimal', { rightAlignNumerics: false });
+        $(this).children().first().focus();
+    });
+
+    var calculateEffort = function () {
+        var prodSum = 0
+        var totalSum = 0
+
+        $(".effort").each(function () {
+            prodSum = prodSum + (parseFloat($(this).text()) * parseFloat($("#" + $(this).prop("id") + "FP").text()) * (parseFloat($("#" + $(this).prop("id") + "PC").text())/100));
+            totalSum = totalSum + parseFloat($(this).text());
+        });
+
+        if (totalSum) {
+            $("#TProductivity").text((prodSum / totalSum).toFixed(2));
+            $("#TSizeFPCut").text((parseFloat($("#Total").text()) * parseFloat($("#vaf").text())).toFixed(1));
+            $("#TCutEffPDs").text((parseFloat($("#TSizeFPCut").text()) / parseFloat($("#TProductivity").text())).toFixed(1));
+            $("#TOvrllProjEff").text(((parseFloat($("#TCutEffPDs").text()) / parseFloat($("#TCutEffTotal").val())) * 100).toFixed(1));
+        }
+    };
+
+    $("body").delegate(".EditEffPC", "click", function () {
+        var OriginalContent = $(this).text();
+
+        $(this).addClass("cellEditing");
+        $(this).html("<input type='text' value='" + OriginalContent + "' size='3' id='mask_percent' />");
+        $("#mask_percent").inputmask({ "mask": "9", "repeat": 3, "greedy": false }, { placeholder: " ", clearMaskOnLostFocus: true }); //default
+        $(this).children().first().focus();
+
+        $(this).children().first().keypress(function (e) {
+            if (e.which == 13) {
+                var newContent = $(this).val();
+                var parentEle = $(this).parent();
+
+                parentEle.text(newContent);
+                calculateValues();
+                parentEle.removeClass("cellEditing");
+            }
+        });
+
+        $(this).children().first().blur(function () {
+            var newContent = $(this).val();
+            var parentEle = $(this).parent();
+
+            parentEle.text(newContent);
+            calculateValues();
+            parentEle.removeClass("cellEditing");
+        });
+    });
+
+    $(document).on("click", "#newCycle", function () {
+        if (confirm("Do you want to create a new cycle for this estimation ?")) {
+            $("#cycleID").text(parseInt($("#cycleID").text()) + 1);
+            alert("New Estimation Cycle Created");
+        }
+    });
+    </script> 
+
+}

@@ -1,0 +1,117 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_resourceplan_hardwareInput
+@{
+    Layout = null;
+    IQueryable<tbl_workflow> workflow;
+    ViewBag.DialogOption = "openWorkflow";
+    ViewBag.SaveOption = "saveExtraWorkflow";
+    ViewBag.UpdateID = "openDialogBox";
+    ViewBag.Key = "";
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else
+    {
+        workflow = null;
+    }
+}
+<div class="modal-dialog" style="width:50%">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Create New Hardware Plan</h4>
+	</div>
+    <form method="post" action="@Url.Action("Create")" id="WFForm"  role="form">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+		    <div class="row">
+			    <div class="col-md-12">
+                        <input type="hidden" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" value="@Model.tbl_Org_ProjectID" />
+                        <input type="hidden" id="ClientID" name="ClientID" value="@Model.ClientID" />
+                        <input type="hidden" id="CreatedBy" name="CreatedBy" value="@WebSecurity.CurrentUserId" />
+                        <input type="hidden" id="CreateDate" name="CreateDate" value="@System.DateTime.Now.Date.ToString(Globals.DateFormatString)" />
+                        <input type="hidden" value="" id="workflow_status" name="mstr_Process_LC_StatusID" />
+                        <input type="hidden" value="false" id="followWF" name="followWF" />
+                        <input type="hidden" value="0" id="statusWF" name="statusWF" />  
+                        <input type="hidden" value="@WebSecurity.CurrentUserId" id="workflowUser" name="workflowUser" />
+                        <input type="hidden" value="null" id="workflow" name="workflow" />
+            
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="control-label">Detail</label>
+                                @Html.TextBoxFor(o => o.Details, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(o => o.Details)
+                            </div>    
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Number Required</label>
+                                @Html.TextBoxFor(o => o.Count, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(o => o.Count)
+                            </div>
+                        </div>
+                </div>
+			    <div class="col-md-12">
+                    <div class="col-md-9">
+                        <div class="form-group">    
+                            <label class="control-label">Specification</label>
+                            @Html.TextAreaFor(o => o.Specification, new { @class = "form-control", rows = 4 })
+                            @Html.ValidationMessageFor(o => o.Specification)
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">    
+                            <label class="control-label">Required From</label>
+                            <input type="text" name="PlannedFrom" id="PlannedFrom" value="@(Model.PlannedFrom == new DateTime() ? "" : Model.PlannedFrom.ToString(Globals.DateFormatString))" class="form-control datepicker"/>
+                            @Html.ValidationMessageFor(o => o.PlannedFrom)
+                        </div>
+                        <div class="form-group">    
+                            <label class="control-label">Required Till</label>
+                            <input type="text" name="PlannedTo" id="PlannedTo" value="@(Model.PlannedTo == new DateTime() ? "" : Model.PlannedTo.ToString(Globals.DateFormatString))" class="form-control"/>
+                            @Html.ValidationMessageFor(o => o.PlannedTo)
+                        </div>
+                    </div>
+                </div>
+			    <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Justification</label>
+                            @Html.TextAreaFor(o => o.Justification, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Justification)
+                        </div>
+                    </div>
+                </div>
+			    <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="checkbox" name="BillableToClient" id="BillableToClient" value=true @(Model.BillableToClient == true ? "checked" : "") />
+                            <label class="control-label">&nbsp;&nbsp;Will be billed to the client</label>
+                        </div>
+                    </div>
+                </div>
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+                @if (workflow != null)
+                {
+                    @Html.Partial("printWorkflow", workflow)
+                }
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+
+</div><!-- /.modal-dialog -->
+
+
+<script>
+    $("#PlannedFrom").datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+    $("#PlannedTo").datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+</script>

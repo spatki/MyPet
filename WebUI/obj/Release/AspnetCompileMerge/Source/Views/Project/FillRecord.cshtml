@@ -1,0 +1,41 @@
+﻿@model project_process_documents
+@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+
+}
+<div class="panel colored">
+    <div class="panel-body"  id="filledContents">
+        @Html.Raw(Model.Contents)
+    </div>
+    <form name="saveRecording" id="saveRecording" method="post" action="@Url.Action("saveRecord","Project")">
+            <input type="hidden" name="ID" id="ID" value="@Model.ID" />
+            <input type="hidden" name="tbl_Org_ProjectID" id="tbl_Org_ProjectID" value="@Model.tbl_Org_ProjectID" />
+            <input type="hidden" name="Name" id="Name" value="@Model.Name" />
+            <input type="hidden" name="SourceType" id="SourceType" value="@Model.SourceType" />        
+            <input type="hidden" name="Type" id="Type" value="@Model.Type" />
+            <input type="hidden" name="ProcessDoc_RefID" id="ProcessDoc_RefID" value="@Model.ProcessDoc_RefID" />
+            <input type="hidden" name="Contents" id="Contents" value="" />
+    </form>
+    <div class="panel-footer">
+		<div class="form-group" id="actionButtons">
+            <a href="javascript:;" class="btn btn-med blue-bg saveRecord" data-id="T@(Model.Type)D@(Model.ID)" data-form="saveRecording" data-mode="update" data-message="Saved Successfully">Save</a>
+            <a href="javascript:;" class="btn btn-med gray-bg navigateBack">Back</a>
+		</div>
+	</div>
+</div>
+
+<script>
+    @if (Model.Type == 3)
+    {
+        <text>configureInlineCkEditorFullMenu(".EditEditor");</text>
+    }
+    else 
+    {
+        <text>configureInlineCkEditor(".EditEditor");</text>
+    }
+</script>

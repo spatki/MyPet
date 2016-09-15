@@ -1,0 +1,47 @@
+﻿@model IQueryable<tbl_workflow>
+@{
+    Layout = null;
+    var urlUser = "";
+}
+@foreach (var w in Model) 
+{
+    urlUser = "";   
+    switch (w.RoleType)
+    {
+        case 1:
+            urlUser = Url.Action("getOrgEmployeeForRole", "SysUser", new { roleID = w.RoleID });
+            break;
+        case 2:
+            urlUser = Url.Action("getSysUserForRole", "SysUser", new { roleID = w.RoleID });                                    
+            break;
+        case 3:
+            urlUser = Url.Action("getReportingUser", "SysUser", new { userID = WebSecurity.CurrentUserId });                                    
+            break;
+        case 4:
+            urlUser = Url.Action("getReviewerUser", "SysUser", new { userID = WebSecurity.CurrentUserId });                                    
+            break;
+        case 5:
+            urlUser = Url.Action("getProjectApprovers", "SysUser");
+            break;
+        case 6:
+            urlUser = Url.Action("getProjectReviewers", "SysUser");
+            break;
+        case 7:
+            urlUser = Url.Action("getMemberForRole", "ProjAllocation", new { roleID = w.RoleID, projectID = ViewBag.ProjectID });
+            break;
+        case 8:
+            urlUser = Url.Action("validateUser", "ProjAllocation", new { userID = w.UserID, projectID = ViewBag.ProjectID });
+            break;
+        default:
+            urlUser = "";
+            break;
+    }
+	<a href="javascript:;" class="btn btn-med blue-bg  @(w.Dialog == true ? ViewBag.DialogOption : ViewBag.SaveOption)" data-id="@ViewBag.UpdateID" 
+        data-source="@Url.Action(w.ActionName, w.Controller)" data-method="@(w.Dialog == true ? "GET" : "POST")" 
+        data-key="@ViewBag.Key" data-form="WFForm" 
+        data-statustype="@w.Action" data-status="@(w.PostStatusID == null ? w.Status : w.PostStatusID)" 
+        data-userid="@(w.RoleID == null ? (w.UserID == null ? 0 : w.UserID) : w.RoleID)" 
+        data-usertype="@(w.RoleType == null ? "user" : urlUser)" data-message="@w.SuccessMessage" 
+        data-confirm="@w.ConfirmAction"
+        data-workflow="@w.WorkFlow">@w.UserCaption</a>                        
+}

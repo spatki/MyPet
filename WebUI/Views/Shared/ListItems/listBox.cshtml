@@ -1,0 +1,11 @@
+﻿@model IEnumerable<SelectListItem>
+@{
+    var selectedItems = (List<int>)ViewBag.selectedItems;
+}
+<select name="@ViewBag.itemName" id="@ViewBag.itemName" class="specialCombo form-control col-md-12 @((ViewBag.reload != null) ? ViewBag.reload : "" )" multiple="multiple" size="10">
+@foreach (var item in Model)
+{
+    <option value="@item.Value" @(selectedItems.Contains(int.Parse(item.Value)) ? "selected" : "") >@item.Text</option>
+}
+
+</select>

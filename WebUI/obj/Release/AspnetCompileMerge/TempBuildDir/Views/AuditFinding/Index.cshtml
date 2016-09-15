@@ -1,0 +1,32 @@
+﻿@{
+
+    Layout = null;
+}
+
+@Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+
+<div class="panel colored col-md-12">
+    <div class="row">
+        <div class="form-group">
+            <label class="col-md-2">Select Project</label>
+            <div class="controls col-md-8" id="ProjectParams" data-source="@Url.Action("GetAudits","AuditFinding")" data-id="DataListing">
+                @Html.Action("getListItems","Project",new { selectedItem = (ViewBag.ProjectID != null ? ViewBag.ProjectID : "0"), controlName = "Project", excludeIds = "", selectIds = ViewBag.SelectedIDs, reload = "loadProjectData"})
+            </div>
+            <div class="col-md-2"><a href="Javascript:;" onclick="javascript: $('#Project').change();return false;" class="btn btn-med blue-bg">Get Scheduled Audits</a></div>
+        </div>
+    </div>
+</div>
+<hr />
+<div id="DataListing">
+    @if (ViewBag.ProjectID != null)
+    {
+        @Html.Action("GetAudits","AuditFinding", new { id = (int) ViewBag.ProjectID })
+    }
+    else
+    {
+        <p>Select project to view scheduled audits</p>
+    }
+</div>
+<script>
+    if ($("#Project").find("option:selected").eq(0).val() > 0) $("#Project").change();
+</script>

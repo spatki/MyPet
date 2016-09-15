@@ -1,0 +1,24 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_employee>
+@{
+    Layout = null;
+}
+@if (Model.Any())
+{
+    var counter = 1;
+    foreach (var e in Model)
+    {
+        <tr id="@e.ID" class="takeID" data-detail="@e.EmpCode">
+            <td>@counter</td>
+            <td>@e.EmpCode</td>
+            <td>@e.GivenName @e.FamilyName</td>
+            <td>@e.DateOfJoining.ToString(Globals.DateFormatString)</td>
+            <td>@((e.mstr_org_designation != null) ? e.mstr_org_designation.LongName : "Not defined")</td>
+            <td>@((e.mstr_process_lc_status != null) ? e.mstr_process_lc_status.Status : "")</td>
+        </tr>
+    }
+}
+else
+{
+    <p>No Employees found</p>
+}

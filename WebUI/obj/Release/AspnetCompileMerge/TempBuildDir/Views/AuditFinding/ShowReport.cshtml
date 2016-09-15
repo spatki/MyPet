@@ -1,0 +1,29 @@
+﻿@model auditRecordingInput
+
+@{
+    Layout = null;
+}
+<div class="panel">
+	<div class="panel-body">
+            @if (Model.Type == 1)
+            {
+                // QA Observation
+                @Html.Partial("QAObservationReport", Model)
+            }
+            else
+            {
+                // Audit
+                @Html.Partial("NCFormReport", Model)
+            }
+	    <div class="panel-footer">
+		    <div class="form-group">
+                @if (ViewBag.Mode == 1 && Model.Status == 3)     // View report for closure
+                {
+		            <button type="button" class="btn blue-bg openDialog" data-source="@Url.Action("CloseObs","AuditFinding",new { id = Model.ID })">Close Observations</button>
+                }
+                <a href="javascript:;" class="btn btn-med gray-bg subMenu" data-source="@Url.Action("ProjectIndex", "AuditFinding", new { id = Model.tbl_Org_ProjectID, viewName = (ViewBag.Mode == 1 ? "AuditCloseIndex" : "Index") })">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+

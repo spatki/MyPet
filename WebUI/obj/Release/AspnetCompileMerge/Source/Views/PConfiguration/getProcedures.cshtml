@@ -1,0 +1,20 @@
+﻿@model tbl_process_repository
+@{
+    Layout = null;
+}
+
+<li id="Proc@(Model.ID)">
+    <a href="javascript:" class="tree-toggle repositoryDetails" data-basenode="@(Model.ID)" role="branch" data-toggle="branch">
+        <span class="label label-warning">Procedures</span>&nbsp;<span id="GT@(Model.ID)Count" class="badge badge-warning">@Model.tbl_process_rep_procedure.Count()</span>
+    </a>
+    <ul class="branch in">
+        <li><a href="javascript:" data-toggle="modal" class="openDialog" data-id="Proc@(Model.ID)" data-source="@(Url.Action("manageProcedures", new  { repoID = Model.ID }))">Click to configure Procedures</a></li>
+    @{  if (Model.tbl_process_rep_procedure.Any()) {
+            foreach (var g in Model.tbl_process_rep_procedure)
+        {
+            <li><a href="javascript:" class="label-configured openDialog" data-id="" data-source="@Url.Action("showPreview", "PProcedure", new { id = g.tbl_Process_ProcedureID })">@g.tbl_process_procedure.Name</a></li>
+        }
+    }
+    }
+    </ul>
+</li>

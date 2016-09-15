@@ -1,0 +1,26 @@
+﻿@model IEnumerable<tbl_tailored_rep_document>
+@{
+    Layout = null;
+}
+<ul class="branch in" id="Document@(ViewBag.key)">
+    <li><a href="javascript:;" class="openDialog" data-source="@Url.Action("manageDocuments", "PrjProcessTailor", new { projectID = ViewBag.projectID, repoID = ViewBag.repoID, projPhase = ViewBag.phaseID })" data-id="">Click to add/remove Documents</a></li>
+@if (Model.Any())
+{
+    foreach (var p in Model)
+    {
+        <li id = "LDoc@(p.ID)">&nbsp;&nbsp;
+            <span class="label label-@((p.Exclude ? "strikeThrough" : "configured"))">
+                <a href="javascript:" class="label-configured openDocument" data-id="" data-source="@Url.Action("ViewDocument", "DocMgr", new { id = p.tbl_Process_DocumentID })">@p.tbl_process_document.tbl_docmgr_document.Name</a>
+            </span>
+            @if (p.Exclude)
+            {
+             <span class='label label-danger'>Excluded</span>   
+            }
+        </li>
+    }
+}
+else
+{
+    <li id="NilDoc@(ViewBag.key)" >No Checklists found</li>
+}
+</ul>

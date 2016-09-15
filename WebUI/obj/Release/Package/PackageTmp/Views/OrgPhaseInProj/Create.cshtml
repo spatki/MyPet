@@ -1,0 +1,39 @@
+﻿@model tbl_org_config_details
+@{
+    Layout = null;
+    var excludeIDs = ViewBag.excludeIDs;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Add Project Phases</h4>
+	</div>
+        <div class="modal-body"> 
+            <form id="projPhaseForm" name="projPhaseForm" action="@Url.Action("linkPhase")" method="post">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="hidden" value="@Model.ID" name="ID" id="ID" />
+                        <div class="col-md-12"><strong>Project Type: </strong>@Model.Name</div>
+                        <hr />
+                        <div class="col-md-12">  <!-- List of all checklists -->
+                            <div class="col-md-12 control-label">Available Phases</div>
+                            <div class="col-md-12" >
+                                @Html.Action("getListBoxItems", "OrgProjPhase", new { selectedItems = new List<int>(), controlName = "selectedOptions", excludeIds = excludeIDs, selectIds = "", reload = "" })
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </form>
+	    </div>
+        <div class="modal-footer">
+	      <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+	      <button type="button" class="btn blue-bg saveDefaultPage" data-mode="edit" data-pageid="ProjType@(Model.ID)" data-form="projPhaseForm">Save changes</button>
+	    </div>
+
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script type="text/javascript">
+    // specialDropDown (".specialCombo")
+</script>

@@ -1,0 +1,56 @@
+﻿@using ProcessAccelerator.WebUI
+@model refDoc
+@{
+    Layout = null;
+    var taskID = ViewBag.TaskID;
+    bool Include = ViewBag.Include;
+    DocReferenceType docRef = new DocReferenceType();
+}
+@if (Model.ID > 0)
+{
+    if (Include == true)
+    {
+        <tr id="Doc@(Model.ID)">
+            <td>
+                <input type="hidden" name="refDocs.Index" value="@Model.ID" />
+                <input type="hidden" name="refDocs[@Model.ID].ID" value="@Model.ID" />
+                <input type="hidden" name="refDocs[@Model.ID].ClientID" value="@Model.ClientID" />
+                <input type="hidden" name="refDocs[@Model.ID].DocType" value="@Model.DocType" id="refDocs@(Model.ID)refKeyDocType" />
+                <input type="hidden" name="refDocs[@Model.ID].referenceID" value="@Model.referenceID" id="refDocs@(Model.ID)refKeyRefID" />
+                <input type="hidden" name="refDocs[@Model.ID].DocumentName" value="@Model.DocumentName" id="refDocs@(Model.ID)refKeyDocumentName" />
+                <a href="javascript:;" class="deleteRow" data-id="Doc@(Model.ID)" data-dialogname="deleteDialogBox" 
+                    data-clientdelete="N" data-source="@Url.Action("DeleteActivityDoc", "PrjProcessTailor", new { id = Model.ID })"><i class="icon-remove"></i></a>
+            </td>
+            <td>@Html.Action("GetReferenceData","PrjProcessTailor", new { id = 0, taskID = taskID, selectedValue = Model.refKey, controlName = "refDocs[" + Model.ID + "].refKey", reload = "updateDocType" })</td>
+            <td>@Html.TextBox("refDocs[" + Model.ID + "].Remarks", Model.Remarks, new { @class = "form-control" })</td>
+            <td>@Html.DropDownList("refDocs[" + Model.ID + "].Mandatory",docRef.getList((short)Model.Mandatory),"Select ...", new { @class = "col-md-12 form-control" })</td>
+        </tr>
+    }
+    else
+    {
+        <tr id="Doc@(Model.ID)">
+            <td>
+                <input type="hidden" name="refDocs.Index" value="@Model.ID" />
+                <input type="hidden" name="refDocs[@Model.ID].ID" value="@Model.ID" />
+                <input type="hidden" name="refDocs[@Model.ID].ClientID" value="@Model.ClientID" />
+                <input type="hidden" name="refDocs[@Model.ID].DocType" value="@Model.DocType" id="refDocs@(Model.ID)refKeyDocType" />
+                <input type="hidden" name="refDocs[@Model.ID].referenceID" value="@Model.referenceID" id="refDocs@(Model.ID)refKeyRefID" />
+                <input type="hidden" name="refDocs[@Model.ID].refKey" value="@Model.refKey" id="refDocs[@Model.ID].refKey" />
+                <input type="hidden" name="refDocs[@Model.ID].Remarks" value="@Model.Remarks" id="refDocs[@Model.ID].Remarks" />
+                <input type="hidden" name="refDocs[@Model.ID].Mandatory" value="@Model.Mandatory" id="refDocs[@Model.ID].Mandatory" />
+                <input type="hidden" name="refDocs[@Model.ID].DocumentName" value="@Model.DocumentName" id="refDocs@(Model.ID)refKeyDocumentName" />
+                <a href="javascript:;" class="loadDetails" data-element="Doc@(Model.ID)" data-source="@Url.Action("IncludeTaskDoc", "PrjProcessTailor", new { id = Model.ID })" 
+                    data-mode="edit" title="Include this document"><i class="icon-ok"></i></a>
+            </td>
+            <td>
+                <label class="label-strikeThrough control-label">@Model.DocumentName</label>
+            </td>
+            <td>
+                <label class="label-strikeThrough control-label">@Model.Remarks</label>
+            </td>
+            <td>
+                <label class="label-strikeThrough control-label">@docRef.getTypeName((short)Model.Mandatory.GetValueOrDefault())</label>
+            </td>
+        </tr>        
+    }
+}

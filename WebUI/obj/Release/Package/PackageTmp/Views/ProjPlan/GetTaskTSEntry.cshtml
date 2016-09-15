@@ -1,0 +1,38 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_plan_resource>
+@{
+    Layout = null;
+}
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr >
+                <th>Resource</th>
+                <th>Assigned From</th>
+                <th>Assigned To</th>
+                <th>Planned Hours</th>
+                <th>Actual Hours</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tsk in Model)
+            {
+                <tr>
+                    <td>@tsk.tbl_org_employee.GivenName @tsk.tbl_org_employee.FamilyName</td>
+                    <td>@tsk.PlannedStart.ToString(Globals.DateFormatString)</td>
+                    <td>@(tsk.PlannedEnd == null ? "" : tsk.PlannedEnd.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+                    <td>@tsk.PlannedDuration</td>
+                    <td>@tsk.ActualDuration</td>
+                    <td>@(tsk.ActualStart == null ? "Not Started" : (tsk.PercentComplete < 100 ? "In Progress" : "Complete"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><label class="control-label">No Resources allocated to this task</label></p>
+}

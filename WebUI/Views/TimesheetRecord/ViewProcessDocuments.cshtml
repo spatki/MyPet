@@ -1,0 +1,18 @@
+﻿@model IEnumerable<vw_task_recording>
+@{
+    Layout = null;
+    DocType docType = new DocType();
+}
+@foreach (var o in Model)
+{
+    <tr id="T@(o.DocType)D@(o.ID)">
+        <td></td>
+        <td><span class="label label-warning">Record</span></td>
+        <td>@docType.getTypeName((short)o.DocType)</td>
+        <td>
+            <a href="javascript:" class="openDialog" data-source="@Url.Action("ViewRecord","TimesheetRecord",new { id = o.filled_DocID })">@o.docName</a>       
+        </td>
+        <td>Task: @o.TaskName @(o.Remarks != null && o.Remarks != "" ? "(" + o.Remarks + ")" : "")</td>
+        <td></td>
+    </tr>
+}

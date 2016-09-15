@@ -1,0 +1,17 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<tbl_org_resourceplan_hardware>
+@{
+    Layout = null;
+}
+@foreach (var o in Model)
+{
+    <tr id="@o.ID">
+        <td>@o.Details</td>
+        <td>@o.Specification</td>
+        <td>@o.Count</td>
+        <td>@o.PlannedFrom.ToString(Globals.DateFormatString)</td>
+        <td>@o.PlannedTo.ToString(Globals.DateFormatString)</td>
+        <td>@o.mstr_process_lc_status.Status</td>
+        <td><button class="btn btn-med green-bg openDialog" data-id="@o.ID" data-mode="edit" data-source="@Url.Action("Edit", "ProjHardwarePlan", new { id = o.ID })"><i class="icon-">&#xf044;</i></button></td>
+   </tr>
+}

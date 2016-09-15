@@ -1,0 +1,75 @@
+﻿@model uploaded_doc
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#uploadForm").ajaxForm({
+            success: function (data) {
+                $.pnotify({
+                    title: 'Supporting document added',
+                    type: 'info'
+                });
+                $("#newDoc").replaceWith(data);
+                $("#extraDialogBox").modal("hide");
+            },
+            error: function (data) {
+                $.pnotify({
+                    title: data.responseText,
+                    type: 'info'
+                });
+            }
+        });
+    });
+</script>    
+
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Add Supporting Document</h4>
+	</div>
+    <form method="post" action="@Url.Action("UploadDocForTask")" id="uploadForm"  enctype="multipart/form-data">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <input type="hidden" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" value="@Model.tbl_Org_ProjectID" />
+                <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label>Select File</label>
+                        <div class="controls">
+                            <input type="file" name="fileName" id="fileName" />
+                            @Html.ValidationMessageFor(o => o.fileName)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">Mandatory</label>
+                        @Html.DropDownListFor(o => o.ReferenceType, (new DocReferenceType()).getList(Model.ReferenceType), "Select ...", new { @class = "col-md-12 form-control" })
+                        @Html.ValidationMessageFor(o => o.ReferenceType)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <div class="controls"><textarea  rows="3" class="col-md-12" name="Remarks" id="Remarks">@Model.Remarks</textarea></div>
+                        @Html.ValidationMessageFor(o => o.Remarks)
+                    </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="submit" class="btn blue-bg " data-mode="add" data-id="listing" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+

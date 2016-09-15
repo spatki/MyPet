@@ -1,0 +1,30 @@
+﻿@model IEnumerable<mstr_org_project_type>
+@{
+    Layout = null;
+}
+<ul class="branch">
+    @if (Model.Any()) {
+        foreach (var o in Model)
+        {
+            <li><a href="javascript:" class="showMapping" data-param="projType=@(o.ID)" data-name="@o.LongName"><i class="icon-wrench"></i></a>
+                 &nbsp;&nbsp;<a href="javascript:;" role="branch" class="tree-toggle" data-toggle="branch" data-value="Bootstrap_Tree"><span class="label label-success">@o.LongName</span></a>
+                <ul class="branch in" id="ProjType@(o.ID)">
+                    @if (o.mstr_org_phase_in_proj.Any()) 
+                    {
+                        foreach (var s in o.mstr_org_phase_in_proj.OrderBy(l => l.mstr_org_proj_phase.SequenceNo))
+                        {
+                            <li id="P@(o.ID)P@(s.ID)">
+                                <a href="javascript:" class="showMapping" data-param="projType=@(o.ID)&projPhase=@(s.mstr_Org_Proj_PhaseID)" data-name="@s.mstr_org_proj_phase.LongName"><i class="icon-wrench"></i></a>
+                                    <a href="javascript:;">&nbsp;&nbsp;@s.mstr_org_proj_phase.LongName</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </li>
+        }
+    }
+    else
+    {
+        <li>Project Types not defined yet</li>
+    }
+</ul>

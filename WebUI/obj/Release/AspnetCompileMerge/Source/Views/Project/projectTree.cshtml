@@ -1,0 +1,34 @@
+﻿@model IEnumerable<tbl_org_project>
+@{
+    Layout = null;
+}
+@if (Model.Any())
+{
+    foreach (var prj in Model)
+    {
+        <li>
+            <a href="javascript:;" role="branch" class="tree-toggle closed" data-toggle="branch"><span class="label label-root">@prj.Name</span></a>
+            <ul class="branch" id="ProjType@(prj.ID)">
+                <li><a href="javascript:" class="showProjectMapping" data-param="projectID=@(prj.ID)" data-name="@prj.Name" data-treeroot="PConfiguration" data-classname="mapProject" data-project="@prj.ID" data-phase=""><i class="icon-wrench"></i></a>
+                    &nbsp;&nbsp;<a href="javascript:;" role="branch" class="tree-toggle closed" data-toggle="branch"><span class="label label-success">@prj.mstr_org_project_type.ShortName</span></a>
+                    <ul class="branch" id="Phases@(prj.ID)">
+                        @foreach (var ph in prj.mstr_org_project_type.mstr_org_phase_in_proj)
+                        {
+                            <li>
+                                <a href="javascript:" class="showProjectMapping" data-param="projectID=@(prj.ID)&projPhase=@(ph.mstr_Org_Proj_PhaseID)" data-name="@(prj.Name), @(ph.mstr_org_proj_phase.ShortName)" data-treeroot="PConfiguration" data-classname="mapProject" data-project="@prj.ID" data-phase="@ph.mstr_Org_Proj_PhaseID"><i class="icon-wrench"></i></a>
+                                &nbsp;&nbsp;<a href="javascript:;" id="ph@(ph.ID)" class="tree-toggle " role="leaf"><span class="label label-warning">@ph.mstr_org_proj_phase.ShortName</span></a>
+                            </li>                            
+                        }
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    }
+}
+else
+{
+<li>
+    <a href="javascript:;" role="branch" class="tree-toggle closed" data-toggle="branch"><span class="label label-root">No Projects found</span></a>
+</li>    
+}    
+

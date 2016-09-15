@@ -1,0 +1,20 @@
+﻿@model tbl_process_repository
+@{
+    Layout = null;
+}
+
+<li id="Checklist@(Model.ID)">
+    <a href="javascript:" class="tree-toggle repositoryDetails" data-basenode="@(Model.ID)" role="branch" data-toggle="branch">
+        <span class="label label-warning">Checklists</span>&nbsp;<span id="Checklist@(Model.ID)Count" class="badge badge-warning">@Model.tbl_process_rep_procedure.Count()</span>
+    </a>
+    <ul class="branch in">
+        <li><a href="javascript:" data-toggle="modal" class="openDialog" data-id="Checklist@(Model.ID)" data-source="@(Url.Action("manageChecklists", new  { repoID = Model.ID }))">Click to configure Checklists</a></li>
+    @{  if (Model.tbl_process_rep_chklst.Any()) {
+            foreach (var g in Model.tbl_process_rep_chklst)
+        {
+            <li><a href="javascript:" class="label-configured openDialog" data-id="" data-source="@Url.Action("showPreview", "PChecklist", new { id = g.tbl_Process_ChecklistID })">@g.tbl_process_checklist.Name</a></li>
+        }
+    }
+    }
+    </ul>
+</li>

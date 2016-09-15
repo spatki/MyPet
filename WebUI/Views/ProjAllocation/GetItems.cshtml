@@ -1,0 +1,28 @@
+﻿@model IEnumerable<vw_project_allocations>
+@{
+    Layout = null;
+    var counter = 0;
+}
+@if (Model.Any())
+{
+    foreach (var o in Model)
+    {
+        counter += 1;
+        <tr id="@o.ID">
+            <td>@counter</td>
+            <td>@o.EmpCode</td>
+            <td>@o.GivenName @o.FamilyName</td>
+            <td>@o.desig_ShortName</td>
+            <td>@o.LocationName</td>
+            <td>@o.role_ShortName</td>
+            <td>@o.PlannedStart</td>
+            <td>@o.ManagerGivenName @o.ManagerFamilyName</td>
+            <td>@o.AllocationComments</td>
+            <td><button class="btn btn-med green-bg openDialog" data-source="@Url.Action("Edit", "ProjAllocation", new { id = o.ID })" title="Edit"><i class="icon-ok"></i></button></td>
+            <td><button class="btn btn-med red-bg openDialog" data-id="@o.ID" data-mode="delete" data-source="@Url.Action("ReleaseEmployee", "ProjAllocation", new { id = o.ID })" title="Delete"><i class="icon-remove"></i></button></td>
+        </tr>
+    }
+}
+else {
+    <p>No Data Found</p>
+}

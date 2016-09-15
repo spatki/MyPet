@@ -1,0 +1,303 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_proj_planInput
+@{
+    Layout = null;
+    var counter = 0;
+    ViewBag.DialogOption = "openExtraWorkflow";
+    ViewBag.SaveOption = "saveExtraWorkflow";
+    ViewBag.UpdateID = "openDialogBox";
+    ViewBag.Key = "";
+    IQueryable<tbl_workflow> workflow;
+    if (ViewBag.WF == true)
+    {
+        workflow = (IQueryable<tbl_workflow>)ViewBag.workflow;
+    }
+    else
+    {
+        workflow = null;
+    }
+}
+<div class="modal-dialog" style="width:900px;">
+	<div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task </h4>
+		</div>
+		<div class="modal-body">
+            @Html.ValidationSummary(true)
+            <form name="WFForm" id="WFForm" method="post" action="@Url.Action("Create")">
+                <ul class="nav nav-tabs" id="Ul1">
+                    <li class="active"><a data-toggle="tab" href="#SDetail">Details</a></li>
+                    <li><a data-toggle="tab" href="#SSuppDoc">Resources</a></li>
+                    <li><a data-toggle="tab" href="#SDocs">Supporting Information</a></li>
+                </ul>
+                <div class="tab-content" id="Div3">
+                    <br />
+                    <div id="SDetail" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-md-2">Task</label>
+                                    <input type="hidden" value="@Model.tbl_Org_ProjectID" id="tbl_Org_ProjectID" name="tbl_Org_ProjectID" />
+                                    <div class="controls col-md-10">
+                                        <div class="input-group">
+                                            @Html.Action("getProjectTasks", "MapRepository", new { selectedItem = Model.tbl_Mapped_Proj_ProcessID, controlName = "tbl_Mapped_Proj_ProcessID", reload = "loadSupportingDocs", projectID = Model.tbl_Org_ProjectID, phase = "", mode = 1 })
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-med orange-bg reloadProjectTasks" data-mode="1" id="TaskFilter" title="Show all tasks"><i class="icon-eye-close"></i></button>
+									        </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="TaskName" id="TaskName" value="@Model.TaskName" />
+                                    @Html.ValidationMessageFor(o => o.tbl_Mapped_Proj_ProcessID)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="classname"="form-group">
+                                    <label class="col-md-4">Plan Name</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            @Html.Action("getPlansFor", "ProjPlanname", new { selectedItems = Model.PlanID.GetValueOrDefault(), controlName = "PlanID", projectID = Model.tbl_Org_ProjectID })
+									        <div class="input-group-btn">
+                                                <button type="button" class="btn btn-med green-bg editProjectPlans" data-calledby="2" data-dialog="extraDialogBox" data-sourceid="PlanID" data-projectid="Project" data-source="@Url.Action("EditPlan", "ProjPlanname")" data-id="PlanID" id="GoButton" title="Click to add plans"><i class="icon-pencil"></i></button>
+									        </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(o => o.PlanID)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">&nbsp;</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-md-12">Description</label>
+                                    <textarea rows="3" class="form-control col-md-12" name="TaskDescription" id="TaskDescription" >@Model.TaskDescription</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12">&nbsp;</div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-4">Group</label>
+                                    <div class="controls col-md-8">
+                                        @Html.Action("getListItemsFor", "ProjGroup", new { selectedItem = Model.tbl_Org_Proj_GroupID.GetValueOrDefault(), controlName = "tbl_Org_Proj_GroupID", excludeIds = "", selectIds = "", projectID = Model.tbl_Org_ProjectID, allowNewClient = false, reload = "" })
+                                        @Html.ValidationMessageFor(o => o.tbl_Org_Proj_GroupID)
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-4">Phase</label>
+                                    <div class="controls col-md-8">
+                                        @Html.Action("getListItemsFor", "OrgPhaseInProj", new { selectedItem = Model.tbl_Org_Proj_GroupID.GetValueOrDefault(), controlName = "ProjectPhase", excludeIds = "", selectIds = "", projectTypeID = Model.ProjectType, reload = "loadTasksForPhase" })
+                                        <input type="hidden" id="ProjectType" name="ProjectType" value="@Model.ProjectType" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="TSHours"></th>
+                                        <th class="docTableResult">Start</th>
+                                        <th class="docTableResult">Finish</th>
+                                        <th class="TSHours">Duration</th>
+                                        <th class="docTableResult" >Unit</th>
+                                        <th class="TSHours">% Complete</th>
+                                        <th class="TSHours">Is Complete? </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>Planned</th>
+                                        <td>                             
+                                            <div class="input-group date datepicker">
+                                                <input type="text" value="@Model.PlannedStartDate.ToString(Globals.DateFormatString)" class="form-control" name="PlannedStartDate" id="PlannedStartDate">
+                                                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-format="dd/mm/yyyy" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                            </div>
+                                            @Html.ValidationMessageFor(o => o.PlannedStartDate)
+                                        </td>
+                                        <td>                                                        
+                                            <div class="input-group date datepicker" data-date-format="dd/mm/yyyy">
+                                                <input type="text" value="@(Model.PlannedEndDate == null ? "" : Model.PlannedEndDate.GetValueOrDefault().ToString(Globals.DateFormatString))" class="form-control" name="PlannedEndDate" id="PlannedEndDate">
+                                                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                            </div>
+                                            @Html.ValidationMessageFor(o => o.PlannedEndDate)
+                                        </td>                 
+                                        <td><input type="text" size="3"  class="form-control mask_number" value="@Model.PlannedDuration" id="PlannedDuration" name="PlannedDuration"/>
+                                            @Html.ValidationMessageFor(o => o.PlannedDuration)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(o => o.DurationUnit, (new DurationUnitTypes()).getList(Model.DurationUnit.GetValueOrDefault()), "Select ...", new { @class = "col-md-12 form-control" })
+                                            @Html.ValidationMessageFor(o => o.DurationUnit)
+                                        </td>
+                                        <td><input type="text" size="3"  class="form-control mask_percent" value="@Model.PercentComplete" id="PercentComplete" name="PercentComplete"/>
+                                            @Html.ValidationMessageFor(o => o.PercentComplete)
+                                        </td>
+                                        <td><input type="checkbox" name="IsComplete" id="IsComplete"/>
+                                            @Html.ValidationMessageFor(o => o.IsComplete)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Actual</th>
+                                        <td></td>
+                                        <td></td>                 
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group pull-right">
+                                    @Html.CheckBox("IsMilestone", (Model.IsMilestone == null ? false : Model.IsMilestone)) <label class="control-label">Mark this task as a Milestone</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="SSuppDoc" class="tab-pane">
+                        <br />
+                        <div class="row dialogScroll">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1"></th>
+                                        <th class="col-md-3">Resource</th>
+                                        <th>Allocation %</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Duration (Days)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="taskResources">
+                                    @if (Model.tbl_org_plan_resource != null && Model.tbl_org_plan_resource.Any())
+                                    {
+                                        counter = 0;
+                                        foreach (var r in Model.tbl_org_plan_resource)
+                                        {
+                                            if (r.ID > counter) { counter = r.ID; }
+                                            <tr id="R@(r.ID)">
+                                                <td class="col-md-1"><a href="javascript:;" class="openDeleteDialog2" data-delete="client" data-pageid="@Model.tbl_Org_ProjectID" data-id="R@(r.ID)" data-source="@Url.Action("DeleteResource", "ProjPlan", new { id = r.ID })"><i class="icon-remove"></i></a>
+                                                    <span></span>
+                                                    <input type="hidden" name="tbl_org_plan_resource.Index" value="@r.ID" />
+                                                    <input type="hidden" name="tbl_org_plan_resource[@r.ID].ID" value="@r.ID" />
+                                                </td>
+                                                <td class="col-md-3">
+                                                    @Html.Action("GetProjectResources", "Project", new { projectID = Model.tbl_Org_ProjectID, selectedItem = r.tbl_Org_EmployeeID, controlName = "tbl_org_plan_resource[" + r.ID + "].tbl_Org_EmployeeID", reload = "getResourceDetails" }) 
+                                                    <input type="hidden" name="tbl_org_plan_resource[@r.ID].AllocationStart" value="" />
+                                                    <input type="hidden" name="tbl_org_plan_resource[@r.ID].AllocationEnd" value="" />
+                                                    @Html.ValidationMessage("tbl_org_plan_resource[" + r.ID + "].tbl_Org_EmployeeID")
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="mask_percent form-control" value="@r.AllocationPercent" size="5" name="tbl_org_plan_resource[@r.ID].AllocationPercent" id="tbl_org_plan_resource[@r.ID].AllocationPercent" />
+                                                    @Html.ValidationMessage("tbl_org_plan_resource[" + r.ID + "].AllocationPercent")
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="datepicker form-control" value="@r.PlannedStart.ToString(Globals.DateFormatString)" size="10" name="tbl_org_plan_resource[@r.ID].PlannedStart" id="tbl_org_plan_resource[@r.ID].PlannedStart" />
+                                                    @Html.ValidationMessage("tbl_org_plan_resource[" + r.ID + "].PlannedStart")
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="datepicker form-control" value="@r.PlannedEnd.GetValueOrDefault().ToString(Globals.DateFormatString)" size="10"name="tbl_org_plan_resource[@r.ID].PlannedEnd" id="tbl_org_plan_resource[@r.ID].PlannedEnd" />
+                                                    @Html.ValidationMessage("tbl_org_plan_resource[" + r.ID + "].PlannedEnd")
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="mask_duration form-control" value="@r.PlannedDuration" size="5" name="tbl_org_plan_resource[@r.ID].PlannedDuration" id="tbl_org_plan_resource[@r.ID].PlannedDuration" />
+                                                    @Html.ValidationMessage("tbl_org_plan_resource[" + r.ID + "].PlannedDuration")
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr id="R@(counter + 1)">
+                                        <td><a href="#" data-id="R@(counter + 1)" class="loadDetails" data-mode="newResourceWithAddOption" data-element="taskResources" data-source="@Url.Action("addResource", "ProjPlan", new { projectID = Model.tbl_Org_ProjectID, id = (counter + 1) })" data-sourceid=""><i class="icon-">&#xf055</i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="SDocs" class="tab-pane">
+                        <br />
+                        <div class="row dialogScroll">
+                            <table  class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Type</th>
+                                        <th>Document</th>
+                                        <th>Remarks</th>
+                                        <th>Mandatory</th>
+                                        <th class="hidden-sm">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-count="1" id="supportingDocs">
+                                    @{
+                                        var docType = new DocType();
+                                        var docRef = new DocReferenceType();
+
+                                        if (Model.tbl_org_plan_document != null && Model.tbl_org_plan_document.Any())
+                                        {
+                                            foreach (var doc in Model.tbl_org_plan_document)
+                                            {
+                                                <tr id="SD@(doc.ID)" class="mappedDocs">
+                                                    <td >
+                                                        <input type="hidden" name="tbl_org_plan_document.Index" value="@doc.ID" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].ID" class="mappedID" id="ID@(doc.ID)" value="@doc.ID" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].tbl_Org_PlanID" value="@doc.tbl_Org_PlanID" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].DocType"  id="ID@(doc.ID)DocType" value="@doc.DocType" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].Name" value="@doc.Name" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].tbl_DocMgr_DocumentID" value="@doc.tbl_DocMgr_DocumentID" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].tbl_Process_ProcedureID" value="@doc.tbl_Process_ProcedureID" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].tbl_Process_ChecklistID" value="@doc.tbl_Process_ChecklistID" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].tbl_Process_TemplateID" value="@doc.tbl_Process_TemplateID" />
+                                                        <input type="hidden" name="tbl_org_plan_document[@doc.ID].Source" value="@doc.Source" />
+                                                        @Html.CheckBox("tbl_org_plan_document[" + doc.ID + "].Include", doc.Include)
+                                                    </td>
+                                                    <td>@docType.getTypeName(doc.DocType)</td>
+                                                    <td>@doc.Name</td>
+                                                    <td><input type="text" name="tbl_org_plan_document[@doc.ID].Remarks" id="tbl_org_plan_document[@doc.ID].Remarks" value="@doc.Remarks" class="form-control"/></td>
+                                                    <td>@Html.DropDownList("tbl_org_plan_document[" + doc.ID + "].ReferenceType",docRef.getList((short)doc.ReferenceType.GetValueOrDefault()),"Select ...",new { @class = "col-md-12 form-control" })</td>
+                                                    <td class="hidden-sm"></td>
+                                                </tr>
+                                            }
+                                        }
+                                        <tr id="NewDoc">
+                                            <td></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>       
+                <input type="hidden" value="@Model.mstr_Process_LC_StatusID" id="workflow_status" name="mstr_Process_LC_StatusID" />
+                <input type="hidden" value="false" id="followWF" name="followWF" />
+                <input type="hidden" value="0" id="statusWF" name="statusWF" />  
+                <input type="hidden" value="@Model.CreateDate.GetValueOrDefault().ToString(Globals.DateFormatString)" id="CreateDate" name="CreateDate" />
+                <input type="hidden" value="@WebSecurity.CurrentUserId" id="workflowUser" name="workflowUser" />
+                <input type="hidden" value="null" id="workflow" name="workflow" />
+            </form>
+		</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+            @if (workflow != null)
+            {
+                @Html.Partial("printWorkflow", workflow)
+            }
+		</div>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+    <!-- Modal -->
+    <div class="modal fade" id="extraDialogBox" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div><!-- /.modal -->
+
+<script>
+    $(".datepicker").datetimepicker({         // Create new datepickers
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false
+    });
+
+//    $(".mask_date2").inputmask("mm/dd/yyy", { "placeholder": "mm/dd/yyyy" }); //multi-char placeholder
+//    $(".mask_percent").inputmask({ "mask": "9", "repeat": 3, "greedy": false }, { placeholder: " ", clearMaskOnLostFocus: true }); //default
+    //$(".mask_number").inputmask("999.99", { placeholder: " ", clearMaskOnLostFocus: true }); //default
+    //$("#PlannedDuration").inputmask('decimal', { rightAlignNumerics: true });
+</script>

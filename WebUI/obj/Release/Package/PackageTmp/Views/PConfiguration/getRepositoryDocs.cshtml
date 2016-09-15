@@ -1,0 +1,43 @@
+﻿@model tbl_process_repository
+@{
+    Layout = null;
+}
+<select name="@ViewBag.itemName" id="@ViewBag.itemName" class="specialCombo form-control col-md-12">
+    <option value="" selected>Select...</option>
+@if (Model.tbl_process_rep_procedure.Any())
+{
+ <optgroup label="Procedures">
+    @foreach (var proc in Model.tbl_process_rep_procedure)
+    {
+        <option value="P@(proc.ID)" @(ViewBag.selectedItem == "P" + proc.ID.ToString() ? "selected" : "" ) >@proc.tbl_process_procedure.Name</option>
+    }    
+ </optgroup>
+}
+@if (Model.tbl_process_rep_template.Any())
+{
+ <optgroup label="Templates">    
+    @foreach (var tmpl in Model.tbl_process_rep_template)
+    {
+        <option value="T@(tmpl.ID)" @(ViewBag.selectedItem == "T" + tmpl.ID.ToString() ? "selected" : "" ) >@tmpl.tbl_process_template.Name</option>
+    }    
+ </optgroup>
+}
+@if (Model.tbl_process_rep_chklst.Any())
+{
+ <optgroup label="Checklists">    
+    @foreach (var chklst in Model.tbl_process_rep_chklst)
+    {
+        <option value="C@(chklst.ID)" @(ViewBag.selectedItem == "C" + chklst.ID.ToString() ? "selected" : "" ) >@chklst.tbl_process_checklist.Name</option>
+    }    
+ </optgroup>
+}
+@if (Model.tbl_process_rep_document.Any())
+{
+ <optgroup label="Documents">    
+    @foreach (var doc in Model.tbl_process_rep_document)
+    {
+        <option value="D@(doc.ID)" @(ViewBag.selectedItem == "D" + doc.ID.ToString() ? "selected" : "" ) >@doc.tbl_process_document.tbl_docmgr_document.Name</option>
+    }    
+ </optgroup>
+}
+</select>

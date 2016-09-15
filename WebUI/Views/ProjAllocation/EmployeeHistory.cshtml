@@ -1,0 +1,28 @@
+﻿@model IEnumerable<vw_project_allocations>
+@{
+    Layout = null;
+    var counter = 0;
+}
+@if (Model.Any())
+{
+    foreach (var o in Model)
+    {
+        counter += 1;
+        <tr id="@o.ID">
+            <td>@counter</td>
+            <td>@o.EmpCode</td>
+            <td>@o.GivenName @o.FamilyName</td>
+            <td>@o.desig_ShortName</td>
+            <td>@o.LocationName</td>
+            <td>@o.role_ShortName</td>
+            <td>@o.ManagerGivenName @o.ManagerFamilyName</td>
+            <td>@o.PlannedStart</td>
+            <td>@o.ActualEnd</td>
+            <td>@o.AllocationComments</td>
+        </tr>
+    }
+}
+else
+{
+    <p>No Data Found</p>
+}

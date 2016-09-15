@@ -1,0 +1,255 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+ 			<div class="row">
+            	<div class="panel col-md-12">
+                    <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	<div class="row pull-right panel-footer">
+                            <div class="col-lg-12 col-lg-offset-1">
+                                <button type="button" class="btn blue-bg" id="sbmtApproval">Submit For Approval</button>
+                                <button type="button" class="btn blue-bg" id="Button1" title="Applicable only for approved timesheets">Request to Change</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 notification blue-bg">
+                 	            <strong>Record Time: </strong> : Click on the desired date to record time for that date, click to close this. 
+                        </div>
+                    </div>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Timesheet Calendar</h3>
+                    </div>
+                    <div class="panel-body" id='showTSCalendar'></div>                
+            	</div>
+            </div>
+    
+<div class="modal fade" id="editTS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:60%;">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <div class="row">
+	      <h4 class="model-title col-md-6">Time Entry</h4>
+          <div class="col-md-5"><h4 class="pull-right label-configured" id="dateRange"></h4></div>
+      </div>
+	</div>
+	<div class="modal-body">
+        <div class="row">
+        <div class="panel colored">
+        <div class="panel-body">                    
+			<form class="form-horizontal left-label" id="TSDays" data-days="1">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Select Project</label>
+                            <div class="col-md-8"><select class="col-md-12" id="taskProject"><option value="1">Payroll System</option> <option value="2">Code Migration</option></select></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Group</label>
+                            <div class="col-md-8"><select class="col-md-12" id="taskGroup"><option value="Design Team">Design Team</option> <option selected="selected" value="Salary Processing Module">Salary Processing Module</option> <option value="Testing Team">Testing Team</option></select></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-md-2">Task</label>
+                            <div class="col-md-10">
+                                <select class="col-md-12" id="taskName">
+                                    <option value="0">Select</option>
+                                    <optgroup label="General Tasks">
+                                        <option value="Project Management">Project Management</option>
+                                        <option value="Leave">Leave</option>
+                                        <option value="Meeting">Meeting</option>
+                                        <option value="Conf.Call">Conf. Call</option>
+                                        <option value="Lunch">Lunch</option>
+                                        <option value="Idle">Idle</option>
+                                    </optgroup>
+                                    <optgroup label="Assigned">
+                                        <option value="Coding for Payroll Module">Coding for Payroll Module</option>
+                                        <option value="Code Review">Code Review</option>
+                                    </optgroup>
+                                    <optgroup label="Review">
+                                        <option value="Code Review">Code Review for Rule Engine</option>
+                                        <option>Peer Review EF Module</option>
+                                    </optgroup>
+                                </select>
+                                <span class="help-block">Searching option (type to search)</span>
+                            </div>
+                        </div>
+                     </div>
+                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">From Time</label>
+                            <div class="col-md-8"><input type="text" class="form-control" id="fromTime" disabled></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">To Time</label>
+                            <div class="col-md-8"><input type="text" class="form-control" id="toTime" disabled></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Duration (Hrs)</label>
+                            <div class="col-md-3"><input type="text" id="taskDuration" class="mask_duration form-control" value="ST"></div>
+                            <div class="col-md-5" id="dist"><select class="col-md-12 chzn-nopadd chzn-select-no-single" id="durDistribute"><option value="1" selected="selected">Per Day</option><option value="2">Total</option></select></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Complete %</label>
+                            <div class="col-md-8"><input type="hidden" id="PComplete" class="slider col-md-12" value="0" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="55" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-handle="square" data-slider-tooltip="show"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4">Remarks</label>
+                            <div class="col-md-8"><textarea rows="2" class="col-md-12" id="taskRemarks"></textarea></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-1"><input type="checkbox" id="taskComplete" value="1"></div>
+                            <label class="col-md-9">Task Complete ?</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+            <button type="button" class="btn blue-bg" id="saveTime">Save</button>
+            <button type="button" class="btn blue-bg" id="deleteTime">Delete</button>
+        </div>
+        </div>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<script type="text/javascript">
+	    var timeCount = 1;
+	    var timeEvent;
+	    var config = {
+	        '.chzn-select': {},
+	        '.chzn-select-deselect': { allow_single_deselect: false },
+	        '.chzn-select-no-single': { disable_search_threshold: 10 },
+	        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+	        '.chzn-select-width': { width: "95%" }
+	    }
+	    for (var selector in config) {
+	        $(selector).chosen(config[selector]);
+	    }
+
+	    $('#editTS').on('shown.bs.modal', function () {
+	        //$(".mask_duration").inputmask("99.9", { placeholder: " ", clearMaskOnLostFocus: true });
+	        $('#taskProject').val(timeEvent.project);
+	        $('#taskGroup').val(timeEvent.group);
+	        $('#taskName').val(timeEvent.task);
+	        //$('#taskName').text(timeEvent.task);
+	        $('#taskDuration').val(timeEvent.Duration);
+	        $('#PComplete').val(timeEvent.CP);
+	        $('#taskRemarks').text(timeEvent.Remarks);
+	        //$('#taskComplete').val(timeEvent.TC);
+	    });
+
+	    var setTimeDetails = function (calEvent) {
+	        if (calEvent.id == 0) calEvent.id = timeCount;
+	        timeEvent = calEvent;
+	    };
+
+	    $(document).on("click", "#saveTime", function () {
+            // Basic Validation checks
+            if ($('#taskName').val() == "0" || parseInt($("#taskDuration").val()) == 0) {
+                alert ("Pl. select the task name and/or duration to proceed");
+                return;
+            }
+	        var days = parseInt($("#TSDays").data("days"));
+	        if (days > 0) {
+	            // Timesheet entry is spanning across days(
+	            var startDate = timeEvent.start;
+                var endDate = timeEvent.start;
+                var duration = $('#taskDuration').val();
+                var addDur = 0;
+
+                if ($("#durDistribute").val() == 2)
+                {
+                    addDur = duration % (days + 1);
+                    duration = (duration - addDur) / (days + 1);
+                }
+	            for (var count = 0; count <= days; count++) {
+	                startDate = new Date(timeEvent.start.getFullYear(), timeEvent.start.getMonth(), timeEvent.start.getDate() + count, timeEvent.start.getHours(), timeEvent.start.getMinutes());
+	                endDate = new Date(timeEvent.start.getFullYear(), timeEvent.start.getMonth(), timeEvent.start.getDate() + count, timeEvent.start.getHours(), timeEvent.start.getMinutes());
+	                if (count == days) {
+                        duration = duration + addDur;
+                        timeCount = timeCount + count;
+                    }
+	                $("#showTSCalendar").fullCalendar('renderEvent', {
+	                    id: timeEvent.id + count,
+	                    title: duration + "(" + $('#taskName').val() + ")", 
+	                    start: startDate,
+	                    end: endDate,
+	                    allDay: timeEvent.allDay,
+	                    project: $('#taskProject').val(),
+	                    group: $('#taskGroup').val(),
+	                    task: $('#taskName').val(),
+	                    Duration: duration,
+	                    CP: $('#PComplete').val(),
+	                    Remarks: $('#taskRemarks').val(),
+	                    TC: $('#taskComplete').val()
+	                }, true);
+	            }
+	        }
+	        else {
+	            // This entry is only for one day
+	            //if (timeEvent.end == null) timeEvent.end = new Date(timeEvent.start.getFullYear(), timeEvent.start.getMonth(), timeEvent.start.getDate() + count, timeEvent.start.getHours(), timeEvent.start.getMinutes());
+	            timeEvent.project = $('#taskProject').val();
+	            timeEvent.group = $('#taskGroup').val();
+	            timeEvent.task = $('#taskName').val();  
+	            timeEvent.Duration = $('#taskDuration').val();
+	            timeEvent.CP = $('#PComplete').val();
+	            timeEvent.Remarks = $('#taskRemarks').val();
+	            timeEvent.TC = $('#taskComplete').val();
+	            timeEvent.title = $('#taskDuration').val() + "(" + $('#taskName').val() + ")";
+	            if (timeEvent.id == timeCount) {
+	                // Add New Event
+	                timeCount = timeCount + 1;
+	                $("#showTSCalendar").fullCalendar('renderEvent', timeEvent, true);
+	            }
+	            else {
+	                // Update existing event
+	                $("#showTSCalendar").fullCalendar('updateEvent', timeEvent);
+	            }
+            }
+	        $("#showTSCalendar").fullCalendar('unselect');
+            $("#editTS").modal("hide");
+	    });
+
+        $(document).on("click", "#deleteTime", function () {
+	        if (confirm("Do you want to delete this time entry")) {
+                $("#showTSCalendar").fullCalendar('removeEvents', timeEvent.id);
+	            $("#showTSCalendar").fullCalendar('unselect');
+                $("#editTS").modal("hide");
+            }
+	    });
+
+	</script> 
+   
+               
+}

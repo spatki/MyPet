@@ -1,0 +1,68 @@
+﻿@using ProcessAccelerator.WebUI
+@model IEnumerable<review_timesheets>
+@{
+    int type = ViewBag.Type;
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+<div class="row">
+    <div class="panel col-md-12">
+        <div class="panel-heading">
+            <h3 class="panel-title">@(type == 1 ? "Timesheets to be approved" : "Approved Timesheets")</h3>
+            <ul class="pagination pull-right" style="margin:-1px 0;">
+                <li class="@(type == 1 ? "active" : "")"><a href="javascript:;" class="subMenu" data-source="@Url.Action("ApproveTS", "Timesheet", new { type = 1 })">Timesheets to be approved</a></li>
+                <li class="@(type == 1 ? "" : "active")"><a href="javascript:;" class="subMenu" data-source="@Url.Action("ApproveTS", "Timesheet", new { type = 2 })">Approved Timesheets</a></li>
+            </ul>
+        </div>
+        <div class="panel-body" id="dataList">
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="processTable">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>@(type == 1 ? "Hours to Approve" : "Approved Hours")</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th class="docTableResult">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="listing">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var r in Model)
+                        {
+                            <tr>
+                                <td>@r.GivenName @r.FamilyName</td>
+                                <td>@r.TotalHours</td>
+                                <td>@r.StartDate.ToString(Globals.DateFormatString)</td>
+                                <td>@r.EndDate.ToString(Globals.DateFormatString)</td>
+                                <td class="docTableResult">
+                                    <a href="#" title="Review Timesheet" class="btn btn-med blue-bg subMenu" data-source="@Url.Action("ShowTSForApproval","Timesheet",new { type = type, empID = r.tbl_Org_EmployeeID, startDate = r.StartDate.ToString(Globals.DateFormatString) })"><i class="icon-">&#xf06e;</i></a>
+                                    @if (type == 1)
+                                    {
+                                        <a href="#" title="Approve" class="btn btn-med green-bg confirmAction" 
+                                        data-messagetitle="Confirm to Approve"
+                                        data-message="Do you want to approve this timesheet ?" data-class="loadDetails" 
+                                        data-classparams="data-element='containerDetails' data-mode='timesheet' data-source='@Url.Action("ApproveTSHours","Timesheet",new { empID = r.tbl_Org_EmployeeID, startDate = r.StartDate.ToString(Globals.DateFormatString), endDate = r.EndDate.ToString(Globals.DateFormatString) })'"><i class="icon-">&#xf00c;</i></a>
+                                    }
+                                    <a href="#confirmModal" title="Reject" class="btn btn-med red-bg confirmAction" 
+                                    data-messagetitle="Confirm to Reject"
+                                    data-message="Do you want to reject this timesheet ?" data-class="loadDetails" 
+                                    data-classparams="data-element='containerDetails' data-mode='timesheet' data-source='@Url.Action("RejectTSHours","Timesheet",new { empID = r.tbl_Org_EmployeeID, startDate = r.StartDate.ToString(Globals.DateFormatString), endDate = r.EndDate.ToString(Globals.DateFormatString) })'"><i class="icon-">&#xf112;</i></a>
+                                </td>
+                            </tr>                            
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>                
+</div>
+<script>
+    jsTable('processTable');
+</script>
+
+
+}

@@ -1,0 +1,12 @@
+﻿@model vw_prj_process_mapping
+@{
+    Layout = null;
+}
+<a href="javascript:;" id="option@(Model.ID)" class="loadDetails" data-element="@Model.ID" data-source="@Url.Action("IncludeRepo","PrjProcessTailor")" 
+    data-sourceid="@Model.ID" data-mode="IncludeRepo" title = "Click to include">
+    <i class="icon-ok"/>
+</a>
+<a class="tree-toggle closed" data-toggle="branch" role="branch" data-id="@Model.ID" id="Node@(Model.ID)" href="javascript:">
+    <span class="label label-info">@Model.LevelShortName @Model.Name</span>
+    <span class="label label-danger">Excluded</span>
+</a>

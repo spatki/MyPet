@@ -1,0 +1,57 @@
+﻿@model tbl_org_proj_locationInput
+@{
+    Layout = null;
+}
+            @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2">Select Project</label>
+                    <input type="hidden" name="selectedDoc" id="selectedDoc" value="0" />
+                    <div class="controls col-md-7">
+                        @Html.Action("getListItems","Project",new { selectedItem = "0", controlName = "Project", excludeIds = "", selectIds = ViewBag.SelectedIDs, reload = "reLoadOnChange"})
+                    </div>
+                    <div class="col-md-3 pull-right">
+                        <a href="javascript:;" class="btn green-bg pull-right relativeAddNew" data-sourceid="Project" data-source="@Url.Action("OrgLevelMapping","Project")">Set Org Level Mapping</a>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row col-md-12">
+                <div class="pull-right"><a href="javascript:;" data-toggle="modal" class="btn btn-med blue-bg relativeAddNew" data-sourceid="Project" data-id="listing" data-source="@Url.Action("Create")">Add New</a></div>
+            </div>
+            <div class="row">
+                <div class="panel colored col-md-12">
+                    <div class="panel-heading green-bg">
+                        <h3 class="panel-title">Project Locations</h3>
+                        <ul class="pull-right toolbar">
+                            <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                            <li><a href="javascript:;" class="icon-button reload-box reLoad" data-container="dataList" data-filter="Project" data-url="/ProjLocation/ReloadItems"><i class="icon-">&#xf021;</i></a></li>
+                            <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body" id="dataList">
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="processTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listing">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>                
+            </div>
+
+
+<script>
+
+    jsTable('processTable');
+    if ($("#Project").find("option:selected").eq(0).val() > 0) $("#Project").change();
+
+</script>
+
+

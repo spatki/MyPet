@@ -1,0 +1,52 @@
+﻿@model ProcessAccelerator.WebUI.Dto.LoginModel
+@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+	<div class="row">
+            <div class="panel col-md-12">
+            <div class="panel-heading">
+                <h3 class="panel-title">Function Configuration</h3>
+                <ul class="pull-right toolbar">
+                    <li><a href="#" class="icon-button"><i class="icon-">&#xf059;</i></a></li>
+                    <li><a href="#" class="icon-button reload-box"><i class="icon-">&#xf021;</i></a></li>
+                    <li><a href="#" class="icon-button mini-max"><i class="icon-">&#xf0aa;</i></a></li>
+                    <li><a href="#" class="icon-button close-box"><i class="icon-">&#xf057;</i></a></li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <p>Define various support functions and sub functions as per organisation requirements.</p>
+            </div>
+        </div>
+    </div>
+        <div class="row responsive-tab">
+            <ul class="stats clearfix">
+                <li class="col-md-4 popovers" data-original-title="Projects" data-content="Define project types and its phases using this option. This will be used during project creation process." data-trigger="hover" data-placement="top">
+                    <div class="black-bg subMenu" data-source="@Url.Action("Index","OrgFunction")">
+                    <i class="icon-umbrella"></i>
+                    <h5>Functions</h5> 
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","OrgFunction")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+                <li class="col-md-4 popovers" data-original-title="Functions" data-content="Configure functions and their sub-functions uing this options. All support groups that enable the primary business of the organisation should be defined here." data-trigger="hover" data-placement="top">
+                    <div class="purple-bg subMenu" data-source="@Url.Action("Index","OrgSubFunction")">
+                    <i class="icon-cogs"></i>
+                    <h5>Sub Functions</h5>
+                    <a href="javascript:" class="subMenu" data-source="@Url.Action("Index","OrgSubFunction")">Proceed <i class="icon-">&#xf0a9;</i></a>
+                    </div>
+                </li>
+            </ul>   
+        </div>
+
+    @functions{
+        public string GetAntiForgeryToken()
+        {
+            string cookieToken, formToken;
+            AntiForgery.GetTokens(null, out cookieToken, out formToken);
+            return cookieToken + ":" + formToken;                
+        }        
+    }
+}

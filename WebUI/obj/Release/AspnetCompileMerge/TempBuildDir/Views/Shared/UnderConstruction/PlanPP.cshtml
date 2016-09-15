@@ -1,0 +1,1370 @@
+﻿@{
+    Layout = null;
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+    @Html.Action("BreadCrump", "Menu", new { id = ViewBag.FunctionID })
+                <div class="row">
+                <div class="form-group">
+                    <label class="col-md-2">Select Project</label>
+                    <div class="controls col-md-10"><select class="col-md-12 chzn-nopadd chzn-select-no-single"><option>Payroll System</option> <option>Code Migration</option></select></div>
+                </div>
+            </div>
+            <hr />
+
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a data-toggle="tab" href="#ProjPlan">Plan</a></li>
+                <li><a data-toggle="tab" href="#ProjTrack">Track</a></li>
+            </ul>
+            
+            <div class="tab-content" id="myTabContent">
+                <div id="ProjPlan" class="tab-pane fade in active">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="javascript:;" id="showfilter" class="pull-left">Filter Tasks <i class="icon-">&#xf00e;</i></a>
+                        </div>
+                        <hr />
+                        <div class="panel colored" id="filterParams">
+                            <div class="panel-body filter-bg">
+                                <div class="row col-md-12">
+                                    <div class="col-md-5">
+                                            <label class="col-md-2 pull-left filterParams">From</label>
+                                            <div class="col-md-9">
+                                                <div class="input-group date datepicker">
+                                                    <input type="text" id="filter_fromDt" class="form-control col-md-9 filterParams">
+                                                    <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="col-md-2 pull-left filterParams">To</label>
+                                        <div class="col-md-9">
+                                            <div class="input-group date datepicker">
+                                                <input type="text" id="filter_toDt" class="form-control col-md-9 filterParams">
+                                                <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-med blue-bg searchProcedure pull-right filterParams">GO</button>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="col-md-2 pull-left filterParams">Plan</label>
+                                            <div class="col-md-9">
+                                                <select class="col-md-12 filterParams chzn-select-no-single">
+                                                    <option value="1">Plan 1</option>
+                                                    <option value="2">Plan 2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="col-md-2 pull-left filterParams">Group</label>
+                                            <div class="col-md-9">
+                                                <select class="col-md-12 filterParams chzn-select-no-single">
+                                                    <option value="1">Design Team</option>
+                                                    <option value="2">Salary Processing Module</option>
+                                                    <option value="3">Testing Team</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="col-md-2 pull-left filterParams">Plan Status</label>
+                                            <div class="col-md-9">
+                                                <select class="col-md-12 filterParams chzn-select-no-single">
+                                                    <option value="1">Not Started</option>
+                                                    <option value="2">In Progress</option>
+                                                    <option value="2">Under Review</option>
+                                                    <option value="2">Complete</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="col-md-2 pull-left filterParams">Track Status</label>
+                                            <div class="col-md-9">
+                                                <select class="chzn-select-no-single col-md-12 filterParams">
+                                                    <option value="1">Delayed</option>
+                                                    <option value="2">Early Completion</option>
+                                                    <option value="3">Not Resources Assigned</option>
+                                                    <option value="3">Pending Pickup</option>
+                                                    <option value="3">Pickup Rejected</option>
+                                                    <option value="3">Due this week</option>
+                                                    <option value="3">Yet to Start</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>     
+                          			
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered advanced-table" >
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Plan</th>
+                                    <th class="visible-lg">Group</th>
+                                    <th>Task</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th class="visible-lg">Duration</th>
+                                    <th class="visible-lg">Duration Unit</th>
+                                    <th>% Complete</th>
+                                    <th>Status</th>
+                                    <th class="visible-lg">Resources</th>
+                                    <th>Track Status</th>
+                                    <th>View</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Plan 1</td>
+                                        <td class="visible-lg"></td>
+                                        <td>Requirements Gathering</td>
+                                        <td>01-Feb-14</td>
+                                        <td>30-Mar-14</td>
+                                        <td class="visible-lg">25</td>
+                                        <td class="visible-lg">Days</td>
+                                        <td>30 %</td>
+                                        <td>In Progress</td>
+                                        <td class="visible-lg">Arvind Swami (50%), Sunanda Gupte, Krish Parekh</td>
+                                        <td><span class="label label-danger col-md-12">Delayed</span></td>
+                                        <td><a href="#reqTaskDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-edit"></i></a></td>
+                                        <td><a href="#confirmModal" class="btn btn-med red-bg rejectProj" role="button" data-toggle="modal"><i class="icon-remove"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Plan 1</td>
+                                        <td class="visible-lg"></td>
+                                        <td>Requirements Documentation</td>
+                                        <td>10-Feb-14</td>
+                                        <td>30-Mar-14</td>
+                                        <td class="visible-lg">25</td>
+                                        <td class="visible-lg">Days</td>
+                                        <td>30 %</td>
+                                        <td>In Progress</td>
+                                        <td class="visible-lg">Arvind Swami (50%)</td>
+                                        <td><span class="label label-success col-md-12">On Time</span></td>
+                                        <td><a href="#reqTaskDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-edit"></i></a></td>
+                                        <td><a href="#confirmModal" class="btn btn-med red-bg rejectProj" role="button" data-toggle="modal"><i class="icon-remove"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Plan 1</td>
+                                        <td class="visible-lg"></td>
+                                        <td>Database Design</td>
+                                        <td>01-Apr-14</td>
+                                        <td>15-Jun-14</td>
+                                        <td class="visible-lg">40</td>
+                                        <td class="visible-lg">Days</td>
+                                        <td>0 %</td>
+                                        <td>To be Started</td>
+                                        <td class="visible-lg">Tarun Gupta, Sumedha Patkar</td>
+                                        <td><span class="label label-warning col-md-12">Due</span></td>
+                                        <td><a href="#reqTaskDetails" class="btn btn-med blue-bg" data-toggle="modal"><i class="icon-edit"></i></a></td>
+                                        <td><a href="#confirmModal" class="btn btn-med red-bg rejectProj" role="button" data-toggle="modal"><i class="icon-remove"></i></a></td>
+                                    </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="row">
+                         <div class="panel colored col-md-12">
+					        <form role="form">				
+                                 <div class="panel-body">
+                                        <div class="col-lg-12 navbar-fixed-bottom pull-right">
+                    	                    <div class="row pull-right panel-footer">
+                                                <div class="col-lg-12 col-lg-offset-1">
+                                                    <button type="button" class="btn blue-bg" id="NewTask">New Task</button>
+                                                    <button type="button" class="btn blue-bg" id="projCalendar" data-last="1">Project Calendar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>					
+					        </form>
+                        </div>  
+                    </div>
+                </div>
+                <div id="ProjTrack" class="tab-pane">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Track for week starting: <span id="weekStart" class="boldText"></span>  
+                                        <a href="#" class="nav_options" id="prevWeek"><i class="icon-double-angle-left"></i> Prev</a>
+                                        <a href="#" class="nav_options" id="showToday"><i class="icon-double-angle-down"></i> current</a>
+                                        <a href="#" class="nav_options" id="nextWeek">Next <i class="icon-double-angle-right"></i></a>
+                                    </h3>
+                                    <ul class="pagination pull-right" style="margin:-1px 0;">
+                                        <li  class="active"><a href="#" id="showTaskView" >Task</a></li>
+                                        <li><a href="#" id="showResView">Resource</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                                <div class="panel-body" id="TaskView">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="docTableSequence-bg"></th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Task</th>
+                                                <th>Planned Duration</th>
+                                                <th>Actual Duration</th>
+                                                <th>Status</th>
+                                                <th>Tracking Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><a href="javascript:;" class="group tree-toggle closed" data-childid="T1"></a></td>
+                                                <td>12-Jan-14</td>
+                                                <td>15-Jan-14</td>
+                                                <td><a href="#reqTaskDetails" data-toggle="modal" title="Click to view task">Design</a></td>
+                                                <td>36</td>
+                                                <td>0</td>
+                                                <td>Not Started</td>
+                                                <td><span class="label label-success">Yet to Start</span></td>
+                                            </tr>
+                                            <tr id="T1" style="display:none;">
+                                                <td></td>
+                                                <td colspan="7">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr class="EditRow">
+                                                                <th>Resource</th>
+                                                                <th>From</th>
+                                                                <th>To</th>
+                                                                <th>Actual Hours</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Avinash Gupta</a></td>
+                                                                <td>12-Jan-14</td>
+                                                                <td>15-Jan-14</td>
+                                                                <td>0</td>
+                                                                <td>Not Started</td>
+                                                            </tr>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Supriya Sure</a></td>
+                                                                <td>12-Jan-14</td>
+                                                                <td>14-Jan-14</td>
+                                                                <td>0</td>
+                                                                <td>Not Started</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="javascript:;" class="group tree-toggle closed" data-childid="T2"></a></td>
+                                                <td>23-Feb-14</td>
+                                                <td>31-Mar-14</td>
+                                                <td><a href="#reqTaskDetails" data-toggle="modal" title="Click to view task">Coding</a></td>
+                                                <td>200</td>
+                                                <td>0</td>
+                                                <td>Not Started</td>
+                                                <td><span class="label label-warning">No Resources Assigned</span></td>
+                                            </tr>
+                                            <tr id="T2" style="display:none;">
+                                                <td></td>
+                                                <td colspan="7">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr class="EditRow">
+                                                                <th>Resource</th>
+                                                                <th>From</th>
+                                                                <th>To</th>
+                                                                <th>Actual Hours</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="EditRow warning">
+                                                                <td colspan="5">No Resources Assigned</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="javascript:;" class="group tree-toggle closed" data-childid="T3"></a></td>
+                                                <td>13-Dec-13</td>
+                                                <td>01-Feb-14</td>
+                                                <td><a href="#reqTaskDetails" data-toggle="modal" title="Click to view task">Requirements Documentation</a></td>
+                                                <td>120</td>
+                                                <td>10</td>
+                                                <td>In Progress</td>
+                                                <td><span class="label label-danger">Delayed</span></td>
+                                            </tr>
+                                            <tr id="T3" style="display:none;">
+                                                <td></td>
+                                                <td colspan="7">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr class="EditRow">
+                                                                <th>Resource</th>
+                                                                <th>From</th>
+                                                                <th>To</th>
+                                                                <th>Actual Hours</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Jignesh Parekh</a></td>
+                                                                <td>13-Dec-13</td>
+                                                                <td>01-Feb-14</td>
+                                                                <td>10</td>
+                                                                <td>In Progress</td>
+                                                            </tr>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Chandu Singh</a></td>
+                                                                <td>13-Dec-13</td>
+                                                                <td>01-Feb-14</td>
+                                                                <td>0</td>
+                                                                <td>Not Started</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="javascript:;" class="group tree-toggle closed" data-childid="T4"></a></td>
+                                                <td>11-Nov-13</td>
+                                                <td>04-Dec-13</td>
+                                                <td><a href="#reqTaskDetails" data-toggle="modal" title="Click to view task">Requirements Gathering</a></td>
+                                                <td>300</td>
+                                                <td>300</td>
+                                                <td>In Progress</td>
+                                                <td><span class="label label-success">On Time</span></td>
+                                            </tr>
+                                            <tr id="T4" style="display:none;">
+                                                <td></td>
+                                                <td colspan="7">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr class="EditRow">
+                                                                <th>Resource</th>
+                                                                <th>From</th>
+                                                                <th>To</th>
+                                                                <th>Actual Hours</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Kunal Sinha</a></td>
+                                                                <td>13-Dec-13</td>
+                                                                <td>01-Feb-14</td>
+                                                                <td>150</td>
+                                                                <td>Approved</td>
+                                                            </tr>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Swapnil Joshi</a></td>
+                                                                <td>13-Dec-13</td>
+                                                                <td>20-Jan-14</td>
+                                                                <td>100</td>
+                                                                <td>Approved</td>
+                                                            </tr>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Geeta Mehta</a></td>
+                                                                <td>21-Jan-14</td>
+                                                                <td>01-Feb-14</td>
+                                                                <td>50</td>
+                                                                <td>Approved</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-body" id="ResourceView" style="display:none;">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="docTableSequence-bg"></th>
+                                                <th>Resource</th>
+                                                <th>Assigned Hours</th>
+                                                <th>Actual Hours</th>
+                                                <th>Allocation %</th>
+                                                <th>Actual %</th>
+                                                <th>TS Status</th>
+                                                <th>Tracking Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><a href="javascript:;" class="group tree-toggle closed" data-childid="Rs1"></a></td>
+                                                <td>Kunal Sinha</td>
+                                                <td>50</td>
+                                                <td>50</td>
+                                                <td>125 %</td>
+                                                <td>125 %</td>
+                                                <td>Approved</td>
+                                                <td><span class="label label-danger">Over Allocated</span></td>
+                                            </tr>
+                                            <tr id="Rs1" style="display:none;">
+                                                <td></td>
+                                                <td colspan="8">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr class="EditRow">
+                                                                <th>Task</th>
+                                                                <th>From</th>
+                                                                <th>To</th>
+                                                                <th>Assigned Hours</th>
+                                                                <th>Actual Hours</th>
+                                                                <th>Schedule Variance</th>
+                                                                <th>Effort Variance</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Requirements Gathering</a></td>
+                                                                <td>13-Dec-14</td>
+                                                                <td>14-Dec-14</td>
+                                                                <td>16</td>
+                                                                <td>16</td>
+                                                                <td>0</td>
+                                                                <td>0</td>
+                                                                <td>Approved</td>
+                                                            </tr>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">Design Review</a></td>
+                                                                <td>16-Dec-14</td>
+                                                                <td>20-Dec-14</td>
+                                                                <td>30</td>
+                                                                <td>30</td>
+                                                                <td>0</td>
+                                                                <td>0</td>
+                                                                <td>Approved</td>
+                                                            </tr>
+                                                            <tr class="EditRow">
+                                                                <td><a href="#viewTSDetails" data-toggle="modal" title="Click to view timesheet">SRS Review</a></td>
+                                                                <td>30-Dec-14</td>
+                                                                <td>30-Dec-14</td>
+                                                                <td>4</td>
+                                                                <td>4</td>
+                                                                <td>0</td>
+                                                                <td>0</td>
+                                                                <td>Approved</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+    <div class="modal fade" id="reqTaskDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:900px;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Task </h4>
+		</div>
+		<div class="modal-body">
+            <ul class="nav nav-tabs" id="Ul1">
+                <li class="active"><a data-toggle="tab" href="#SDetail">Details</a></li>
+                <li><a data-toggle="tab" href="#SSuppDoc">Resources</a></li>
+                <li><a data-toggle="tab" href="#SDocs">Supporting Information</a></li>
+            </ul>
+            <div class="tab-content" id="Div3">
+                <br />
+                <div id="SDetail" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-md-2">Task</label>
+                                <div class="controls col-md-10">
+                                    <select class="col-md-12 chz-nopadd sns"><option>Select Task</option><optgroup label="Requirements"><option>Requirements Gathering</option><option>Documentation</option><option>Review</option><option>Traceability</option></optgroup><optgroup label="Design"><option>Design Discussion</option><option>Design</option><option>Documentation</option><option>Review</option></optgroup><optgroup label="Coding"><option>Low Level Design</option><option>Conding</option><option>Code Review</option><option>Unit Testing</option></optgroup><optgroup label="SIT"><option>Test Plan Preparation</option><option>Test Plan Review</option><option>Testing</option><option>Test Review</option></optgroup></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-12">Description</label>
+                                <textarea rows="3" class="form-control col-md-12" ></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-md-12">&nbsp;</label>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4">Group</label>
+                                    <div class="controls col-md-8"><select class="col-md-12 chzn-nopadd sns" ><option>Design Team</option> <option selected="selected">Salary Processing Module</option> <option>Testing Team</option></select></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Status</label>
+                                    <div class="controls col-md-8"><select class="col-md-12 chzn-nopadd sns" ><option>Not Started</option> <option selected="selected">In Progress</option> <option>Under Review</option>  <option>Review Complete</option></select></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Plan Name</label>
+                                    <div class="col-md-8">
+                                        <input class="form-control col-md-12" type="text" value="Plan 1"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Start</th>
+                                    <th>Finish</th>
+                                    <th>Duration</th>
+                                    <th>Unit</th>
+                                    <th>% Complete</th>
+                                    <th>Is Complete? </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Planned</th>
+                                    <td>                             
+                                        <div class="input-group date datepicker">
+                                            <input type="text" id="planned_from" class="form-control">
+                                            <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                        </div>
+                                    </td>
+                                    <td>                                                        
+                                        <div class="input-group date datepicker">
+                                            <input type="text" id="planned_to" class="form-control">
+                                            <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                                        </div>
+                                    </td>                 
+                                    <td><input type="text" size="3" class="form-control"/></td>
+                                    <td><select class="chzn-nopadd chzn-select-no-single" ><option>Hours</option> <option selected="selected">Days</option> <option>Months</option> </select></td>
+                                    <td><input type="text" size="3"  class="form-control" id="mask_decimal"/></td>
+                                    <td><input type="checkbox" /></td>
+                                </tr>
+                                <tr>
+                                    <th>Actual</th>
+                                    <td></td>
+                                    <td></td>                 
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="SSuppDoc" class="tab-pane">
+                    <br />
+                    <div class="row">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-1"></th>
+                                                <th>Resource</th>
+                                                <th>Allocation %</th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-count="1">
+                                            <tr id="R1">
+                                                <td><a href="#" data-id="R1" class="addResource" data-toggle="modal" data-tableid="HDocDetails" data-key="R"><i class="icon-">&#xf055</i></a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                </div>
+                <div id="SDocs" class="tab-pane">
+                    <br />
+                    <div class="row">
+                        <table  class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Document</th>
+                                    <th>Remarks</th>
+                                    <th>Mandatory</th>
+                                    <th class="hidden-sm">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody data-count="1">
+                                <tr id="S1">
+                                    <td><a href="#" data-id="S1" class="addSDoc" data-toggle="modal" data-tableid="HDocDetails" data-key="S"><i class="icon-">&#xf055</i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>       
+		</div>
+		<div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		    <button type="button" class="btn blue-bg" data-dismiss="modal">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+    <div class="modal fade" id="reviewDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Review Comments</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <input type="hidden" id="statusID" /><input type="hidden" id="statusDesc" />
+                        <label class="control-label col-lg-3"><b>Reviewer:</b></label>
+                        <label class="control-label col-lg-3 pull-left">Sanjay Goel</label>
+                        <label class="control-label col-lg-3"><b>Review Date: </b></label>
+                        <label class="control-label col-lg-3 pull-left" id="createDate">01-Oct-13</label>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="col-lg-12"><b>Review Comments</b></label>
+                        <textarea name="reviewComments" class="col-lg-12" rows="5" id="reviewComments"></textarea>                    
+                    </div>
+                </div>
+            </div>
+		</div>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		  <button type="button" class="btn blue-bg" id="saveReview">Save</button>
+		</div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+<div class="modal fade" id="showDocument" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-remote="Documents/Projects/BRD for Process Accelerator v1.1.pdf" >
+	<div class="modal-dialog"  style="width:80%; height:90%;overflow:auto;">
+  <div class="modal-content">
+	<div class="modal-header blue-bg">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="model-title emphasize">View Document</h4>
+	</div>
+	<div class="modal-body">
+        <div class="row" id="docContent">
+            Document contents will appear here...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+<div class="modal fade" id="showCalendar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="model-title">Configure Project Holidays</h4>
+	</div>
+	<div class="modal-body">
+        <div class="row">
+            <div class="panel col-md-12">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Project Calendar</h3>
+                </div>
+                <div class="panel-body" id='showProjCalendar'></div>
+            </div>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+<div class="modal fade" id="editHolidays" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:400px;">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	  <h4 class="model-title">Holiday</h4>
+	</div>
+	<div class="modal-body">
+        <div class="row">
+            <div class="form-group">
+                <label>Holiday Name</label>
+                <div class="controls"><input type="text" class="form-control" value="" id="holidayName" /></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+            <button type="button" class="btn blue-bg" data-dismiss="modal" id="saveHoliday">Save</button>
+            <button type="button" class="btn blue-bg" data-dismiss="modal" id="deleteHoliday">Delete</button>
+        </div>
+    </div>
+  </div><!-- /.modal-content -->	
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+<div class="modal fade" id="viewTSDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:95%;height:60%;overflow:auto;">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">Timesheet Details</h4>
+		</div>
+		<div class="modal-body">
+            <div class="row">
+                <div class="col-md-10">
+                    <strong><span id="empName"></span></strong> -  <span id="period"></span>
+                </div>
+            </div>
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="Table1">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Project</th>
+                        <th>Group</th>
+                        <th>Task Type</th>
+                        <th>Task</th>
+                        <th>From Time</th>
+                        <th>To Time</th>
+                        <th>Duration (hrs)</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td>01/01/2013</td> 
+                            <td>Payroll System</td> 
+                            <td>Design Team</td>
+                            <td>General Task</td> 
+                            <td>Project Management</td> 
+                            <td>00:00</td>
+                            <td>00:00</td>
+                            <td>3</td>
+                            <td>Routine PM activities</td>
+                        </tr>
+                        <tr>
+                            <td>01/01/2013</td> 
+                            <td>Payroll System</td> 
+                            <td>Design Team</td>
+                            <td>Assigned Task</td> 
+                            <td>Review</td> 
+                            <td>00:00</td>
+                            <td>00:00</td>
+                            <td>3</td>
+                            <td>SRS Review</td>
+                        </tr>                                        
+                        <tr>
+                            <td>01/01/2013</td> 
+                            <td>Payroll System</td> 
+                            <td>Design Team</td>
+                            <td>General Task</td> 
+                            <td>Meeting</td> 
+                            <td>00:00</td>
+                            <td>00:00</td>
+                            <td>2</td>
+                            <td>Status Meeting with team</td>
+                        </tr>
+                </tbody>
+            </table>                            
+
+		<div class="modal-footer">
+		  <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		</div>
+        </div>
+	  </div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<script type="text/javascript">
+
+    var holidayCount = 7;
+    var holidayEvent;
+    var viewDate = new Date();
+
+    var config = {
+        '.chzn-select': {},
+        '.chzn-select-deselect': { allow_single_deselect: false },
+        '.chzn-select-no-single': { disable_search_threshold: 10 },
+        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chzn-select-width': { width: "95%" }
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+
+    var setHolidayDetails = function (calEvent) {
+        if (calEvent.id == 0) calEvent.id = holidayCount;
+        holidayEvent = calEvent;
+        $("#holidayName").val(holidayEvent.title);
+        $("#holidayName").focus();
+    };
+
+    $(document).on("click", "#saveHoliday", function () {
+        if ($("#holidayName").val()) {
+            if (holidayEvent.id == holidayCount) {
+                // Add New Event
+                holidayCount = holidayCount + 1;
+                holidayEvent.title = $("#holidayName").val();
+                $("#showProjCalendar").fullCalendar('renderEvent', holidayEvent, true);
+            }
+            else {
+                // Update existing event
+                holidayEvent.title = $("#holidayName").val();
+                $("#showProjCalendar").fullCalendar('updateEvent', holidayEvent);
+            }
+        }
+        $("#showProjCalendar").fullCalendar('unselect');
+    });
+
+    $(document).on("click", "#deleteHoliday", function () {
+        if (confirm("Do you want to delete this holiday")) $("#showProjCalendar").fullCalendar('removeEvents', holidayEvent.id);
+        $("#showProjCalendar").fullCalendar('unselect');
+    });
+
+    $("body").delegate(".showDocumentData", "click", function () {
+        //        $("#showDocument").modal("show");
+        window.open("Documents/Projects/Example.pdf", null,"height=400,width=600,status=yes,toolbar=no,menubar=no,location=no,top=200,left=300");
+    });
+
+    $("#filter_fromDt").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+    $("#filter_toDt").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+    $("#planned_from").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+    $("#planned_to").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+
+    $(document).on("click", "#showEmpFilter", function () {
+        $("#filterEmpParams").toggle("slow");
+    });
+
+    $("body").delegate(".removeResource", "keydown", function (e) {
+        keypressCode = e.which;
+        keypressShift = e.shiftKey;
+    });
+
+    $("body").delegate(".removeResource", "click", function () {
+        if (confirm("Do you want to remove this resource ?")) {
+            $("#" + $(this).data("id")).remove();
+        }
+    });
+    
+    $("body").delegate(".removeResource", "blur", function (e) {
+        if (keypressCode == 9 && !keypressShift) $(this).parent().parent().children().eq(1).click();
+        else {
+            if (keypressCode == 9 && keypressShift) $(this).parent().parent().prev().children().eq(4).click();
+        }
+    });
+
+    $("body").delegate(".addResource", "keydown", function (e) {
+        keypressCode = e.which;
+        keypressShift = e.shiftKey;
+    });
+
+    $("body").delegate(".addResource", "blur", function (e) {
+        if (keypressCode == 9 && keypressShift) $(this).parent().parent().prev().children().eq(4).click();
+    });
+
+
+    $("body").delegate(".showDocumentData", "click", function () {
+        //        $("#showDocument").modal("show");
+        window.open("Documents/Projects/Example.pdf", null, "height=400,width=600,status=yes,toolbar=no,menubar=no,location=no,top=200,left=300");
+    });
+
+    $("body").delegate(".addResource", "click", function () {
+        // add additional columns for edit
+        var count = parseInt($(this).parent().parent().parent().data("count"));
+        var nodeKey = $(this).parent().parent().parent().prop("id");
+        count = count + 1;
+        var newColumns = '<td class="resEdit" id="' + nodeKey + 'Resource' + count + '" data-id="0" data-next="' + nodeKey + 'AllocP' + count + '" data-type="Resource">Select</td>' +
+                            '<td class="resEdit" id="' + nodeKey + 'AllocP' + count + '" data-id="100" data-next="' + nodeKey + 'From' + count + '" data-prev="' + nodeKey + 'Resource' + count + '" data-type="AllocP">Select</td>' +
+                            '<td class="resEdit" id="' + nodeKey + 'From' + count + '" data-id="" data-next="' + nodeKey + 'To' + count + '" data-prev="' + nodeKey + 'AllocP' + count + '" data-type="From"></td>' +
+                            '<td class="resEdit" data-id="" id="' + nodeKey + 'To' + count + '" data-prev="' + nodeKey + 'From' + count + '" data-type="To"></td>' ;
+        $(this).parent().after(newColumns);
+        $(this).parent().parent().parent().data("count", count);
+
+        // Add the option to add more rows
+        $(this).parent().parent().parent().append('<tr id="R' + count + '"><td><a href="#" class="addResource" data-id="R' + (count + 1) + '" data-count="' + (count + 1) + '"><i class="icon-">&#xf055</i></a></td></tr>');
+        $(this).removeClass("addResource");
+        $(this).addClass("removeResource");
+        $(this).children().first().html("&#xf00d");
+        $("#Resource" + count).click();
+        // Go to the new rule
+        $('html, body').animate({
+            scrollTop: $("#" + "R" + count).offset().top
+        }, 2000);
+
+    });
+
+    $("body").delegate(".resEdit", "click", function () {
+        var OriginalContent = $(this).text();
+        var OriginalValue = $(this).data("id");
+        var editItem = $(this).data("type");
+
+        var inputHTML = "";
+
+        // Prepare input based on type of column
+        switch (editItem) {
+            case "Resource":
+                inputHTML = '<select><option value="0">Select</option><option value="1">Arvind Swami</option> <option value="2">Sunanda Gupte</option> <option value="3">Krish Parekh</option> <option value="4">Tarun Gupta</option> <option value="5">Sumedha Patkar</option> </select>';
+                break;
+            case "AllocP":
+                inputHTML = '<input type="text" class="max_percent" size="4" />';
+                break;
+            case "From":
+                inputHTML = '<input type="text" class="dateInput" size="10">';
+                break;
+            case "To":
+                inputHTML = '<input type="text" class="dateInput" size="10">';
+                break;
+        };
+
+        $(this).removeClass("resEdit");
+        $(this).addClass("cellEditing");
+        $(this).html(inputHTML);
+        $(this).children().val(OriginalValue);
+        $(this).children().first().focus();
+        $(this).children().first().select();
+        // Add mask for duration
+        $(".mask_percent").inputmask("999", { placeholder: " ", clearMaskOnLostFocus: true }); //default
+        $(".dateInput").inputmask("d/m/y", { "placeholder": "dd/mm/yyyy" });
+
+        keypressCode = -1;
+        keypressShift = false;
+	
+        $(this).children().first().blur(function () {
+            var nextTD = $(this).parent().data("next");
+            var prevTD = $(this).parent().data("prev");
+
+            $(this).parent().removeClass("cellEditing");
+            $(this).parent().addClass("resEdit");
+            $(this).parent().data("id",$(this).val());
+            if ($(this).find("option:selected").length == 0) $(this).parent().text($(this).val());
+            else $(this).parent().text($(this).find("option:selected").eq(0).text());
+                       
+            if (keypressCode == 9 || keypressCode == 16)
+            {
+                if (keypressShift) $("#" + prevTD).click();
+                else $("#" + nextTD).click();
+            } 
+        });
+
+
+        $(this).children().first().on("keydown",(function (e) {
+            // check for tab key
+            if (e.which == 13) {
+                var nextTD = $(this).parent().data("next");
+                var prevTD = $(this).parent().data("prev");
+
+                $(this).parent().removeClass("cellEditing");
+                $(this).parent().addClass("resEdit");
+                $(this).parent().data("id",$(this).val());
+                if ($(this).find("option:selected").length == 0) $(this).parent().text($(this).val());
+                else $(this).parent().text($(this).find("option:selected").eq(0).text());
+                // Focus on the next td
+                $("#" + nextTD).click();
+             }
+            else
+            {
+                keypressCode = e.which;
+                keypressShift =  e.shiftKey;
+            }
+        }));
+        
+    });
+
+    $(document).on("click", "#NewTask", function () {
+        $("#reqTaskDetails").modal("show");
+    });
+    
+    $(document).on("click", "#projCalendar", function () {
+        $("#showCalendar").modal("show");
+    });
+
+    $('#showCalendar').on('shown.bs.modal', function () {
+        $('#showProjCalendar').fullCalendar('render');
+    });
+
+    $("body").delegate(".addSDoc", "keydown", function (e) {
+        keypressCode = e.which;
+        keypressShift = e.shiftKey;
+    });
+
+    $("body").delegate(".addSDoc", "blur", function (e) {
+        if (keypressCode == 9 && keypressShift) $(this).parent().parent().prev().children().last().prev().click();
+    });
+
+    $("body").delegate(".addSDoc", "click", function () {
+        // add additional columns for edit
+        var count = parseInt($(this).parent().parent().parent().data("count"));
+        var nodeKey = $(this).parent().parent().parent().prop("id");
+        var newColumns = '<td class="editDoc" id="' + nodeKey + 'Document' + count + '" data-id="0" data-next="' + nodeKey + 'Remarks' + count + '" data-type="Document">Select</td>' +
+                            '<td class="editDoc" id="' + nodeKey + 'Remarks' + count + '" data-id="" data-next="' + nodeKey + 'Mandatory' + count + '" data-prev="' + nodeKey + 'Document' + count + '" data-type="Remarks">Select</td>' +
+                            '<td class="editDoc" id="' + nodeKey + 'Mandatory' + count + '" data-id="0" data-prev="' + nodeKey + 'Remarks' + count + '" data-type="Mandatory"></td>' +
+                            '<td data-id="" id="' + nodeKey + 'Status' + count + '" data-type="Status">Not Applicable</td>';
+        $(this).parent().after(newColumns);
+        count = count + 1;
+        $(this).parent().parent().parent().data("count", count);
+
+        // Add the option to add more rows
+        $(this).parent().parent().parent().append('<tr id="S' + count + '"><td><a href="#" class="addSDoc" data-id="S' + count + '" data-count="' + count + '"><i class="icon-">&#xf055</i></a></td></tr>');
+        $(this).removeClass("addSDoc");
+        $(this).addClass("removeSDoc");
+        $(this).children().first().html("&#xf00d");
+        $("#Document" + (count-1)).click();
+        // Go to the new rule
+        $('html, body').animate({
+            scrollTop: $("#" + "S" + count).offset().top
+        }, 2000);
+
+    });
+
+    $("body").delegate(".editDoc", "click", function () {
+        var OriginalContent = $(this).text();
+        var OriginalValue = $(this).data("id");
+        var editItem = $(this).data("type");
+
+        var inputHTML = "";
+
+        // Prepare input based on type of column
+        switch (editItem) {
+            case "Document":
+                inputHTML = '<select class="col-md-12">' + 
+                                    '<option value="0">Select</option>' +
+                                    '<optgroup label="Procedures">' +
+                                        '<option value="Coding Best Practices">Coding Best Practices</option>' +
+                                        '<option value="Inter Browser Compatibility">Inter Browser Compatibility process</option>' +
+                                    '</optgroup>' +
+                                    '<optgroup label="Checklists">' +
+                                        '<option value="Coding checklist">Coding Checklist</option>' +
+                                        '<option value="Code Review Checklist">Code Review Checklist</option>' +
+                                    '</optgroup>' +
+                                    '<optgroup label="Templates">' +
+                                        '<option value="Test plan Template">Test Plan Template</option>' +
+                                        '<option valu="Test Strategy">Test Strategy</option>' +
+                                    '</optgroup>' +
+                                '</select>' ;
+                break;
+            case "Remarks":
+                inputHTML = '<input type="text" size="20">';
+                break;
+            case "Mandatory":
+                inputHTML = '<select><option value="0">Reference</option><option value="1">Yes</option><option value="2">No</option></select>';
+                break;
+            case "Status":
+                inputHTML = 'Not Applicable';
+                break;
+        };
+
+        $(this).removeClass("editDoc");
+        $(this).addClass("cellEditing");
+        $(this).html(inputHTML);
+        $(this).children().val(OriginalValue);
+        $(this).children().first().focus();
+        $(this).children().first().select();
+
+        keypressCode = -1;
+        keypressShift = false;
+
+        $(this).children().first().blur(function () {
+            var nextTD = $(this).parent().data("next");
+            var prevTD = $(this).parent().data("prev");
+
+            $(this).parent().removeClass("cellEditing");
+            $(this).parent().addClass("editDoc");
+            $(this).parent().data("id", $(this).val());
+            if ($(this).find("option:selected").length == 0) $(this).parent().text($(this).val());
+            else $(this).parent().text($(this).find("option:selected").eq(0).text());
+
+            if (keypressCode == 9 || keypressCode == 16) {
+                if (keypressShift) $("#" + prevTD).click();
+                else $("#" + nextTD).click();
+            }
+        });
+
+
+        $(this).children().first().on("keydown", (function (e) {
+            // check for tab key
+            if (e.which == 13) {
+                var nextTD = $(this).parent().data("next");
+                var prevTD = $(this).parent().data("prev");
+
+                $(this).parent().removeClass("cellEditing");
+                $(this).parent().addClass("editDoc");
+                $(this).parent().data("id", $(this).val());
+                if ($(this).find("option:selected").length == 0) $(this).parent().text($(this).val());
+                else $(this).parent().text($(this).find("option:selected").eq(0).text());
+                // Focus on the next td
+                $("#" + nextTD).click();
+            }
+            else {
+                keypressCode = e.which;
+                keypressShift = e.shiftKey;
+            }
+        }));
+
+    });
+
+    $("body").delegate(".removeSDoc", "click", function () {
+        if (confirm("Do you want to remove this document ?")) {
+            $("#" + $(this).data("id")).remove();
+        }
+    });
+
+    $("body").delegate(".removeSDoc", "keydown", function (e) {
+        keypressCode = e.which;
+        keypressShift = e.shiftKey;
+    });
+
+    $("body").delegate(".removeSDoc", "blur", function (e) {
+        if (keypressCode == 9 && !keypressShift) $(this).parent().parent().children().eq(1).click();
+        else {
+            if (keypressCode == 9 && keypressShift) $(this).parent().parent().prev().children().last().prev().click();
+        }
+    });
+
+    $('#reqTaskDetails').on('shown.bs.modal', function () {
+            $(".sns").chosen({ disable_search_threshold: 10 });
+    });
+
+
+	    /********************************************* SHWETA *************************************/
+
+    var chartDataSource = [
+{
+    year: 1950, Africa: 227, Americas: 331,
+    Asia: 1436, Europe: 547, Oceania: 12
+},
+{
+    year: 1960, Africa: 285, Americas: 416,
+    Asia: 1718, Europe: 605, Oceania: 15
+},
+{
+    year: 1970, Africa: 365, Americas: 512,
+    Asia: 2156, Europe: 657, Oceania: 19
+},
+{
+    year: 1980, Africa: 478, Americas: 612,
+    Asia: 2644, Europe: 695, Oceania: 22
+},
+{
+    year: 1990, Africa: 633, Americas: 720,
+    Asia: 3180, Europe: 722, Oceania: 26
+},
+{
+    year: 2000, Africa: 810, Americas: 833,
+    Asia: 3678, Europe: 731, Oceania: 30
+},
+{
+    year: 2010, Africa: 1016, Americas: 936,
+    Asia: 4149, Europe: 728, Oceania: 35
+}];
+
+    $(function () {
+        $("#chartContainer").dxChart({
+            dataSource: chartDataSource,
+            title: {
+                text: 'Continental Population Shift (in millions)'
+            },
+            legend: {
+                horizontalAlignment: 'center',
+                verticalAlignment: 'bottom'
+            },
+            commonSeriesSettings: {
+                argumentField: 'year',
+                type: 'fullStackedArea',
+                label: {
+                    visible: true,
+                    connector: {
+                        visible: true
+                    }
+                }
+            },
+            tooltip: {
+                enabled: true,
+                percentPrecision: 2,
+                customizeTooltip: function (value) {
+                    return {
+                        text: value.percentText
+                    };
+                }
+            },
+            series: [{
+                name: 'Oceania',
+                valueField: 'Oceania'
+            }, {
+                name: 'Africa',
+                valueField: 'Africa'
+            }, {
+                name: 'Americas',
+                valueField: 'Americas'
+            }, {
+                name: 'Asia',
+                valueField: 'Asia'
+            }, {
+                name: 'Europe',
+                valueField: 'Europe'
+            }]
+        });
+    });
+
+    var pieChartDataSource = [
+        { category: 'Oceania', value: 35 },
+        { category: 'Africa', value: 1016 },
+        { category: 'Americas', value: 936 },
+        { category: 'Asia', value: 4149 },
+        { category: 'Europe', value: 728 }
+    ];
+
+    $(function () {
+        $("#pieChartContainer").dxPieChart({
+            dataSource: pieChartDataSource,
+            series: {
+                argumentField: 'category',
+                valueField: 'value',
+                label: {
+                    visible: true,
+                    connector: {
+                        visible: true
+                    }
+                }
+            },
+            tooltip: {
+                enabled: true,
+                percentPrecision: 2,
+                customizeTooltip: function (value) {
+                    return {
+                        text: value.percentText
+                    };
+                }
+            },
+            title: {
+                text: 'Continental Population by 2010 (in millions)'
+            },
+            legend: {
+                horizontalAlignment: 'center',
+                verticalAlignment: 'bottom'
+            }
+        });
+    });
+
+    $("body").delegate(".group", "click", function () {
+        $("#" + $(this).data("childid")).toggle();
+        $(this).toggleClass("closed");
+    });
+
+        $(document).on("click","#showToday",function() {
+            viewDate = new Date();
+            populateWeek(viewDate);
+        });
+
+        $(document).on("click","#prevWeek",function() {
+            viewDate = dateAdd(viewDate,-7);
+            populateWeek(viewDate);
+        });
+
+        $(document).on("click","#nextWeek",function() {
+            viewDate = dateAdd(viewDate,7);
+            populateWeek(viewDate);
+        });
+
+        var populateWeek = function(currDate) 
+        {
+            var monthName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            var scroll = $(window).scrollTop(); // Save the window position before this operation was invoked
+
+            if (currDate.getDay() > 1) currDate  = dateAdd(currDate,(-1) * (currDate.getDay()-1));
+
+            $("#weekStart").text(currDate.getDate() + "-" + monthName[currDate.getMonth()] + "-" + currDate.getFullYear());
+
+            $('html, body').animate({
+                scrollTop: scroll
+            }, 2000);
+        };
+
+        var dateAdd = function (valDate, days) {
+            var currDays = valDate.getDate();
+            var monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var newDays
+            var newMonth
+            var newYear
+
+            newDays = currDays + days;
+
+            if (newDays < 1) {
+                // decrement days
+                newMonth = ((valDate.getMonth() - 1) < 0) ? 11 : (valDate.getMonth() - 1);
+                newYear = ((valDate.getMonth() - 1) < 0) ? (valDate.getFullYear() - 1) : valDate.getFullYear();
+                newDays = monthDays[newMonth] + newDays;
+            }
+            else {
+                newMonth = valDate.getMonth();
+                newYear = valDate.getFullYear();
+                //              alert(newDays);
+                if (newDays > monthDays[newMonth]) {
+                    if (valDate.getMonth() == 11) { newMonth = 0; newYear = valDate.getFullYear() + 1; }
+                    else newMonth = valDate.getMonth() + 1;
+                    newDays = newDays - monthDays[valDate.getMonth()];
+                }
+                //                alert("M: " + newMonth + " D: " + newDays + " Y: " + newYear);
+            }
+            return new Date(newYear, newMonth, newDays);
+        };
+
+    $("#showfilter").click();
+    populateWeek(viewDate);
+
+    $(document).on("click","#showTaskView", function() {
+        if ($("#showResView").parent().hasClass("active"))
+        {
+            $("#ResourceView").hide();
+            $("#TaskView").show();
+            $("#showResView").parent().removeClass("active");
+            $(this).parent().addClass("active");
+        }
+    });
+
+    $(document).on("click","#showResView", function() {
+        if ($("#showTaskView").parent().hasClass("active"))
+        {
+            $("#TaskView").hide();
+            $("#ResourceView").show();
+            $("#showTaskView").parent().removeClass("active");
+            $(this).parent().addClass("active");
+        }
+    });
+        
+</script> 
+
+}

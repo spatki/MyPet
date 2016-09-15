@@ -1,0 +1,46 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_audit_scheduleInput
+@{
+    Layout = null;
+    ViewBag.Title = "GetSchedule";
+    AuditActivityType ActivityType = new AuditActivityType();
+    AuditPlanStatus AuditStatus = new AuditPlanStatus();
+    AuditFrequencyType FrequencyType = new AuditFrequencyType();
+}
+
+<tr class="sch@(Model.tbl_Org_Audit_PlanID)" id="sch@(Model.ID)">
+    <td>@if (Model.Status == 1)
+        {
+            @(ViewBag.RefID + "-" + @Model.ID)
+        }
+        else
+        {   
+            <a href="Javascript:;" class="openDialog" data-source="@Url.Action("ScheduleAudit","OrgAudit", new { id = Model.ID })" title="Click to view schedule">@ViewBag.RefID-@Model.ID</a>
+        }
+    </td>
+    <td>@Model.Planned_Start.ToString(Globals.DateFormatString)</td>
+    <td>@Model.Planned_Finish.ToString(Globals.DateFormatString)</td>
+    <td>@(Model.Status == 1 ? "" : Model.Start.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+    <td>@(Model.Status == 1 ? "" : Model.Finish.GetValueOrDefault().ToString(Globals.DateFormatString))</td>
+    <td>@AuditStatus.getTypeName((short) Model.Status)</td>
+    <td>@Html.Raw(FrequencyType.TrackingStatus(Model.Planned_Start, Model.Planned_Finish, Model.Start, Model.Audit_Date, (short)Model.Status))</td>
+    <td>
+        @switch (Model.Status)
+        {
+            case 1: // Planned
+                <a href="Javascript:;" class="openDialog btn btn-med blue-bg" data-source="@Url.Action("ScheduleAudit","OrgAudit", new { id = Model.ID })">Schedule</a>
+                break;
+            case 2: // Scheduled
+                <a href="Javascript:;" class="btn btn-med green-bg subMenu" data-source="@Url.Action("Edit","OrgAuditFinding",new { id = Model.ID })">Conduct</a>
+                break;
+            case 3: // Audited
+                <a href="Javascript:;" class="btn btn-med black-bg subMenu" data-source="@Url.Action("Edit","OrgAuditFinding",new { id = Model.ID })">Report</a>
+                break;
+            case 4: // Closed
+                <a href="Javascript:;" class="btn btn-med black-bg subMenu" data-source="@Url.Action("Edit","OrgAuditFinding",new { id = Model.ID })">View Report</a>
+                break;
+            default:
+                break;
+        }
+    </td>
+</tr>

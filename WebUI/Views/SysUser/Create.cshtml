@@ -1,0 +1,119 @@
+﻿@model UserProfileInput
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title" id="dialogTitle">Create User for Client @((Request.QueryString["text"] == null) ? "" : Request.QueryString["text"]) </h4>
+	</div>
+    <form method="post" action="@Url.Action("Create")" id="submitLevel">
+        <div class="modal-body"> 
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>User Type</label>
+                        <div class="controls">
+                            @Html.DropDownListFor(o => o.UserType, (new UserTypes()).getList(Model.UserType.GetValueOrDefault()), "Select ...", new { @class = "col-md-12 form-control userTypeValidation" })
+                            @Html.ValidationMessageFor(o => o.UserType)
+                        </div>
+                    </div>
+                </div>
+                            
+                <div class="col-md-6" >
+                    <div id="empcode" style="@((Model.UserType == 1) ? "" : "display:none")">  
+                        <label class="control-label">Employee Code</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="RefCode" id="enterSelected" value="@Model.RefCode">
+                            @Html.HiddenFor(o => o.ClientID)
+						    <div class="input-group-btn">
+                                <a href="javascript:;" class="btn btn-med blue-bg openDialogExtra" data-dialog="extraDialogBox" data-source="@Url.Action("MiniEmployeeSearch","Employee")"><i class="icon-search"></i></a>
+						    </div>
+                        </div>
+                        @Html.ValidationMessageFor(o => o.RefCode)
+                        <span class="help-block"><i class="icon-">&#xf05a;</i> Applicable for user type employee</span>
+                    </div>
+                    <div id="splusr" style="@((Model.UserType == 3) ? "" : "display:none")">
+                        <div class="form-group">
+                            <label>Special Access Type</label>
+                            <div class="controls">
+                                @Html.DropDownListFor(o => o.AccessType, (new SpecialUserTypes()).getList(Model.AccessType.GetValueOrDefault()), "Select ...", new { @class = "col-md-12 form-control" })
+                                @Html.ValidationMessageFor(o => o.AccessType)
+                            <span class="help-block"><i class="icon-">&#xf05a;</i> Applicable for special users</span>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div id="clientusr" style="@((Model.UserType == 2) ? "" : "display:none")">
+                        <div class="form-group">
+                            <label>Client Role</label>
+                            <div class="controls">
+                                 @Html.Action("getMultiSelectListFor","SysRole",new { selectedItem = Model.Roles.ToList<int>() , controlName = "Roles", excludeIds = "", selectIds = "", reload = "", client = Model.ClientID})
+                                 <span class="help-block"><i class="icon-">&#xf05a;</i> Client Role</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label class="control-label">User Name</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(o => o.DisplayName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.DisplayName)
+                        </div>
+                    </div>
+                </div>
+                            
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Email ID&nbsp;&nbsp;<small>(Will be used as login id)</small></label>
+                        <div class="controls">
+                            @Html.TextBoxFor(o => o.UserName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.UserName)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label>Password</label>
+                    <div class="controls">
+                            @Html.PasswordFor(o => o.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.Password)                        
+                        <span class="help-block"><i class="icon-">&#xf05a;</i> Enter your password here</span></div>
+                    </div>
+                </div>
+                            
+                <div class="col-md-6">
+                    <div class="form-group">
+                    <label>Renter Password</label>
+                    <div class="controls">
+                            @Html.PasswordFor(o => o.ConfirmPassword, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(o => o.ConfirmPassword)                        
+                        <span class="help-block"><i class="icon-">&#xf05a;</i> Re-Enter your password here</span></div>
+                    </div>
+                </div>
+            </div>
+	    </div>
+	    <div class="modal-footer">
+			<div class="form-group">
+		        <button type="button" class="btn gray-bg" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn blue-bg saveDefault" data-mode="add" data-id="listing" data-form="submitLevel">Save</button>
+			</div>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<div class="modal fade" id="extraDialogBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div><!-- /.modal -->
+
+<script>
+    specialDropDown(".specialCombo");
+    $("#UserType").focus();
+</script>

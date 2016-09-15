@@ -1,0 +1,20 @@
+﻿@model proj_estm_GSC
+@{
+    Layout = null;
+}
+<tr class="EditRow checkGSC" data-id="@Model.GSCID" id="GSC@(Model.ID)">
+    <td><a href="Javascript:;" class="confirmAction" data-source=""
+        data-messagetitle="Confirm Action" data-message="Do you want to remove this GSC ?" data-id="@Model.ID"
+        data-class="removeLineItem" data-classparams="data-id='GSC@(Model.ID)'" title="Remove this GSC"><i class="icon-remove"></i></a>
+        <input type="hidden" id="tbl_org_proj_estm_gsc.Index" name="tbl_org_proj_estm_gsc.Index" value="@Model.ID" />
+        <input type="hidden" id="tbl_org_proj_estm_gsc[@(Model.ID)].ID" name="tbl_org_proj_estm_gsc[@(Model.ID)].ID" value="@(Model.ID)" />
+        <input type="hidden" id="tbl_org_proj_estm_gsc[@(Model.ID)].ClientID" name="tbl_org_proj_estm_gsc[@(Model.ID)].ClientID" value="@Model.ClientID" />
+        <input type="hidden" id="GSCRating@(Model.ID)Input" name="tbl_org_proj_estm_gsc[@(Model.ID)].Rating" value="" />
+        <input type="hidden" id="tbl_org_proj_estm_gsc[@(Model.ID)].tbl_Org_ProjectID" name="tbl_org_proj_estm_gsc[@(Model.ID)].tbl_Org_ProjectID" value="@Model.ProjectID" />
+        <input type="hidden" id="tbl_org_proj_estm_gsc[@(Model.ID)].tbl_Proj_EstimationID" name="tbl_org_proj_estm_gsc[@(Model.ID)].tbl_Proj_EstimationID" value="@Model.Proj_EstimationID" />
+        <input type="hidden" id="tbl_org_proj_estm_gsc[@(Model.ID)].tbl_Org_Estm_TDI_ID" name="tbl_org_proj_estm_gsc[@(Model.ID)].tbl_Org_Estm_TDI_ID" value="@Model.GSCID" />
+    </td>
+    <td>@Model.Name</td>
+    <td class="EditGSC GSCRating updateInput" data-navkey="EditGSC" id="GSCRating@(Model.ID)"></td>
+    <td ><div class="col-md-12">@Html.Raw(Model.Helptext)</div></td>
+</tr>                                                                                 

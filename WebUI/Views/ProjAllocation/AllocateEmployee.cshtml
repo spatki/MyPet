@@ -1,0 +1,161 @@
+﻿@using ProcessAccelerator.WebUI
+@model tbl_org_proj_allocationInput
+@{
+    Layout = null;
+}
+<script src="/Scripts/pa/bootstrap-slider/bootstrap-slider.js" type="text/javascript"></script>
+
+<div class="modal-dialog" style="width:800px;">
+	<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title"><strong>Project: </strong>@Model.ProjectName | <strong>Allocate: </strong>@Model.EmployeeName</h4>
+	</div>
+    <form method="post" action="@Url.Action("AllocateEmployee","ProjAllocation")" id="allocDetails">
+	    <div class="modal-body">
+            <br />
+            <input type="hidden" value="@Model.ProjectName" name="ProjectName" id="ProjectName" />
+            <input type="hidden" value="@Model.EmployeeName" name="EmployeeName" id="EmployeeName" />
+            <input type="hidden" value="@Model.tbl_Org_ProjID" name="tbl_Org_ProjID" id="tbl_Org_ProjID" />
+            <input type="hidden" value="@Model.tbl_Org_EmployeeID" name="tbl_Org_EmployeeID" id="tbl_Org_EmployeeID" />
+            <div class="row">
+                <div class="col-md-11 pull-right">@Html.ValidationSummary(true)</div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-4">From:</label>
+                        <div class="input-group date datepicker col-md-7">
+                            <input type="text" class="form-control" name="PlannedStartDate" id="PlannedStartDate" value="@Model.PlannedStartDate.ToString(Globals.DateFormatString)">
+                            <span class="input-group-addon accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                        </div>
+                        @Html.ValidationMessageFor(o => o.PlannedStartDate)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-4">Till:</label>
+                        <div class="input-group date datepicker col-md-7">
+                            <input type="text" class="form-control" value="@(Model.PlannedEndDate == null ? "" : Model.PlannedEndDate.GetValueOrDefault().ToString(Globals.DateFormatString))" name="PlannedEndDate" id="PlannedEndDate">
+                            <span class="input-group-addon  accordion-toggle"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i></span>
+                        </div>
+                        <div class="col-md-12 pull-right">@Html.ValidationMessageFor(o => o.PlannedEndDate)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-4">Role</label>
+                        <div class="controls col-md-7">
+                            @Html.Action("getListItems","OrgRole",new { selectedItem = Model.mstr_Org_RoleID, controlName = "mstr_Org_RoleID", excludeIds = "", selectIds = "", reload = ""})
+                        </div>
+                        <div class="col-md-12 pull-right">@Html.ValidationMessageFor(o => o.mstr_Org_RoleID)</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Reporting To</label>
+                        <div class="controls col-md-7">
+                            @Html.Action("getReportingManagersFor","ProjAllocation",new { selectedItem = Model.ReportingTo.GetValueOrDefault(), controlName = "ReportingTo", projectID = Model.tbl_Org_ProjID, employeeID = Model.tbl_Org_EmployeeID, roleID = Model.mstr_Org_RoleID})                                
+                        </div>
+                        @Html.ValidationMessageFor(o => o.ReportingTo)
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Allocation %</label>
+                        <div class="controls col-md-7">
+                            <input type="text" class="mask_percent col-md-12 form-control" value="@(Model.Percent_Allocation == 0 ? 100 : Model.Percent_Allocation)" name="Percent_Allocation" id="Percent_Allocation">
+                        </div>
+                        @Html.ValidationMessageFor(o => o.Percent_Allocation)
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Group</label>
+                        <div class="controls col-md-7">
+                            @Html.Action("getListItemsFor","ProjGroup",new { selectedItem = Model.tbl_Org_Proj_GroupID.GetValueOrDefault(), controlName = "tbl_Org_Proj_GroupID", excludeIds = "", selectIds = "", projectID = Model.tbl_Org_ProjID, allowNewClient = false, reload = "" })
+                        </div>
+                        @Html.ValidationMessageFor(o => o.tbl_Org_Proj_GroupID)
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4">Location</label>
+                        <div class="controls col-md-7">
+                            @Html.Action("getListItemsFor", "ProjLocation", new { selectedItem = Model.tbl_Org_Proj_LocationID.GetValueOrDefault(), controlName = "tbl_Org_Proj_LocationID", excludeIds = "", selectIds = "", projectID = Model.tbl_Org_ProjID })
+                        </div>
+                        @Html.ValidationMessageFor(o => o.tbl_Org_Proj_LocationID)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="controls col-md-2">
+                            <input type="checkbox" value="true" name="Billable" id="Billable" @(Model.Billable == true ? "checked" : "") />
+                        </div>
+                        <div class="controls col-md-10">
+                            <label class="control-label">Billable Resource</label>
+                        </div>
+                        @Html.ValidationMessageFor(o => o.Billable)
+                    </div>
+                    <div class="form-group">
+                        <div class="controls col-md-2">
+                            <input type="checkbox" value="true" name="DefectAdmin" id="DefectAdmin"  @(Model.DefectAdmin == true ? "checked" : "")/>
+                        </div>
+                        <div class="controls col-md-10">
+                            <label class="control-label">Defect Co-ordinator</label>
+                        </div>
+                        @Html.ValidationMessageFor(o => o.DefectAdmin)
+                    </div>
+                    <div class="form-group">
+                        <div class="controls col-md-2">
+                            <input type="checkbox" value="true" name="IssueAdmin" id="IssueAdmin"  @(Model.IssueAdmin == true ? "checked" : "")/>
+                        </div>
+                        <div class="controls col-md-10">
+                            <label class="control-label">Issue Co-ordinator</label>
+                        </div>
+                        @Html.ValidationMessageFor(o => o.IssueAdmin)
+                    </div>
+                    <div class="form-group">
+                        <div class="controls col-md-2">
+                            <input type="checkbox" value="true" name="HelpDeskAdmin" id="HelpDeskAdmin"  @(Model.HelpDeskAdmin == true ? "checked" : "")/>
+                        </div>
+                        <div class="controls col-md-10">
+                            <label class="control-label">Helpdesk Co-ordinator</label>
+                        </div>
+                        @Html.ValidationMessageFor(o => o.HelpDeskAdmin)
+                    </div>
+                    <div class="form-group">
+                        <div class="controls col-md-2">
+                            <input type="checkbox" value="true" name="CRAdmin" id="CRAdmin"  @(Model.CRAdmin == true ? "checked" : "")/>
+                        </div>
+                        <div class="controls col-md-10">
+                            <label class="control-label">Change Request Co-ordinator</label>
+                        </div>
+                        @Html.ValidationMessageFor(o => o.CRAdmin)
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="form-group col-md-11">
+                    <label >Allocation Comments</label>
+                    <div class="controls"><textarea rows="4" class="form-control" name="Comments" id="Comments">Allocated based on requisition</textarea></div>
+                </div>
+                @Html.ValidationMessageFor(o => o.Comments)
+            </div>
+	    </div>
+	    <div class="modal-footer">
+		    <button type="button" class="btn gray-bg" data-dismiss="modal">Close</button>
+		    <button type="button" class="btn blue-bg save" data-mode="addProjectAllocation" data-id="allocatedEmployees" data-form="allocDetails">Save</button>
+	    </div>
+    </form>
+	</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+<script>
+    $("#PlannedDuration").inputmask('decimal', { rightAlignNumerics: true });
+    $('.datepicker').datetimepicker({
+        format: "@Globals.DateFormatString.ToUpper()", pickTime: false,
+        beforeShow: function () {
+            setTimeout(function () {
+                $('.ui-datepicker').css('z-index', 999999);
+            }, 0);
+        }
+    });
+    $(".mask_percent").inputmask({ "mask": "9", "repeat": 3, "greedy": false }, { placeholder: " ", clearMaskOnLostFocus: true }); //default
+    $(".mask_number").inputmask("999", { placeholder: " ", clearMaskOnLostFocus: true }); //default
+</script>
